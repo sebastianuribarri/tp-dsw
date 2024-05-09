@@ -1,44 +1,32 @@
-import CompetitionEntity from "../domain/competiton.entity.js";
-import { db } from "../../middlewares/connection.js";
-import Competition from "../domain/competiton.entity.js";
-import CompetitionRepository from "../domain/competition.repository.js";
-
-export interface ILeagueService {
-  service: ILeagueService;
-}
-
-const competitions = db.collection<CompetitionEntity>("competitions");
+import ICompetition from "../domain/competiton.entity.js";
+import { db } from "../../shared/middlewares/connection.js";
+import { ICompetitionRepository } from "../domain/competition.repository.js";
+import CompetitionModel from "./competition.schema.js";
 
 export default class CompetitionMongoRepository
-  implements CompetitionRepository
+  implements ICompetitionRepository
 {
-  public async findAll(): Promise<CompetitionEntity[] | void> {
+  public async findAll(): Promise<ICompetition[] | null> {
     try {
-      return (await competitions.find().toArray()).map((comp) => {
-        return {
-          id: comp.id,
-          start: comp.start,
-          name: comp.name,
-          type: comp.type,
-          logo: comp.logo,
-        };
-      });
+      return await CompetitionModel.find();
     } catch (err) {
-      console.log("ocurrio un error");
+      console.log("ocurrio un error en MongoRepository(findAll):", err);
     }
   }
-  public async findById(id: number): Promise<Competition | null> {
+
+  public async findById(id: number): Promise<ICompetition | null> {
     return;
   }
-  public async insertOne(id: Competition): Promise<Competition | null> {
-    return;
+
+  public async insertOne(competition: ICompetition): Promise<void> {
+    await CompetitionModel.create(competition);
   }
   public async updateOne(
-    competition: Competition
-  ): Promise<Competition | null> {
-    return;
-  }
-  public async deleteOne(id: number): Promise<Competition | null> {
-    return;
+    oldCompetition,
+    newData: { start: Date }
+  ): Promise<ICompetition | null> {
+    const updatedCompetition = oldCompetition;
+    updatedCompetition.start = newData.start;
+    return updatedCompetition.save();
   }
 }

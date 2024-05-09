@@ -11,7 +11,6 @@ export const apiResponse: any = (endpoint: string) => {
   };
   return axios(config)
     .then(function (response: any) {
-      console.log(JSON.stringify(response.data));
       return response.data;
     })
     .catch(function (error: any) {

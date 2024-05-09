@@ -1,16 +1,12 @@
-import { apiResponse } from "../../middlewares/api-football.js";
-import CompetitionRepository from "../domain/competition.repository.js";
+import { apiResponse } from "../../shared/middlewares/api-football.js";
+import { ICompetitionApiRepository } from "../domain/competition.repository.js";
 import Competition from "../domain/competiton.entity.js";
-
-export default class CompetitionApiRepository implements CompetitionRepository {
+export default class CompetitionApiRepository
+  implements ICompetitionApiRepository
+{
   public async findAll() {
-    try {
-      const res = await apiResponse("leagues?country=Argentina&current=true");
-      console.log(res.response);
-      return res.response.map((elem) => new Competition(elem)); // crear una instancia Competition por cada elemento
-    } catch (err) {
-      console.log("ocurrio un error");
-      new Error("Error en la consulta a API:");
-    }
+    const res = await apiResponse("leagues?country=Argentina&current=true");
+    const apiCompetitions = res.response.map((elem) => new Competition(elem));
+    return apiCompetitions;
   }
 }

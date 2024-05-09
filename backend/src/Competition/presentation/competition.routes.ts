@@ -17,7 +17,4 @@ const competitionController = new CompetitionController(competitionUseCases);
 export const competitionRouter = Router();
 
 competitionRouter.get("/", competitionController.getAll);
-competitionRouter.get("/:id");
-competitionRouter.post("/");
-competitionRouter.put("/:id");
-competitionRouter.delete("/:id");
+competitionRouter.get("/:id", competitionController.getOne);

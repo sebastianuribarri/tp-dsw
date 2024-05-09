@@ -1,9 +1,12 @@
-import Competition from "./competition.js";
+import ICompetition from "./competition.js";
 
-export default interface CompetitionRepository {
-  findAll(): Promise<Competition[] | any>;
-  findById?(id: number): Promise<Competition | null>;
-  insertOne?(competition: Competition): Promise<Competition | null>;
-  updateOne?(competition: Competition): Promise<Competition | null>;
-  deleteOne?(id: number): Promise<Competition | null>;
+export interface ICompetitionApiRepository {
+  findAll(): Promise<any>;
+}
+
+export interface ICompetitionRepository {
+  findAll(): Promise<ICompetition[] | null>;
+  findById(id: number): Promise<ICompetition | null>;
+  insertOne(competition: ICompetition): Promise<void>;
+  updateOne(oldCompetition: ICompetition, any): Promise<ICompetition | null>;
 }
