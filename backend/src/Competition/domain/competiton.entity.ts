@@ -6,11 +6,11 @@ export default class Competition implements ICompetition {
   name: string;
   type: string;
   logo: string;
-  constructor(data: any) {
-    this.id = data.league.id;
-    this.start = data.seasons[0].start;
-    this.name = data.league.name;
-    this.type = data.league.type;
-    this.logo = data.league.logo;
+  constructor(competition: { id; start; name; type; logo }) {
+    this.id = competition.id;
+    this.start = competition.start;
+    this.name = competition.name;
+    this.type = competition.type;
+    this.logo = competition.logo;
   }
 }

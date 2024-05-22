@@ -1,14 +1,23 @@
 import ICompetition from "../domain/competiton.entity.js";
-import { db } from "../../shared/middlewares/connection.js";
 import { ICompetitionRepository } from "../domain/competition.repository.js";
 import CompetitionModel from "./competition.schema.js";
+import Competition from "../domain/competiton.entity.js";
 
 export default class CompetitionMongoRepository
   implements ICompetitionRepository
 {
   public async findAll(): Promise<ICompetition[] | null> {
     try {
-      return await CompetitionModel.find();
+      const mongoCompetitions = await CompetitionModel.find();
+      return mongoCompetitions.map((elem) => {
+        return new Competition({
+          id: elem.id,
+          start: elem.start,
+          name: elem.name,
+          type: elem.type,
+          logo: elem.logo,
+        });
+      });
     } catch (err) {
       console.log("ocurrio un error en MongoRepository(findAll):", err);
     }
@@ -22,11 +31,11 @@ export default class CompetitionMongoRepository
     await CompetitionModel.create(competition);
   }
   public async updateOne(
-    oldCompetition,
+    id: number,
     newData: { start: Date }
   ): Promise<ICompetition | null> {
-    const updatedCompetition = oldCompetition;
-    updatedCompetition.start = newData.start;
-    return updatedCompetition.save();
+    return await CompetitionModel.findOneAndUpdate({ id: id }, newData, {
+      new: true,
+    });
   }
 }

@@ -1,4 +1,4 @@
-export default interface Competition {
+export default interface ICompetition {
   id: number;
   start: Date;
   name: string;

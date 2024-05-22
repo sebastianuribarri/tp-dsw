@@ -9,13 +9,13 @@ export default class CompetitionController {
   }
 
   public async getAll(req: Request, res: Response) {
-    const result = await this.competitionUseCases.getAll();
+    const result = await this.competitionUseCases.listAll();
     res.json(result);
   }
 
   public async getOne(req: Request, res: Response) {
     console.log(req.params.id);
-    const result = await this.competitionUseCases.getDetailedCompetition(
+    const result = await this.competitionUseCases.getCompetitionDetail(
       Number(req.params.id)
     );
     res.json(result);

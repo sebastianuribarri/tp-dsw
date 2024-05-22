@@ -4,15 +4,60 @@ import {
   ICompetitionRepository,
 } from "../domain/competition.repository.js";
 
+// cada cuanto se actualizan los datos de las Competitions
+const timerInMinutes = 10 * 24 * 60; // 10 dias
+
+let competitionsLastUpdated: Date;
+// si pasaron 10 dias desde la lastUpdate, se actualizan los datos consultando a competitionApiRepository
+// y los almacena en la base de datos local mediante competitionDbRepository
+
+class competitionStandingsLastUpdate {
+  competitionId: number;
+  start: Date;
+  standingsLastUpdate: Date;
+  constructor(competitionStandingsLastUpdate: {
+    competitionId: number;
+    start: Date;
+  }) {}
+}
+
+let competitionsStandingsLastUpdate: competitionStandingsLastUpdate[];
+
 export default class CompetitionUseCases {
+  lastUpdate: Date;
+
   public constructor(
     public competitionApiRepository: ICompetitionApiRepository,
-    public competitionDBRepository: ICompetitionRepository
-  ) {}
+    public competitionDbRepository: ICompetitionRepository
+  ) {
+    // para obtener los datos actualizados
+    this.competitionApiRepository = competitionApiRepository;
+    // para guardar los datos
+    this.competitionDbRepository = competitionDbRepository;
+    // ultima actualizacion de los datos
+  }
+
+  private async isUpdated(timerInMinutes: number, lastUpdate: Date) {
+    if (lastUpdate) {
+      let now: Date = new Date();
+      let difference = (now.getTime() - lastUpdate.getTime()) / (1000 * 60); // tiempo transcurrido en minutos
+      console.log(difference, timerInMinutes);
+      if (difference < timerInMinutes) {
+        console.log("esta actualizado");
+        return true;
+      } else {
+        console.log("hay que actualizar");
+        return false;
+      }
+    } else {
+      console.log("no hay registros de ultima actualizacion, hay q actualizar");
+      return false;
+    }
+  }
 
   private async getNewCompetitionsData() {
     const apiCompetitions = await this.competitionApiRepository.findAll();
-    let mongoCompetitions = await this.competitionDBRepository.findAll();
+    let mongoCompetitions = await this.competitionDbRepository.findAll();
 
     if (apiCompetitions && mongoCompetitions) {
       for (let i = 0; i < apiCompetitions.length; i++) {
@@ -40,44 +85,63 @@ export default class CompetitionUseCases {
         }
       }
     }
+    competitionsLastUpdated = new Date(); // actualiza con fecha actual
     return apiCompetitions;
   }
-  public async getAll() {
-    const updated = false; // getTimer('competitions')
+
+  public async listAll() {
+    const updated = await this.isUpdated(
+      timerInMinutes,
+      competitionsLastUpdated
+    );
     if (updated) {
-      const competitions = await this.competitionDBRepository.findAll();
-      return competitions;
+      return await this.competitionDbRepository.findAll();
     } else {
       return await this.getNewCompetitionsData();
     }
   }
 
-  public async getDetailedCompetition(id: number) {
-    const updated = false;
-    if (updated) {
-      return await this.competitionDBRepository.findById(id);
+  public async getCompetitionDetail(id: number) {
+    const competitionsUpdated = await this.isUpdated(
+      timerInMinutes,
+      competitionsLastUpdated
+    );
+    let competitionDetail: ICompetition | null;
+    if (competitionsUpdated) {
+      // si las Competitions estan actualizadas
+      competitionDetail = await this.competitionDbRepository.findById(id);
     } else {
+      // sino, actualizar el listado
       const updatedCompetitions = await this.getNewCompetitionsData();
-      const competition = updatedCompetitions.find((comp) => comp.id === id);
-      return competition;
+      competitionDetail = updatedCompetitions.find((comp) => comp.id === id);
     }
+    if (competitionDetail) {
+      // si se encontro la Competition
+      const competitionStandingsUpdated = true;
+      let competitionStandings;
+
+      if (competitionStandingsUpdated) {
+      }
+      return competitionDetail;
+    } else {
+      // no existe
+      return;
+    }
+
+    // obteniendo los datos de los partidos de la compencia
+    // matchesUseCases.listLeagueMatches()
   }
 
   public async createCompetition(competition: ICompetition) {
-    const competitionCreated = await this.competitionDBRepository.insertOne(
-      competition
-    );
-    return competitionCreated;
+    return await this.competitionDbRepository.insertOne(competition);
   }
 
   public async updateCompetitionSeason(
     oldCompetition: ICompetition,
     seasonStart: Date
   ) {
-    const competitionUpdated = await this.competitionDBRepository.updateOne(
-      oldCompetition,
-      { start: seasonStart }
-    );
-    return competitionUpdated;
+    return await this.competitionDbRepository.updateOne(oldCompetition.id, {
+      start: seasonStart,
+    });
   }
 }
