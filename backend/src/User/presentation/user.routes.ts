@@ -6,8 +6,8 @@ export default class UsersRoutes {
         const userRouter = Router();
         server.use("/api/users", userRouter);
 
-        console.log("Hola pai")
         userRouter.get("/:mail", userController.getOne);
         userRouter.post("/", userController.createOne);
+        userRouter.delete("/:mail", userController.deleteOne);
     }
 }

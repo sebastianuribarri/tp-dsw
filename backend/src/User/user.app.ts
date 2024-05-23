@@ -14,15 +14,15 @@ export default class UsersApp {
   userRoutes: UsersRoutes;
 
   constructor(server: Express) {
-    // ----------------- infrastructure layout -------------------
+    // ----------------- infrastructure layer -------------------
     this.userDbRepository = new UserMongoRepository();
 
-    // ----------------- application layout -----------------
+    // ----------------- application layer -----------------
     this.userUseCases = new UserUseCases(
       this.userDbRepository
     );
 
-    // ----------------- presentation layout -----------------
+    // ----------------- presentation layer -----------------
     this.userController = new UserController(
       this.userUseCases
     );

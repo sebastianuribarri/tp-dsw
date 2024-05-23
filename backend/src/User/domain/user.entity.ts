@@ -3,9 +3,9 @@ export default class User {
     password: string;
     premium: boolean;
 
-    constructor(user: { mail; password; premium }) {
+    constructor(user: { mail; password }) {
         this.mail = user.mail;
         this.password = user.password;
-        this.premium = user.premium;
+        this.premium = false;
     }
 }

@@ -21,7 +21,7 @@ export default class UserUseCases {
       return await this.userDbRepository.updateOne(mail, {premium: newSuscriptionStatus})
     }
     public async createUser(user: User){
-      return await this.userDbRepository.insertOne(user)
+      await this.userDbRepository.insertOne(user)
     }
     public async deleteUser(mail: string){
       return await this.userDbRepository.deleteOne(mail)
