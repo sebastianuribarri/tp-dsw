@@ -2,6 +2,7 @@ import express from "express";
 
 import dbInit from "./shared/middlewares/db.js";
 import CompetitionsApp from "./Competition/competition.app.js";
+import UsersApp from "./User/user.app.js";
 
 export async function main() {
   const server = express();
@@ -10,6 +11,7 @@ export async function main() {
   // para cada Entidad
 
   const competitionsApp = new CompetitionsApp(server);
+  const userApp = new UsersApp(server);
 
   dbInit().then();
   server.listen(5000, () => {
