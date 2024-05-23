@@ -6,6 +6,7 @@ export default class UserController {
 
 constructor ( private userUseCases: UserUseCases) {
     this.getOne = this.getOne.bind(this);
+    this.deleteOne = this.deleteOne.bind(this);
     this.createOne = this.createOne.bind(this)
     this.userUseCases = userUseCases;
 }
@@ -21,10 +22,12 @@ constructor ( private userUseCases: UserUseCases) {
     const user = new User({
         mail: req.query.mail,
         password: req.query.password,
-        premium: req.query.premium
     })
-    console.log (user, req.params, req.query)
-    await this.userUseCases.createUser (user)
+      await this.userUseCases.createUser(user)
+    res.status(200)
+  }
+  public async deleteOne(req: Request, res: Response){
+    await this.userUseCases.deleteUser(req.params.mail)
     res.status(200)
   }
 }
