@@ -1,13 +1,13 @@
-import { apiResponse } from "../../shared/middlewares/api-football.js";
-import { ICompetitionApiRepository } from "../domain/competition.repository.js";
+import { countReset } from "console";
+import IApiRepository from "../../Shared/domain/api.repository.js";
+import { apiResponse } from "../../Shared/infrastructure/api-football.js";
 import Competition from "../domain/competiton.entity.js";
-import ICompetition from "../domain/competition.js";
 
 export default class CompetitionApiRepository
-  implements ICompetitionApiRepository
+  implements IApiRepository<Competition>
 {
-  public async findAll(): Promise<ICompetition[] | null> {
-    const res = await apiResponse("leagues?country=Argentina&current=true");
+  public async findAll(parameters?: object): Promise<Competition[] | null> {
+    const res = await apiResponse("leagues", parameters);
     const apiCompetitions = res.response.map(
       (elem) =>
         new Competition({

@@ -1,15 +1,8 @@
-import ICompetition from "./competition.js";
+import Competition from "./competiton.entity.ts";
 
-export interface ICompetitionApiRepository {
-  findAll(): Promise<ICompetition[] | null>;
-}
-
-export interface ICompetitionRepository {
-  findAll(): Promise<ICompetition[] | null>;
-  findById(id: number): Promise<ICompetition | null>;
-  insertOne(competition: ICompetition): Promise<ICompetition | void>;
-  updateOne(
-    id: number,
-    { start }: { start: Date }
-  ): Promise<ICompetition | null>;
+export default interface ICompetitionRepository {
+  findAll(): Promise<Competition[] | null>;
+  findById(id: number): Promise<Competition | null>;
+  insertOne(competition: Competition): Promise<Competition | void>;
+  updateOne(id: number, newData: Competition): Promise<Competition | null>;
 }

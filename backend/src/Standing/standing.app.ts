@@ -6,34 +6,29 @@ import {
 import StandingsApiRepository from "./infrastructure/standing.repository.api.js";
 import StandingMongoRepository from "./infrastructure/standing.repository.mongo.js";
 import StandingController from "./presentation/standing.controller.js";
-import StandingsRoutes from "./presentation/standing.routes.js";
+import StandingRoutes from "./presentation/standing.routes.js";
 import { Express } from "express";
 
 export default class StandingsApp {
-  standingsApiRepository: IStandingApiRepository;
-  standingsDbRepository: IStandingRepository;
-  standingsUseCases: StandingUseCases;
-  standingsController: StandingController;
-  standingsRoutes: StandingsRoutes;
+  standingApiRepository: IStandingApiRepository;
+  standingDbRepository: IStandingRepository;
+  standingUseCases: StandingUseCases;
+  standingController: StandingController;
+  standingRoutes: StandingRoutes;
 
   constructor(server: Express) {
     // ----------------- infrastructure layout -------------------
-    this.standingsApiRepository = new StandingsApiRepository();
-    this.standingsDbRepository = new StandingMongoRepository();
+    this.standingApiRepository = new StandingsApiRepository();
+    this.standingDbRepository = new StandingMongoRepository();
 
     // ----------------- application layout -----------------
-    this.standingsUseCases = new StandingUseCases(
-      this.standingsApiRepository,
-      this.standingsDbRepository
+    this.standingUseCases = new StandingUseCases(
+      this.standingApiRepository,
+      this.standingDbRepository
     );
 
     // ----------------- presentation layout -----------------
-    this.standingsController = new StandingController(
-      this.standingsUseCases
-    );
-    this.standingsRoutes = new StandingsRoutes(
-      this.standingsController,
-      server
-    );
+    this.standingController = new StandingController(this.standingUseCases);
+    this.standingRoutes = new StandingRoutes(this.standingController, server);
   }
 }

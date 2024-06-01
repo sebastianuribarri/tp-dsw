@@ -1,12 +1,11 @@
-import ICompetition from "../domain/competiton.entity.js";
-import { ICompetitionRepository } from "../domain/competition.repository.js";
+import ICompetitionRepository from "../domain/competition.repository.js";
 import CompetitionModel from "./competition.schema.js";
 import Competition from "../domain/competiton.entity.js";
 
 export default class CompetitionMongoRepository
   implements ICompetitionRepository
 {
-  public async findAll(): Promise<ICompetition[] | null> {
+  public async findAll(): Promise<Competition[] | null> {
     try {
       const mongoCompetitions = await CompetitionModel.find();
       return mongoCompetitions.map((elem) => {
@@ -23,17 +22,17 @@ export default class CompetitionMongoRepository
     }
   }
 
-  public async findById(id: number): Promise<ICompetition | null> {
+  public async findById(id: number): Promise<Competition | null> {
     return;
   }
 
-  public async insertOne(competition: ICompetition): Promise<void> {
+  public async insertOne(competition: Competition): Promise<void> {
     await CompetitionModel.create(competition);
   }
   public async updateOne(
     id: number,
     newData: { start: Date }
-  ): Promise<ICompetition | null> {
+  ): Promise<Competition | null> {
     return await CompetitionModel.findOneAndUpdate({ id: id }, newData, {
       new: true,
     });
