@@ -3,7 +3,7 @@ import IApiRepository from "../../Shared/domain/api.repository.js";
 import Standing from "../domain/standing.entity.js";
 
 export default class StandingApiRepository implements IApiRepository<Standing> {
-  public async findAll(parameters: object): Promise<Standing[] | null> {
+  public async findAll(parameters: any[]): Promise<Standing[] | null> {
     const res = await apiResponse("standings", parameters);
     const apiStandings = res.response.map(
       (elem: any) =>

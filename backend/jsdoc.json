@@ -1,0 +1,13 @@
+{
+    "plugins": [],
+    "source:": {
+        "include": ["src"],
+        "includePattern": ".ts$",
+        "excludePattern": "(node_modules|docs|dist)"
+    },
+    "templates": {},
+    "opts": {
+        "destination":"./docs",
+        "recurse": "true"
+    }
+}

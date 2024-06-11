@@ -1,4 +1,5 @@
 import Timmer from "../../Shared/domain/timmer.js";
+import Competition from "./competiton.entity.js";
 
 export default class CompetitionsTimmer extends Timmer {
   static timmerInMinutes = 10 * 24 * 60; // 10 days

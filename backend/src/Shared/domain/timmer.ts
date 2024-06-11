@@ -21,6 +21,7 @@ export default abstract class Timmer {
       return false;
     }
   }
+
   public setUpdate() {
     this.lastUpdate = new Date();
   }

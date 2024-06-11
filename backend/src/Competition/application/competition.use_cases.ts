@@ -11,59 +11,68 @@ export default class CompetitionUseCases {
   ) {
     this.competitionsTimmer = new CompetitionsTimmer();
   }
+  /**
+   * @todo validacion de errores
+   */
+  private async updateCompetitionsData(newData: Competition[]) {
+    // get database competitions
+    let oldData = await this.competitionDbRepository.findAll();
 
-  private async getNewCompetitionsData() {
-    const apiCompetitions = await this.competitionApiRepository.findAll({
-      country: "Argentina",
-      current: true,
-    });
-    let dbCompetitions = await this.competitionDbRepository.findAll();
-
-    if (apiCompetitions && dbCompetitions) {
+    // update data on database
+    if (newData && oldData) {
       // apiCompetitions loop
-      apiCompetitions.forEach((apiCompetition) => {
+      newData.forEach((apiCompetition) => {
         let founded = false;
         // dbCompetitions loop
-        dbCompetitions.forEach((dbCompetition, i) => {
+        oldData.forEach((dbCompetition, i) => {
           if (dbCompetition.id === apiCompetition.id) {
             if (apiCompetition != dbCompetition) {
               this.updateCompetition(dbCompetition.id, apiCompetition);
             }
-            dbCompetitions.splice(i, 0);
+            oldData.splice(i, 1);
             founded = true;
           }
         });
-
         if (!founded) {
           this.createCompetition(apiCompetition);
         }
       });
-      this.competitionsTimmer.setUpdate();
+    }
+  }
+
+  public async needUpdate() {
+    if (this.competitionsTimmer.updated) {
+      return false;
+    } else {
+      const apiCompetitions = await this.competitionApiRepository.findAll({
+        country: "Argentina",
+        current: true,
+      });
+      const result = this.updateCompetitionsData(apiCompetitions);
+      // no hay errores
+      if (!(result instanceof Error)) {
+        this.competitionsTimmer.setUpdate();
+      }
       return apiCompetitions;
     }
   }
 
   public async listAll() {
-    const updated = this.competitionsTimmer.updated;
-    if (updated) {
-      return await this.competitionDbRepository.findAll();
+    const newData = await this.needUpdate();
+    if (newData) {
+      return newData;
     } else {
-      return await this.getNewCompetitionsData();
+      return await this.competitionDbRepository.findAll();
     }
   }
 
   public async getCompetition(id: number) {
-    const competitionsUpdated = this.competitionsTimmer.updated;
-    let competition: Competition | null;
-    if (competitionsUpdated) {
-      // si las Competitions estan actualizadas
-      competition = await this.competitionDbRepository.findById(id);
+    const newData = await this.needUpdate();
+    if (newData) {
+      return newData.find((comp) => comp.id === id);
     } else {
-      // sino, actualizar el listado
-      const updatedCompetitions = await this.getNewCompetitionsData();
-      competition = updatedCompetitions.find((comp) => comp.id === id);
+      return await this.competitionDbRepository.findById(id);
     }
-    return competition;
   }
 
   public async createCompetition(competition: Competition) {

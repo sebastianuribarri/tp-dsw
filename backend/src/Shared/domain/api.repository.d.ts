@@ -1,3 +1,3 @@
 export default interface IApiRepository<T> {
-  findAll(parameters?: unknown): Promise<T[] | null>;
+  findAll(parameters?: object): Promise<T[] | null>;
 }
