@@ -6,7 +6,7 @@ export interface IUserRepository {
   insertOne(user: User): Promise<void>;
   updateOne(
     mail: string,
-    newData: { password?: string; premium?: boolean }
+    newData: { password?: string; premium?: boolean; teams?:number[] }
   ): Promise<void>;
   deleteOne(mail: string): Promise<void>;
 }

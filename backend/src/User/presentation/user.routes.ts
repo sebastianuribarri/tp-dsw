@@ -9,5 +9,7 @@ export default class UsersRoutes {
         userRouter.get("/:mail", userController.getOne);
         userRouter.post("/", userController.createOne);
         userRouter.delete("/:mail", userController.deleteOne);
+        userRouter.put("/follow", userController.followTeam);
+        userRouter.put("/unfollow", userController.followTeam);
     }
 }

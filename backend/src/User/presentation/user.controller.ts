@@ -17,8 +17,8 @@ export default class UserController {
 
   public async createOne(req: Request, res: Response) {
     const user = new User({
-      mail: req.query.mail as string,
-      password: req.query.password as string,
+      mail: req.body.mail as string,
+      password: req.body.password as string,
     });
     await this.userUseCases.createUser(user);
     res.status(200).json();
@@ -27,4 +27,16 @@ export default class UserController {
     await this.userUseCases.deleteUser(req.params.mail);
     res.status(200).json();
   }
-}
+  public async followTeam(req:Request, res: Response){
+    await this.userUseCases.followTeam (req.params.mail,Number(req.params.team))
+    res.status(200).json();
+    }
+    public async unfollowTeam(req:Request, res: Response){
+      await this.userUseCases.followTeam (req.params.mail,Number(req.params.team))
+      res.status(200).json();
+      }
+    }
+  
+  
+  
+
