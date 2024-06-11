@@ -31,7 +31,7 @@ export default class CompetitionMongoRepository
   }
   public async updateOne(
     id: number,
-    newData: Competition
+    newData: { start: Date }
   ): Promise<Competition | null> {
     return await CompetitionModel.findOneAndUpdate({ id: id }, newData, {
       new: true,
