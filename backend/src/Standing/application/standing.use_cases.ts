@@ -5,12 +5,14 @@ import { NumericType } from "mongodb";
 import Competition from "../../Competition/domain/competiton.entity.js";
 import CompetitionUseCases from "../../Competition/application/competition.use_cases.js";
 import CompetitionStandingsTimmer from "../domain/standing.timmer.js";
+import TeamUseCases from "../../Team/application/team.use_cases.js";
 
 export default class StandingUseCases {
   constructor(
     private readonly standingApiRepository: IApiRepository<Standing>,
     private readonly standingDbRepository: IStandingRepository,
-    private readonly competitionUseCases: CompetitionUseCases
+    private readonly competitionUseCases: CompetitionUseCases,
+    private readonly teamUseCases: TeamUseCases
   ) {}
 
   public async findCompetitionTeams(competition: Competition) {
@@ -98,9 +100,14 @@ export default class StandingUseCases {
   }
 
   public async listStandingsByTeam(teamId: number) {
-    let teamCompetitions: Standing[] = [];
-    const competitions = await this.competitionUseCases.listAll();
+    let teamStandings: Standing[] = [];
 
+    // verify if team exist
+    const team = await this.teamUseCases.getTeam(teamId);
+    if (!team) return [];
+
+    // search for team standing in each competition
+    const competitions = await this.competitionUseCases.listAll();
     for (let competition of competitions) {
       let competitionStandings = await this.findCompetitionTeams(competition);
       console.log(competitionStandings);
@@ -108,11 +115,11 @@ export default class StandingUseCases {
         (standing) => standing.team.id === teamId
       );
       if (teamStanding instanceof Standing) {
-        teamCompetitions.push(teamStanding);
+        teamStandings.push(teamStanding);
       }
     }
 
-    return teamCompetitions;
+    return teamStandings;
   }
 
   public async createCompetitionStandings(

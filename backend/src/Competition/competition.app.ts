@@ -16,17 +16,17 @@ export default class CompetitionApp {
   competitionRoutes: CompetitionRoutes;
 
   constructor(server: Express) {
-    // ----------------- infrastructure layout -------------------
+    // ----------------- infrastructure layer -------------------
     this.competitionApiRepository = new CompetitionApiRepository();
     this.competitionDbRepository = new CompetitionMongoRepository();
 
-    // ----------------- application layout -----------------
+    // ----------------- application layer -----------------
     this.competitionUseCases = new CompetitionUseCases(
       this.competitionApiRepository,
       this.competitionDbRepository
     );
 
-    // ----------------- presentation layout -----------------
+    // ----------------- presentation layer -----------------
     this.competitionController = new CompetitionController(
       this.competitionUseCases
     );

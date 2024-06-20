@@ -16,17 +16,17 @@ export default class TeamApp {
   teamRoutes: TeamRoutes;
 
   constructor(server: Express) {
-    // ----------------- infrastructure layout -------------------
+    // ----------------- infrastructure layer -------------------
     this.teamApiRepository = new TeamApiRepository();
     this.teamDbRepository = new TeamMongoRepository();
 
-    // ----------------- application layout -----------------
+    // ----------------- application layer -----------------
     this.teamUseCases = new TeamUseCases(
       this.teamApiRepository,
       this.teamDbRepository
     );
 
-    // ----------------- presentation layout -----------------
+    // ----------------- presentation layer -----------------
     this.teamController = new TeamController(this.teamUseCases);
     this.teamRoutes = new TeamRoutes(this.teamController, server);
   }

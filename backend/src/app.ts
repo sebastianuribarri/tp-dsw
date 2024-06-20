@@ -15,10 +15,7 @@ export async function main() {
   const competitionApp = new CompetitionApp(server);
   const userApp = new UserApp(server);
   const teamApp = new TeamApp(server);
-  const standingApp = new StandingApp(
-    competitionApp.competitionUseCases,
-    server
-  );
+  const standingApp = new StandingApp(competitionApp, teamApp, server);
 
   dbInit().then();
   server.listen(5000, () => {
