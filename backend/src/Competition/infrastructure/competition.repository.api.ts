@@ -17,6 +17,7 @@ export default class CompetitionApiRepository
         new Competition({
           id: apiCompetition.league.id,
           start: apiCompetition.seasons[0].start,
+          end: apiCompetition.seasons[0].end,
           name: apiCompetition.league.name,
           type: apiCompetition.league.type,
           logo: apiCompetition.league.logo,

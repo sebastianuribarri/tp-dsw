@@ -2,13 +2,15 @@ import { ChildProcess } from "child_process";
 import CompetitionsTimmer from "../../Competition/domain/competition.timmer.js";
 
 export default abstract class Timmer {
+  constructor() {
+    this.lastUpdate = undefined;
+  }
   public lastUpdate: Date;
   public isUpdated(entityTimmer: number) {
     if (this.lastUpdate) {
       let now: Date = new Date();
       let difference =
         (now.getTime() - this.lastUpdate.getTime()) / (1000 * 60); // tiempo transcurrido en minutos
-      console.log(difference, entityTimmer);
       if (difference < entityTimmer) {
         console.log("esta actualizado");
         return true;

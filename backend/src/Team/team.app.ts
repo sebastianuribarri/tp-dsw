@@ -8,7 +8,7 @@ import TeamController from "./presentation/team.controller.js";
 import TeamRoutes from "./presentation/team.routes.js";
 import { Express } from "express";
 
-export default class TeamsApp {
+export default class TeamApp {
   teamApiRepository: IApiRepository<Team>;
   teamDbRepository: ITeamRepository;
   teamUseCases: TeamUseCases;
@@ -27,12 +27,7 @@ export default class TeamsApp {
     );
 
     // ----------------- presentation layout -----------------
-    this.teamController = new TeamController(
-      this.teamUseCases
-    );
-    this.teamRoutes = new TeamRoutes(
-      this.teamController,
-      server
-    );
+    this.teamController = new TeamController(this.teamUseCases);
+    this.teamRoutes = new TeamRoutes(this.teamController, server);
   }
 }

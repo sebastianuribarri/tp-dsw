@@ -2,9 +2,7 @@ import ITeamRepository from "../domain/team.repository.js";
 import TeamModel from "./team.schema.js";
 import Team from "../domain/team.entity.js";
 
-export default class TeamMongoRepository
-  implements ITeamRepository
-{
+export default class TeamMongoRepository implements ITeamRepository {
   public async findAll(): Promise<Team[] | null> {
     try {
       const mongoTeams = await TeamModel.find();
@@ -21,16 +19,13 @@ export default class TeamMongoRepository
   }
 
   public async findById(id: number): Promise<Team | null> {
-    return;
+    return TeamModel.findOne({ id: id });
   }
 
   public async insertOne(team: Team): Promise<void> {
     await TeamModel.create(team);
   }
-  public async updateOne(
-    id: number,
-    newData: Team
-  ): Promise<Team | null> {
+  public async updateOne(id: number, newData: Team): Promise<Team | null> {
     return await TeamModel.findOneAndUpdate({ id: id }, newData, {
       new: true,
     });

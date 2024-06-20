@@ -1,22 +1,18 @@
 import { Schema, model } from "mongoose";
+import { competitionSchema } from "../../Competition/infrastructure/competition.schema.js";
+import { teamSchema } from "../../Team/infrastructure/team.schema.js";
 
-const standingSchema = new Schema({
-  competition: { type: Number, require: true},
-  team: {
-      id: {type: Number , require: true},
-      name: {type: String , require: true},
-      logo: {type: String } 
-     }
-    ,
-    points: {type: Number},
-    
-    goalsDiff: {type: Number},
-    
-    group: {type: String},
+export const standingSchema = new Schema({
+  competition: { type: competitionSchema, require: true },
+  team: { type: teamSchema, require: true },
+  points: { type: Number },
 
-        description: {type: String},  
-    
+  goalsDiff: { type: Number },
+
+  group: { type: String },
+
+  description: { type: String },
 });
 
-  const standingModel = model("standings", standingSchema);  
+const standingModel = model("standings", standingSchema);
 export default standingModel;

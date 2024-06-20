@@ -1,9 +1,10 @@
 import express from "express";
 
 import dbInit from "./Shared/infrastructure/db.js";
-import CompetitionsApp from "./Competition/competition.app.js";
-import UsersApp from "./User/user.app.js";
-import TeamsApp from "./Team/team.app.js";
+import CompetitionApp from "./Competition/competition.app.js";
+import UserApp from "./User/user.app.js";
+import TeamApp from "./Team/team.app.js";
+import StandingApp from "./Standing/standing.app.js";
 
 export async function main() {
   const server = express();
@@ -11,9 +12,13 @@ export async function main() {
 
   // para cada Entidad
 
-  const competitionApp = new CompetitionsApp(server);
-  const userApp = new UsersApp(server);
-  const teamApp = new TeamsApp(server);
+  const competitionApp = new CompetitionApp(server);
+  const userApp = new UserApp(server);
+  const teamApp = new TeamApp(server);
+  const standingApp = new StandingApp(
+    competitionApp.competitionUseCases,
+    server
+  );
 
   dbInit().then();
   server.listen(5000, () => {

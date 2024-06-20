@@ -8,15 +8,16 @@ import StandingController from "./presentation/standing.controller.js";
 import StandingRoutes from "./presentation/standing.routes.js";
 import { Express } from "express";
 import Standing from "./domain/standing.entity.js";
+import CompetitionUseCases from "../Competition/application/competition.use_cases.js";
 
-export default class StandingsApp {
+export default class StandingApp {
   standingApiRepository: IApiRepository<Standing>;
   standingDbRepository: IStandingRepository;
   standingUseCases: StandingUseCases;
   standingController: StandingController;
   standingRoutes: StandingRoutes;
 
-  constructor(server: Express) {
+  constructor(competitionUseCases: CompetitionUseCases, server: Express) {
     // ----------------- infrastructure layout -------------------
     this.standingApiRepository = new StandingsApiRepository();
     this.standingDbRepository = new StandingMongoRepository();
@@ -24,7 +25,8 @@ export default class StandingsApp {
     // ----------------- application layout -----------------
     this.standingUseCases = new StandingUseCases(
       this.standingApiRepository,
-      this.standingDbRepository
+      this.standingDbRepository,
+      competitionUseCases
     );
 
     // ----------------- presentation layout -----------------

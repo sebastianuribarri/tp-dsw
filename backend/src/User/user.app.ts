@@ -5,7 +5,7 @@ import UserController from "./presentation/user.controller.js";
 import UsersRoutes from "./presentation/user.routes.js";
 import { Express } from "express";
 
-export default class UsersApp {
+export default class UserApp {
   userDbRepository: IUserRepository;
   userUseCases: UserUseCases;
   userController: UserController;

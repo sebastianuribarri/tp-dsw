@@ -1,18 +1,17 @@
+import Competition from "../../Competition/domain/competiton.entity.js";
+import Team from "../../Team/domain/team.entity.js";
+
 export default class Standing {
-  readonly competition: number;
-  readonly team: {
-    id: number;
-    name: string;
-    logo: string;
-  };
+  competition: any; //Competition | number;
+  readonly team: Team;
   readonly points: number;
   readonly goalsDiff: number;
   readonly group: string;
   readonly description: string;
 
   constructor(standing: {
-    competition: number;
-    team: { id: number; name: string; logo: string };
+    competition: any;
+    team: Team;
     points: number;
     goalsDiff: number;
     group: string;

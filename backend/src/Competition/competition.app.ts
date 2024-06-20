@@ -8,7 +8,7 @@ import CompetitionController from "./presentation/competition.controller.js";
 import CompetitionRoutes from "./presentation/competition.routes.js";
 import { Express } from "express";
 
-export default class CompetitionsApp {
+export default class CompetitionApp {
   competitionApiRepository: IApiRepository<Competition>;
   competitionDbRepository: ICompetitionRepository;
   competitionUseCases: CompetitionUseCases;

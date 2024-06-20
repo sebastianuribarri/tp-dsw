@@ -8,13 +8,14 @@ export default class CompetitionMongoRepository
   public async findAll(): Promise<Competition[] | null> {
     try {
       const mongoCompetitions = await CompetitionModel.find();
-      return mongoCompetitions.map((elem) => {
+      return mongoCompetitions.map((competition) => {
         return new Competition({
-          id: elem.id,
-          start: elem.start,
-          name: elem.name,
-          type: elem.type,
-          logo: elem.logo,
+          id: competition.id,
+          start: competition.start,
+          end: competition.end,
+          name: competition.name,
+          type: competition.type,
+          logo: competition.logo,
         });
       });
     } catch (err) {
@@ -23,7 +24,15 @@ export default class CompetitionMongoRepository
   }
 
   public async findById(id: number): Promise<Competition | null> {
-    return;
+    const competition = await CompetitionModel.findOne({ id: id });
+    return new Competition({
+      id: competition.id,
+      start: competition.start,
+      end: competition.end,
+      name: competition.name,
+      type: competition.type,
+      logo: competition.logo,
+    });
   }
 
   public async insertOne(competition: Competition): Promise<void> {

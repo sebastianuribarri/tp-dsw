@@ -1,7 +1,7 @@
 import { Schema, model } from "mongoose";
 
-const teamSchema = new Schema({
-  id: { type: Number, require: true, unique: true },
+export const teamSchema = new Schema({
+  id: { type: Number, require: true },
   name: { type: String, require: true },
   logo: { type: String, require: true },
 });
