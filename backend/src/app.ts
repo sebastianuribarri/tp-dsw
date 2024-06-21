@@ -1,26 +1,39 @@
+import { Express } from "express";
 import express from "express";
-
 import dbInit from "./Shared/infrastructure/db.js";
 import CompetitionApp from "./Competition/competition.app.js";
 import UserApp from "./User/user.app.js";
 import TeamApp from "./Team/team.app.js";
 import StandingApp from "./Standing/standing.app.js";
+import MongoDatabase from "./Shared/infrastructure/db.js";
 
-export async function main() {
-  const server = express();
-  server.use(express.json());
+export default class App {
+  server: Express;
 
-  // para cada Entidad
+  // contained apps
+  competitionApp: CompetitionApp;
+  userApp: UserApp;
+  teamApp: TeamApp;
+  standingApp: StandingApp;
+  playerApp: any;
+  matchApp: any;
+  eventApp: any;
+  formationApp: any;
+  voteApp: any;
+  predicitionApp: any;
 
-  const competitionApp = new CompetitionApp(server);
-  const userApp = new UserApp(server);
-  const teamApp = new TeamApp(server);
-  const standingApp = new StandingApp(competitionApp, teamApp, server);
+  constructor(server: Express) {
+    this.server = server;
+    this.competitionApp = new CompetitionApp(server);
+    this.userApp = new UserApp(this.server);
+    this.teamApp = new TeamApp(this.server);
+    this.standingApp = new StandingApp(this.competitionApp, this.server);
+  }
 
-  dbInit().then();
-  server.listen(5000, () => {
-    console.log("escuchando...", 5000);
-  });
+  public run(port: number, dbConnection: () => Promise<void>) {
+    dbConnection().then();
+    this.server.listen(port, () => {
+      console.log("escuchando...", port);
+    });
+  }
 }
-
-main();

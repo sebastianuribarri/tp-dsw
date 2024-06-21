@@ -11,11 +11,10 @@ export default class StandingUseCases {
   constructor(
     private readonly standingApiRepository: IApiRepository<Standing>,
     private readonly standingDbRepository: IStandingRepository,
-    private readonly competitionUseCases: CompetitionUseCases,
-    private readonly teamUseCases: TeamUseCases
+    private readonly competitionUseCases: CompetitionUseCases
   ) {}
 
-  public async findCompetitionTeams(competition: Competition) {
+  public async findExistanceStandings(competition: Competition) {
     // check if the standings of the competition exist or not
     const competitionStandingsExists = CompetitionStandingsTimmer.existUpdate(
       competition.id,
@@ -102,23 +101,15 @@ export default class StandingUseCases {
   public async listStandingsByTeam(teamId: number) {
     let teamStandings: Standing[] = [];
 
-    // verify if team exist
-    const team = await this.teamUseCases.getTeam(teamId);
-    if (!team) return [];
-
     // search for team standing in each competition
     const competitions = await this.competitionUseCases.listAll();
     for (let competition of competitions) {
-      let competitionStandings = await this.findCompetitionTeams(competition);
-      console.log(competitionStandings);
+      let competitionStandings = await this.findExistanceStandings(competition);
       let teamStanding = competitionStandings.find(
         (standing) => standing.team.id === teamId
       );
-      if (teamStanding instanceof Standing) {
-        teamStandings.push(teamStanding);
-      }
+      if (teamStanding instanceof Standing) teamStandings.push(teamStanding);
     }
-
     return teamStandings;
   }
 
@@ -126,9 +117,8 @@ export default class StandingUseCases {
     competition: Competition,
     standings: Standing[]
   ) {
-    for (let standing of standings) {
-      standing.competition = competition;
-    }
+    for (let standing of standings) standing.competition = competition;
+
     return await this.standingDbRepository.insertMany(standings);
   }
 
@@ -148,9 +138,8 @@ export default class StandingUseCases {
             dbStanding.competition === apiStanding.competition &&
             dbStanding.team.id === apiStanding.team.id
           ) {
-            if (apiStanding != dbStanding) {
-              this.updateStanding(apiStanding);
-            }
+            if (apiStanding != dbStanding) this.updateStanding(apiStanding);
+
             oldData.splice(i, 1);
           }
         });

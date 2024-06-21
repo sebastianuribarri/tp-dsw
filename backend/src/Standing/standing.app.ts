@@ -19,11 +19,7 @@ export default class StandingApp {
   standingController: StandingController;
   standingRoutes: StandingRoutes;
 
-  constructor(
-    competitionApp: CompetitionApp,
-    teamApp: TeamApp,
-    server: Express
-  ) {
+  constructor(competitionApp: CompetitionApp, server: Express) {
     // ----------------- infrastructure layer -------------------
     this.standingApiRepository = new StandingsApiRepository();
     this.standingDbRepository = new StandingMongoRepository();
@@ -32,8 +28,7 @@ export default class StandingApp {
     this.standingUseCases = new StandingUseCases(
       this.standingApiRepository,
       this.standingDbRepository,
-      competitionApp.competitionUseCases,
-      teamApp.teamUseCases
+      competitionApp.competitionUseCases
     );
 
     // ----------------- presentation layer -----------------
