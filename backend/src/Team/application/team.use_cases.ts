@@ -12,70 +12,54 @@ export default class TeamUseCases {
     this.teamsTimmer = new TeamsTimmer();
   }
 
-  private async getNewTeamsData() {
-    const apiTeams = await this.teamApiRepository.findAll({
-      country: "Argentina",
-    });
-    let dbTeams = await this.teamDbRepository.findAll();
-
-    if (apiTeams && dbTeams) {
-      // apiTeams loop
-      apiTeams.forEach((apiTeam) => {
-        let founded = false;
-        // dbTeams loop
-        dbTeams.forEach((dbTeam, i) => {
-          if (dbTeam.id === apiTeam.id) {
-            if (apiTeam != dbTeam) {
-              this.updateTeam(dbTeam.id, apiTeam);
-            }
-            dbTeams.splice(i, 1);
-            founded = true;
-          }
-        });
-
-        if (!founded) {
-          this.createTeam(apiTeam);
-        }
-      });
-      this.teamsTimmer.setUpdate();
-      return apiTeams;
-    }
-  }
-
   public async listAll() {
-    const updated = this.teamsTimmer.updated;
-    if (updated) {
-      return await this.teamDbRepository.findAll();
-    } else {
-      return await this.getNewTeamsData();
-    }
+    const newData = await this.needUpdate();
+    if (newData) return newData;
+    return await this.teamDbRepository.findAll();
   }
 
   public async getTeam(id: number) {
-    const teamsUpdated = this.teamsTimmer.updated;
-    let team: Team | null;
-    if (teamsUpdated) {
-      // si las Teams estan actualizadas
-      team = await this.teamDbRepository.findById(id);
-    } else {
-      // sino, actualizar el listado
-      const updatedTeams = await this.getNewTeamsData();
-      team = updatedTeams.find((comp) => comp.id === id);
+    const newData = await this.needUpdate();
+    if (newData) return newData.find((team) => team.id === id);
+    return await this.teamDbRepository.findById(id);
+  }
+
+  private async needUpdate() {
+    if (this.teamsTimmer.updated) return false;
+    const apiTeams = await this.teamApiRepository.findAll({
+      country: "Argentina",
+    });
+    const result = await this.updateTeams(apiTeams);
+    if (result) this.teamsTimmer.setUpdate();
+    return apiTeams;
+  }
+
+  private async updateTeams(apiTeams: Team[]) {
+    let dbTeams = await this.teamDbRepository.findAll();
+
+    if (!(apiTeams && dbTeams)) return false;
+
+    // apiTeams loop
+    for (let apiTeam of apiTeams) {
+      let founded = false;
+      // dbTeams loop
+      dbTeams.forEach((dbTeam, i) => {
+        if (dbTeam.id === apiTeam.id) {
+          if (apiTeam != dbTeam) this.updateTeam(dbTeam.id, apiTeam);
+          dbTeams.splice(i, 1);
+          founded = true;
+        }
+      });
+      if (!founded) this.createTeam(apiTeam);
     }
-    return team;
+    return true;
   }
 
-  public async createTeam(team: Team) {
+  private async updateTeam(teamId: number, newTeamData: Team) {
+    return await this.teamDbRepository.updateOne(teamId, newTeamData);
+  }
+
+  private async createTeam(team: Team) {
     return await this.teamDbRepository.insertOne(team);
-  }
-
-  public async updateTeam(
-    teamId: number,
-    newTeamData: Team
-  ) {
-    return await this.teamDbRepository.updateOne(
-      teamId,
-      newTeamData
-    );
   }
 }

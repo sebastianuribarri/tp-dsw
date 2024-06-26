@@ -10,15 +10,27 @@ export default class Standing {
   readonly description: string;
 
   constructor(standing: {
-    competition: any;
-    team: Team;
+    competition: {
+      id: number;
+      start: Date;
+      end: Date;
+      name: string;
+      type: string;
+      logo: string;
+      standingsTimmer: { lastUpdate: Date; active: boolean };
+    };
+    team: {
+      id: number;
+      name: string;
+      logo: string;
+    };
     points: number;
     goalsDiff: number;
     group: string;
     description?: string;
   }) {
-    this.competition = standing.competition;
-    this.team = standing.team;
+    this.competition = new Competition(standing.competition);
+    this.team = new Team(standing.team);
     this.points = standing.points;
     this.goalsDiff = standing.goalsDiff;
     this.group = standing.group;

@@ -16,6 +16,7 @@ export default class CompetitionMongoRepository
           name: competition.name,
           type: competition.type,
           logo: competition.logo,
+          standingsTimmer: competition.standingsTimmer,
         });
       });
     } catch (err) {
@@ -32,6 +33,7 @@ export default class CompetitionMongoRepository
       name: competition.name,
       type: competition.type,
       logo: competition.logo,
+      standingsTimmer: competition.standingsTimmer,
     });
   }
 

@@ -20,13 +20,13 @@ export default class TeamApp {
     this.teamApiRepository = new TeamApiRepository();
     this.teamDbRepository = new TeamMongoRepository();
 
-    // ----------------- application layer -----------------
+    // -----------------  application layer  --------------------
     this.teamUseCases = new TeamUseCases(
       this.teamApiRepository,
       this.teamDbRepository
     );
 
-    // ----------------- presentation layer -----------------
+    // -----------------  presentation layer  -------------------
     this.teamController = new TeamController(this.teamUseCases);
     this.teamRoutes = new TeamRoutes(this.teamController, server);
   }

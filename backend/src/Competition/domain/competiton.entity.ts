@@ -1,3 +1,5 @@
+import Timmer from "../../Shared/domain/timmer.js";
+
 export default class Competition {
   readonly id: number;
   readonly start: Date;
@@ -5,6 +7,10 @@ export default class Competition {
   readonly name: string;
   readonly type: string;
   readonly logo: string;
+
+  private static readonly standingsTimmerInMinutes = 60;
+
+  standingsTimmer: Timmer;
   constructor(competition: {
     id: number;
     start: Date;
@@ -12,17 +18,40 @@ export default class Competition {
     name: string;
     type: string;
     logo: string;
+    standingsTimmer?: { lastUpdate: Date; active: boolean };
   }) {
     this.id = competition.id;
-    this.start = competition.start;
-    this.end = competition.end;
+    this.start = new Date(competition.start);
+    this.end = new Date(competition.end);
     this.name = competition.name;
     this.type = competition.type;
     this.logo = competition.logo;
+    this.standingsTimmer = competition.standingsTimmer
+      ? new Timmer(competition.standingsTimmer)
+      : new Timmer();
   }
 
   get season() {
     const startDate = new Date(this.start);
     return startDate.getFullYear();
+  }
+
+  public standingsUpdated() {
+    return this.standingsTimmer.isUpdated(Competition.standingsTimmerInMinutes);
+  }
+
+  public updateStandingsTimmerStatus() {
+    const now = new Date();
+    const oldStatus = this.standingsTimmer.active;
+
+    // if the competitions ended 2 days or more time ago, the timer gets disable, instead it get activated
+    const differenceInDays =
+      (now.getTime() - this.end.getTime()) / (1000 * 60 * 24);
+    if (differenceInDays >= 2) this.standingsTimmer.disableTimmer();
+    else this.standingsTimmer.activateTimmer();
+
+    // if the status change, return true, instead return false
+    if (oldStatus != this.standingsTimmer.active) return true;
+    return false;
   }
 }

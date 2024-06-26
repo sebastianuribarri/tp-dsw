@@ -24,6 +24,8 @@ export default class App {
 
   constructor(server: Express) {
     this.server = server;
+
+    // apps setup
     this.competitionApp = new CompetitionApp(server);
     this.userApp = new UserApp(this.server);
     this.teamApp = new TeamApp(this.server);
