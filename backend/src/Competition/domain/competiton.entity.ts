@@ -1,4 +1,5 @@
 import Timmer from "../../Shared/domain/timmer.js";
+import Standing from "./standing.entity.js";
 
 export default class Competition {
   readonly id: number;
@@ -12,6 +13,7 @@ export default class Competition {
 
   standingsTimmer: Timmer;
   constructor(competition: {
+  
     id: number;
     start: Date;
     end: Date;
@@ -54,4 +56,27 @@ export default class Competition {
     if (oldStatus != this.standingsTimmer.active) return true;
     return false;
   }
+}
+
+export class CompetitionDetail extends Competition {
+  readonly standings: Standing[];
+
+  constructor(competition: {
+  
+    id: number;
+    start: Date;
+    end: Date;
+    name: string;
+    type: string;
+    logo: string;
+    standingsTimmer?: { lastUpdate: Date; active: boolean };
+  } , 
+      standings: Standing[],
+) 
+{
+    super (competition);
+    this.standings = standings;
+
+}
+
 }

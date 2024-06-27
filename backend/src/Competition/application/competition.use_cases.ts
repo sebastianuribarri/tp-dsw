@@ -2,13 +2,15 @@ import IApiRepository from "../../Shared/domain/api.repository.js";
 import ICompetitionRepository from "../domain/competition.repository.js";
 import GlobalCompetitions from "../domain/competition.timmer.js";
 import CompetitionsTimmer from "../domain/competition.timmer.js";
-import Competition from "../domain/competiton.entity.js";
+import Competition, { CompetitionDetail } from "../domain/competiton.entity.js";
+import StandingUseCases from "./standing.use_cases.js";
 
 export default class CompetitionUseCases {
   private readonly competitionsTimmer: GlobalCompetitions;
   public constructor(
     private readonly competitionApiRepository: IApiRepository<Competition>,
-    private readonly competitionDbRepository: ICompetitionRepository
+    private readonly competitionDbRepository: ICompetitionRepository,
+    private readonly standingUseCases: StandingUseCases,
   ) {
     this.competitionsTimmer = new GlobalCompetitions();
     this.competitionsTimmer.createTimmer();
@@ -34,11 +36,14 @@ export default class CompetitionUseCases {
   }
 
   public async getCompetition(id: number) {
+    let competition: Competition;
     const newData = await this.needUpdate();
 
-    if (newData) return newData.find((comp) => comp.id === id);
+    if (newData) competition = newData.find((comp) => comp.id === id);
 
-    return await this.competitionDbRepository.findById(id);
+    competition = await this.competitionDbRepository.findById(id);
+
+    
   }
 
   public async createCompetition(competition: Competition) {

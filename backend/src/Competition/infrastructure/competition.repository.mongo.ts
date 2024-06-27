@@ -1,6 +1,7 @@
 import ICompetitionRepository from "../domain/competition.repository.js";
 import CompetitionModel from "./competition.schema.js";
-import Competition from "../domain/competiton.entity.js";
+import Competition, { CompetitionDetail } from "../domain/competiton.entity.js";
+import Standing from "../domain/standing.entity.js";
 
 export default class CompetitionMongoRepository
   implements ICompetitionRepository
@@ -26,7 +27,8 @@ export default class CompetitionMongoRepository
 
   public async findById(id: number): Promise<Competition | null> {
     const competition = await CompetitionModel.findOne({ id: id });
-    return new Competition({
+    const standings = competition.standings.map((standing ) =>  new Standing(standing))
+    return new CompetitionDetail({
       id: competition.id,
       start: competition.start,
       end: competition.end,
@@ -34,7 +36,8 @@ export default class CompetitionMongoRepository
       type: competition.type,
       logo: competition.logo,
       standingsTimmer: competition.standingsTimmer,
-    });
+
+    }, standings );
   }
 
   public async insertOne(competition: Competition): Promise<void> {
