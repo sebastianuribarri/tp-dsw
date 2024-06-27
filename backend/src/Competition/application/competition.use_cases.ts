@@ -1,27 +1,27 @@
 import IApiRepository from "../../Shared/domain/api.repository.js";
 import ICompetitionRepository from "../domain/competition.repository.js";
-import CompetitionsTimmerHandler from "../domain/competition.timmer.js";
+import GlobalCompetitions from "../domain/competition.timmer.js";
 import CompetitionsTimmer from "../domain/competition.timmer.js";
 import Competition from "../domain/competiton.entity.js";
 
 export default class CompetitionUseCases {
-  private readonly competitionsTimmerHandler: CompetitionsTimmerHandler;
+  private readonly competitionsTimmer: GlobalCompetitions;
   public constructor(
     private readonly competitionApiRepository: IApiRepository<Competition>,
     private readonly competitionDbRepository: ICompetitionRepository
   ) {
-    this.competitionsTimmerHandler = new CompetitionsTimmerHandler();
-    this.competitionsTimmerHandler.createTimmer();
+    this.competitionsTimmer = new GlobalCompetitions();
+    this.competitionsTimmer.createTimmer();
   }
 
   public async needUpdate() {
-    if (this.competitionsTimmerHandler.competitionsUpdated()) return false;
+    if (this.competitionsTimmer.competitionsUpdated()) return false;
     const apiCompetitions = await this.competitionApiRepository.findAll({
       country: "Argentina",
       current: true,
     });
     this.updateCompetitions(apiCompetitions);
-    await this.competitionsTimmerHandler.updateTimmer();
+    await this.competitionsTimmer.updateTimmer();
     return apiCompetitions;
   }
 
