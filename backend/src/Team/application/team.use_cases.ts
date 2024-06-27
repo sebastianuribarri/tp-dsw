@@ -1,13 +1,16 @@
 import IApiRepository from "../../Shared/domain/api.repository.js";
 import ITeamRepository from "../domain/team.repository.js";
 import TeamsTimmer from "../domain/team.timmer.js";
-import Team from "../domain/team.entity.js";
+import Team, { TeamDetail } from "../domain/team.entity.js";
+import PlayerUseCases from "./player.use_cases.js";
+import Player from "../domain/player.entity.js";
 
 export default class TeamUseCases {
   private readonly teamsTimmer: TeamsTimmer;
   public constructor(
     private readonly teamApiRepository: IApiRepository<Team>,
-    private readonly teamDbRepository: ITeamRepository
+    private readonly teamDbRepository: ITeamRepository,
+    private readonly playerUseCases: PlayerUseCases
   ) {
     this.teamsTimmer = new TeamsTimmer();
   }
@@ -19,9 +22,27 @@ export default class TeamUseCases {
   }
 
   public async getTeam(id: number) {
-    const newData = await this.needUpdate();
-    if (newData) return newData.find((team) => team.id === id);
+    let teamDetail: TeamDetail;
+    let newTeamPlayers: false | Player[];
+    let team: Team;
+    const newTeams = await this.needUpdate();
+    
+    if (newTeams){
+      const team = newTeams.find((team) => team.id === id);
+      newTeamPlayers = await this.playerUseCases.needUpdate(team);
+    }
+    else {
+      teamDetail = await this.teamDbRepository.findById(id);
+      const {players, ...team_ } = teamDetail
+      team = new Team (team_)
+      newTeamPlayers = await this.playerUseCases.needUpdate(teamDetail);
+    }
+    if (newTeamPlayers) {
+      return new TeamDetail(team, newTeamPlayers)
+
+    }
     return await this.teamDbRepository.findById(id);
+
   }
 
   private async needUpdate() {

@@ -1,6 +1,7 @@
 import ITeamRepository from "../domain/team.repository.js";
 import TeamModel from "./team.schema.js";
-import Team from "../domain/team.entity.js";
+import Team, { TeamDetail } from "../domain/team.entity.js";
+import Player from "../domain/player.entity.js";
 
 export default class TeamMongoRepository implements ITeamRepository {
   public async findAll(): Promise<Team[] | null> {
@@ -19,7 +20,13 @@ export default class TeamMongoRepository implements ITeamRepository {
   }
 
   public async findById(id: number): Promise<Team | null> {
-    return TeamModel.findOne({ id: id });
+    const team = await TeamModel.findOne({ id: id });
+    const players = team.players.map((player) => new Player(player))
+    return new TeamDetail({
+      id: team.id,
+      name: team.name,
+      logo: team.logo,
+    }, players)
   }
 
   public async insertOne(team: Team): Promise<void> {
