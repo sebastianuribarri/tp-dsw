@@ -13,7 +13,6 @@ export default class Competition {
 
   standingsTimmer: Timmer;
   constructor(competition: {
-  
     id: number;
     start: Date;
     end: Date;
@@ -43,12 +42,12 @@ export default class Competition {
   }
 
   public updateStandingsTimmerStatus() {
-    const now = new Date();
+    const lastUpdate = this.standingsTimmer.lastUpdate;
     const oldStatus = this.standingsTimmer.active;
 
     // if the competitions ended 2 days or more time ago, the timer gets disable, instead it get activated
     const differenceInDays =
-      (now.getTime() - this.end.getTime()) / (1000 * 60 * 24);
+      (lastUpdate.getTime() - this.end.getTime()) / (1000 * 60 * 24);
     if (differenceInDays >= 2) this.standingsTimmer.disableTimmer();
     else this.standingsTimmer.activateTimmer();
 
@@ -59,24 +58,21 @@ export default class Competition {
 }
 
 export class CompetitionDetail extends Competition {
-  readonly standings: Standing[];
+  standings: Standing[];
 
-  constructor(competition: {
-  
-    id: number;
-    start: Date;
-    end: Date;
-    name: string;
-    type: string;
-    logo: string;
-    standingsTimmer?: { lastUpdate: Date; active: boolean };
-  } , 
-      standings: Standing[],
-) 
-{
-    super (competition);
+  constructor(
+    competition: {
+      id: number;
+      start: Date;
+      end: Date;
+      name: string;
+      type: string;
+      logo: string;
+      standingsTimmer?: { lastUpdate: Date; active: boolean };
+    },
+    standings: Standing[]
+  ) {
+    super(competition);
     this.standings = standings;
-
-}
-
+  }
 }

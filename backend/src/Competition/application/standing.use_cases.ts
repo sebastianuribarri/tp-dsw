@@ -6,18 +6,8 @@ import Standing from "../domain/standing.entity.js";
 import ICompetitionRepository from "../domain/competition.repository.js";
 export default class StandingUseCases {
   constructor(
-    private readonly standingApiRepository: IApiRepository<Standing>,
+    private readonly standingApiRepository: IApiRepository<Standing>
   ) {}
-
-  public async listStandingsByCompetition(competition: Competition) {
-    
-
-    const newCompetitionStandingsData = await this.standingsNeedUpdate(
-      competition
-    );
-    if (newCompetitionStandingsData) return newCompetitionStandingsData;
-
-  }
 
   public async listStandingsByTeam(teamId: number) {
     let teamStandings: Standing[] = [];
@@ -54,7 +44,7 @@ export default class StandingUseCases {
     return false;
   }
 
-  private async standingsNeedUpdate(competition: Competition) {
+  public async needUpdate(competition: Competition) {
     let response: Standing[] | false = false;
     // check if the competition standings need update
     const standingsUpdated = competition.standingsUpdated();
@@ -65,77 +55,16 @@ export default class StandingUseCases {
         league: competition.id,
         season: competition.season,
       });
-      for (let standing of apiCompetitionStandings) {
-        standing.competition = competition;
-      }
-      //   - update on database
-      // check if the competition standings exist or not
-      if (competition.standingsTimmer.existUpdate()) {
-        //    if they not exist, they are created and delete standing of old seasons if exist
-        await this.createCompetitionStandings(
-          competition,
-          apiCompetitionStandings
-        );
-        await this.deleteOldStandings(competition);
-      } else {
-        //    if they exist, they are updated
-        await this.updateCompetitionStandings(
-          competition.id,
-          apiCompetitionStandings
-        );
-      }
+
       competition.standingsTimmer.setUpdate();
-      //  - return the new data and set update with the actual date
-      response = apiCompetitionStandings;
-    } else {
-      response = false;
-    }
-    // if the timmer has changed from the stored on db, update competition on db
-    const standingsTimmerChangeStatus =
+
       competition.updateStandingsTimmerStatus();
-    if (!standingsUpdated || standingsTimmerChangeStatus) {
-      await this.competitionUseCases.updateCompetition(competition);
-    }
 
+      //  - return the new data and set update with the actual date
+      return apiCompetitionStandings;
+    }
     // if they are updated, return false, instead return the new data
-    return response;
-  }
-
-  private async createCompetitionStandings(
-    competition: Competition,
-    standings: Standing[]
-  ) {
-    for (let standing of standings) standing.competition = competition;
-
-    return await this.standingDbRepository.insertMany(standings);
-  }
-
-  private async updateCompetitionStandings(
-    competitionId: number,
-    newData: Standing[]
-  ) {
-    let oldData = await this.standingDbRepository.findMany({
-      competition: competitionId,
-    });
-    // apiStandings loop
-    for (let apiStanding of newData) {
-      // dbStandings loop
-      oldData.forEach((dbStanding, i) => {
-        if (
-          dbStanding.competition === apiStanding.competition &&
-          dbStanding.team.id === apiStanding.team.id
-        ) {
-          if (apiStanding != dbStanding) this.updateStanding(apiStanding);
-
-          oldData.splice(i, 1);
-        }
-      });
-    }
-    return newData;
-  }
-
-  private async updateStanding(standing: Standing) {
-    return await this.standingDbRepository.updateOne(standing);
+    return false;
   }
 
   private async deleteOldStandings(competition: Competition) {

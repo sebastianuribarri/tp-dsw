@@ -18,7 +18,7 @@ export default class CompetitionApp {
   competitionController: CompetitionController;
   competitionRoutes: CompetitionRoutes;
   standingsUseCases: StandingUseCases;
-  
+
   standingApiRepository: IApiRepository<Standing>;
 
   constructor(server: Express) {
@@ -29,16 +29,13 @@ export default class CompetitionApp {
 
     // ----------------- application layer -----------------
 
-     this.standingsUseCases = new StandingUseCases(
-      this.standingApiRepository,
-    );
+    this.standingsUseCases = new StandingUseCases(this.standingApiRepository);
 
     this.competitionUseCases = new CompetitionUseCases(
       this.competitionApiRepository,
-      this.competitionDbRepository
-      this.standingsUseCases,
+      this.competitionDbRepository,
+      this.standingsUseCases
     );
-
 
     // ----------------- presentation layer -----------------
     this.competitionController = new CompetitionController(
@@ -48,6 +45,5 @@ export default class CompetitionApp {
       this.competitionController,
       server
     );
-
   }
 }

@@ -10,7 +10,7 @@ export default class CompetitionUseCases {
   public constructor(
     private readonly competitionApiRepository: IApiRepository<Competition>,
     private readonly competitionDbRepository: ICompetitionRepository,
-    private readonly standingUseCases: StandingUseCases,
+    private readonly standingUseCases: StandingUseCases
   ) {
     this.competitionsTimmer = new GlobalCompetitions();
     this.competitionsTimmer.createTimmer();
@@ -37,13 +37,19 @@ export default class CompetitionUseCases {
 
   public async getCompetition(id: number) {
     let competition: Competition;
-    const newData = await this.needUpdate();
+    let competitionDetail: CompetitionDetail;
+    const newCompetitions = await this.needUpdate();
+    competitionDetail = await this.competitionDbRepository.findById(id);
 
-    if (newData) competition = newData.find((comp) => comp.id === id);
+    const newStandings = await this.standingUseCases.needUpdate(
+      competitionDetail
+    );
+    if (newStandings) {
+      competitionDetail.standings = newStandings;
+      await this.updateCompetition(competitionDetail);
+    }
 
-    competition = await this.competitionDbRepository.findById(id);
-
-    
+    return competitionDetail;
   }
 
   public async createCompetition(competition: Competition) {
@@ -74,10 +80,6 @@ export default class CompetitionUseCases {
     newCompetition: Competition,
     oldCompetition?: Competition
   ) {
-    if (oldCompetition) {
-      if (oldCompetition.start != newCompetition.start)
-        newCompetition.standingsTimmer.resetUpdate();
-    }
     return await this.competitionDbRepository.updateOne(
       newCompetition.id,
       newCompetition

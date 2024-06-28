@@ -22,27 +22,15 @@ export default class TeamUseCases {
   }
 
   public async getTeam(id: number) {
-    let teamDetail: TeamDetail;
-    let newTeamPlayers: false | Player[];
-    let team: Team;
-    const newTeams = await this.needUpdate();
-    
-    if (newTeams){
-      const team = newTeams.find((team) => team.id === id);
-      newTeamPlayers = await this.playerUseCases.needUpdate(team);
-    }
-    else {
-      teamDetail = await this.teamDbRepository.findById(id);
-      const {players, ...team_ } = teamDetail
-      team = new Team (team_)
-      newTeamPlayers = await this.playerUseCases.needUpdate(teamDetail);
-    }
+    await this.needUpdate();
+    let teamDetail = await this.teamDbRepository.findById(id);
+    let newTeamPlayers = await this.playerUseCases.needUpdate(teamDetail);
     if (newTeamPlayers) {
-      return new TeamDetail(team, newTeamPlayers)
-
+      teamDetail.players = newTeamPlayers;
+      await this.updateTeam(teamDetail.id, teamDetail);
+      return teamDetail;
     }
-    return await this.teamDbRepository.findById(id);
-
+    return teamDetail;
   }
 
   private async needUpdate() {
@@ -66,7 +54,6 @@ export default class TeamUseCases {
       // dbTeams loop
       dbTeams.forEach((dbTeam, i) => {
         if (dbTeam.id === apiTeam.id) {
-          if (apiTeam != dbTeam) this.updateTeam(dbTeam.id, apiTeam);
           dbTeams.splice(i, 1);
           founded = true;
         }
