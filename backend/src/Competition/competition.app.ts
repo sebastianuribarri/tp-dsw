@@ -29,12 +29,14 @@ export default class CompetitionApp {
 
     // ----------------- application layer -----------------
 
-    this.standingsUseCases = new StandingUseCases(this.standingApiRepository);
+     this.standingsUseCases = new StandingUseCases(
+      this.standingApiRepository,
+    );
 
     this.competitionUseCases = new CompetitionUseCases(
       this.competitionApiRepository,
-      this.competitionDbRepository,
-      this.standingsUseCases
+      this.competitionDbRepository
+      this.standingsUseCases,
     );
 
     // ----------------- presentation layer -----------------
