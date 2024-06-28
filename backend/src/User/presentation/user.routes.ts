@@ -7,9 +7,10 @@ export default class UsersRoutes {
         server.use("/api/users", userRouter);
 
         userRouter.get("/:mail", userController.getOne);
-        userRouter.post("/", userController.createOne);
+        userRouter.post("/", userController.register);
         userRouter.delete("/:mail", userController.deleteOne);
         userRouter.put("/follow", userController.followTeam);
         userRouter.put("/unfollow", userController.followTeam);
+        userRouter.post("/login", userController.login)
     }
 }

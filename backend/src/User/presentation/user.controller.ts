@@ -6,7 +6,7 @@ export default class UserController {
   constructor(private userUseCases: UserUseCases) {
     this.getOne = this.getOne.bind(this);
     this.deleteOne = this.deleteOne.bind(this);
-    this.createOne = this.createOne.bind(this);
+    this.register = this.register.bind(this);
     this.userUseCases = userUseCases;
   }
 
@@ -15,28 +15,48 @@ export default class UserController {
     res.json(result);
   }
 
-  public async createOne(req: Request, res: Response) {
-    const user = new User({
+  public async register(req: Request, res: Response) {
+    try{    const user = new User({
       mail: req.body.mail as string,
       password: req.body.password as string,
+      username: req.body.username as string,
     });
-    await this.userUseCases.createUser(user);
-    res.status(200).json();
+    await this.userUseCases.register(user);
+    res.status(200).json();}
+    catch (error){
+      console.log(error);
+    }
   }
+  public async login(req: Request, res: Response){
+    try {
+      const { email, password } = req.body;
+      const userFound = await this.userUseCases.getUser(email);
+      res.json({
+        id: userFound.id,
+        username: userFound.username,
+        email: userFound.mail,
+      });
+    } catch (error) {
+      return res.status(500).json({ message: error.message });
+    }
+  }
+
   public async deleteOne(req: Request, res: Response) {
     await this.userUseCases.deleteUser(req.params.mail);
     res.status(200).json();
   }
-  public async followTeam(req:Request, res: Response){
-    await this.userUseCases.followTeam (req.params.mail,Number(req.params.team))
+  public async followTeam(req: Request, res: Response) {
+    await this.userUseCases.followTeam(
+      req.params.mail,
+      Number(req.params.team)
+    );
     res.status(200).json();
-    }
-    public async unfollowTeam(req:Request, res: Response){
-      await this.userUseCases.followTeam (req.params.mail,Number(req.params.team))
-      res.status(200).json();
-      }
-    }
-  
-  
-  
-
+  }
+  public async unfollowTeam(req: Request, res: Response) {
+    await this.userUseCases.followTeam(
+      req.params.mail,
+      Number(req.params.team)
+    );
+    res.status(200).json();
+  }
+}

@@ -12,6 +12,9 @@ export default class UserMongoRepository implements IUserRepository {
           mail: elem.mail,
           password: elem.password,
           premium: elem.premium,
+          username: elem.username,
+          id: elem.id,
+          teams: elem.teams,
         });
       });
     } catch (err) {
@@ -25,6 +28,10 @@ export default class UserMongoRepository implements IUserRepository {
       return new User({
         mail: mongoUser.mail,
         password: mongoUser.password,
+        premium: mongoUser.premium,
+        username: mongoUser.username,
+        id: mongoUser.id,
+        teams: mongoUser.teams,
       });
     } catch (err) {
       console.log("ocurrio un error en MongoRepository(findAll):", err);

@@ -1,3 +1,4 @@
+import { error } from "console";
 import Competition from "../../Competition/domain/competiton.entity.js";
 import User from "../domain/user.entity.js";
 import { IUserRepository } from "../domain/user.repository.js";
@@ -11,6 +12,7 @@ export default class UserUseCases {
 
   public async getUser(mail: string) {
     const user = await this.userDbRepository.findByMail(mail);
+    if (!user)throw new Error("user not found");
     return user;
   }
   public async updatePassword(mail: string, newPassword: string) {
@@ -27,11 +29,16 @@ export default class UserUseCases {
       premium: newSuscriptionStatus,
     });
   }
-  public async createUser(user: User) {
+  public async register(user: User) {
     await this.userDbRepository.insertOne(user);
   }
   public async deleteUser(mail: string) {
     return await this.userDbRepository.deleteOne(mail);
+  }
+  public async login(mail: string, password: string){
+    const userFound = await this.getUser(mail)
+    if (userFound.password != password) throw new Error ("usuario y/o contraseña incorrecto"); 
+    else return userFound
   }
   public async followTeam(mail:string, idcompetition: number){
     let user = await this.userDbRepository.findByMail (mail);
@@ -47,4 +54,7 @@ export default class UserUseCases {
     await this. userDbRepository.updateOne(mail,{teams:user.teams})
     }
   }
+  
 }
+
+
