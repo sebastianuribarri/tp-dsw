@@ -1,6 +1,7 @@
 import { Schema, model } from "mongoose";
 import Team from "../../Team/domain/team.entity.js";
 import { teamSchema } from "../../Team/infrastructure/team.schema.js";
+import timmerSchema from "../../Shared/infrastructure/timmer.schema.js";
 
 export const competitionSchema = new Schema({
   standings: { type: [{team: teamSchema,
@@ -16,10 +17,7 @@ export const competitionSchema = new Schema({
   type: { type: String, default: "League" },
   logo: { type: String, require: true, default: "" },
   standingsTimmer: {
-    type: {
-      lastUpdate: { type: Date, default: null },
-      active: { type: Boolean, default: true },
-    },
+    type: timmerSchema,
     default: undefined,
   },
 });

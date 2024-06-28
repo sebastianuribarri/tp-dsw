@@ -35,7 +35,7 @@ export default class CompetitionApp {
 
     this.competitionUseCases = new CompetitionUseCases(
       this.competitionApiRepository,
-      this.competitionDbRepository
+      this.competitionDbRepository,
       this.standingsUseCases,
     );
 

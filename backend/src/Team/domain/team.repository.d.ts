@@ -1,8 +1,8 @@
 import Team, { TeamDetail } from "./team.entity.ts";
 
 export default interface ITeamRepository {
-  findAll(): Promise<Team[] | null>;
+  findAll(): Promise<TeamDetail[] | null>;
   findById(id: number): Promise<TeamDetail | null>;
-  insertOne(team: Team): Promise<Team | void>;
-  updateOne(id: number, newData: Team): Promise<Team | null>;
+  insertOne(team: Team): Promise<TeamDetail | void>;
+  updateOne(id: number, newData: Team): Promise<TeamDetail | null>;
 }

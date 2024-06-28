@@ -28,7 +28,6 @@ export default class TeamUseCases {
     if (newTeamPlayers) {
       teamDetail.players = newTeamPlayers;
       await this.updateTeam(teamDetail.id, teamDetail);
-      return teamDetail;
     }
     return teamDetail;
   }

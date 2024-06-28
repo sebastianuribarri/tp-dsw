@@ -51,6 +51,21 @@ export default class CompetitionUseCases {
 
     return competitionDetail;
   }
+  
+  public async getCompetitionsByTeam(teamId: number) {
+   const competitions = await this.listAll()
+    for(let competition of competitions){
+      let newCompetitionStandings = await this.standingUseCases.needCreation(competition);
+      if(newCompetitionStandings) {
+        let competitionDetail = new CompetitionDetail(competition, newCompetitionStandings)
+        await this.updateCompetition(competitionDetail)
+      }
+    }
+    
+    return await this.competitionDbRepository.findAll({})
+
+  }
+
 
   public async createCompetition(competition: Competition) {
     return await this.competitionDbRepository.insertOne(competition);

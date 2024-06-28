@@ -1,9 +1,11 @@
 import { Schema, model } from "mongoose";
+import timmerSchema from "../../Shared/infrastructure/timmer.schema.js";
 
 export const teamSchema = new Schema({
   id: { type: Number, require: true, default: 0 },
   name: { type: String, require: true, default: "" },
   logo: { type: String, require: true, default: "" },
+  playersTimmer: { type: timmerSchema, default: undefined },
   players: { type: [{ 
     id: { type: Number, default: 0}, 
     name: { type: String, default: "" }, 
