@@ -4,7 +4,7 @@ import express from "express";
 
 // database variables
 const db_port = 27017;
-const db_name = "fulbo";
+const db_name = "tf";
 
 // database setup
 const mongoDatabase = new MongoDatabase(db_port, db_name);

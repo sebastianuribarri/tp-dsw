@@ -63,7 +63,7 @@ export default class TeamUseCases {
   }
 
   private async updateTeam(teamId: number, newTeamData: Team) {
-    return await this.teamDbRepository.updateOne(teamId, newTeamData);
+    await this.teamDbRepository.updateOne(teamId, newTeamData);
   }
 
   private async createTeam(team: Team) {

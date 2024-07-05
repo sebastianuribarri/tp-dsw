@@ -14,7 +14,7 @@ export default class App {
   competitionApp: CompetitionApp;
   userApp: UserApp;
   teamApp: TeamApp;
-  standingApp: StandingApp;
+  public standingApp: StandingApp;
   playerApp: any;
   matchApp: any;
   eventApp: any;
@@ -26,10 +26,10 @@ export default class App {
     this.server = server;
 
     // apps setup
-    this.competitionApp = new CompetitionApp(server);
+    this.standingApp = new StandingApp(this.server);
+    this.competitionApp = new CompetitionApp(this.standingApp, this.server);
     this.userApp = new UserApp(this.server);
     this.teamApp = new TeamApp(this.server);
-    this.standingApp = new StandingApp(this.competitionApp, this.server);
   }
 
   public run(port: number, dbConnection: () => Promise<void>) {

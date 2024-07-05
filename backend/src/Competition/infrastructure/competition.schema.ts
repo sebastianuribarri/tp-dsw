@@ -2,14 +2,9 @@ import { Schema, model } from "mongoose";
 import Team from "../../Team/domain/team.entity.js";
 import { teamSchema } from "../../Team/infrastructure/team.schema.js";
 import timmerSchema from "../../Shared/infrastructure/timmer.schema.js";
+import standingSchema from "../../Standing/infrastructure/standing.schema.js";
 
 export const competitionSchema = new Schema({
-  standings: { type: [{team: teamSchema,
-     points: {type: Number, default: 0},
-     goalsDiff: {type: Number, default: 0}, 
-     group: {type: String, default: ''},
-     description: {type: String , default: ''},}],
-     default: []},
   id: { type: Number, require: true, default: 0 },
   start: { type: Date, require: true, default: new Date() },
   end: { type: Date, require: true, default: new Date() },
@@ -20,6 +15,7 @@ export const competitionSchema = new Schema({
     type: timmerSchema,
     default: undefined,
   },
+  standings: { type: [standingSchema], default: [] },
 });
 
 const CompetitionModel = model("competitions", competitionSchema);

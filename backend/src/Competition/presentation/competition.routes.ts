@@ -8,5 +8,6 @@ export default class CompetitionsRoutes {
 
     competitionsRouter.get("/", competitionsController.getAll);
     competitionsRouter.get("/:id", competitionsController.getOne);
+    competitionsRouter.get("/team/:teamId", competitionsController.getByTeam);
   }
 }

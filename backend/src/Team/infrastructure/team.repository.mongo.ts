@@ -8,12 +8,15 @@ export default class TeamMongoRepository implements ITeamRepository {
     try {
       const mongoTeams = await TeamModel.find();
       return mongoTeams.map((elem) => {
-        return new TeamDetail({
-          id: elem.id,
-          name: elem.name,
-          logo: elem.logo,
-          playersTimmer: elem.playersTimmer,
-        }, elem.players);
+        return new TeamDetail(
+          {
+            id: elem.id,
+            name: elem.name,
+            logo: elem.logo,
+            playersTimmer: elem.playersTimmer,
+          },
+          elem.players
+        );
       });
     } catch (err) {
       console.log("ocurrio un error en MongoRepository(findAll):", err);
@@ -22,20 +25,23 @@ export default class TeamMongoRepository implements ITeamRepository {
 
   public async findById(id: number): Promise<TeamDetail | null> {
     const team = await TeamModel.findOne({ id: id });
-    const players = team.players.map((player) => new Player(player))
-    return new TeamDetail({
-      id: team.id,
-      name: team.name,
-      logo: team.logo,
-      playersTimmer: team.playersTimmer
-    }, players)
+    const players = team.players.map((player) => new Player(player));
+    return new TeamDetail(
+      {
+        id: team.id,
+        name: team.name,
+        logo: team.logo,
+        playersTimmer: team.playersTimmer,
+      },
+      players
+    );
   }
 
   public async insertOne(team: Team): Promise<void> {
     await TeamModel.create(team);
   }
-  public async updateOne(id: number, newData: Team): Promise<TeamDetail | null> {
-    return await TeamModel.findOneAndUpdate({ id: id }, newData, {
+  public async updateOne(id: number, newData: TeamDetail): Promise<void> {
+    await TeamModel.findOneAndUpdate({ id: id }, newData, {
       new: true,
     });
   }

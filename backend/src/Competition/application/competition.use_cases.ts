@@ -1,18 +1,17 @@
 import IApiRepository from "../../Shared/domain/api.repository.js";
 import ICompetitionRepository from "../domain/competition.repository.js";
-import GlobalCompetitions from "../domain/competition.timmer.js";
 import CompetitionsTimmer from "../domain/competition.timmer.js";
 import Competition, { CompetitionDetail } from "../domain/competiton.entity.js";
-import StandingUseCases from "./standing.use_cases.js";
+import StandingUseCases from "../../Standing/application/standing.use_cases.js";
 
 export default class CompetitionUseCases {
-  private readonly competitionsTimmer: GlobalCompetitions;
+  private readonly competitionsTimmer: CompetitionsTimmer;
   public constructor(
     private readonly competitionApiRepository: IApiRepository<Competition>,
     private readonly competitionDbRepository: ICompetitionRepository,
     private readonly standingUseCases: StandingUseCases
   ) {
-    this.competitionsTimmer = new GlobalCompetitions();
+    this.competitionsTimmer = new CompetitionsTimmer();
     this.competitionsTimmer.createTimmer();
   }
 
@@ -22,6 +21,7 @@ export default class CompetitionUseCases {
       country: "Argentina",
       current: true,
     });
+
     this.updateCompetitions(apiCompetitions);
     await this.competitionsTimmer.updateTimmer();
     return apiCompetitions;
@@ -36,10 +36,8 @@ export default class CompetitionUseCases {
   }
 
   public async getCompetition(id: number) {
-    let competition: Competition;
-    let competitionDetail: CompetitionDetail;
-    const newCompetitions = await this.needUpdate();
-    competitionDetail = await this.competitionDbRepository.findById(id);
+    await this.needUpdate();
+    let competitionDetail = await this.competitionDbRepository.findById(id);
 
     const newStandings = await this.standingUseCases.needUpdate(
       competitionDetail
@@ -51,24 +49,30 @@ export default class CompetitionUseCases {
 
     return competitionDetail;
   }
-  
+
   public async getCompetitionsByTeam(teamId: number) {
-   const competitions = await this.listAll()
-    for(let competition of competitions){
-      let newCompetitionStandings = await this.standingUseCases.needCreation(competition);
-      if(newCompetitionStandings) {
-        let competitionDetail = new CompetitionDetail(competition, newCompetitionStandings)
-        await this.updateCompetition(competitionDetail)
+    const competitions = await this.listAll();
+    for (let competition of competitions) {
+      let newCompetitionStandings = await this.standingUseCases.needCreation(
+        competition
+      );
+      if (newCompetitionStandings) {
+        let competitionDetail = new CompetitionDetail(
+          competition,
+          newCompetitionStandings
+        );
+        await this.updateCompetition(competitionDetail);
       }
     }
-    
-    return await this.competitionDbRepository.findAll({})
 
+    return await this.competitionDbRepository.findAll({
+      "standings.team.id": teamId,
+    });
   }
 
-
   public async createCompetition(competition: Competition) {
-    return await this.competitionDbRepository.insertOne(competition);
+    const competitionDetail = new CompetitionDetail(competition, []);
+    return await this.competitionDbRepository.insertOne(competitionDetail);
   }
 
   private async updateCompetitions(apiCompetitions: Competition[]) {

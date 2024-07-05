@@ -9,7 +9,7 @@ export const apiResponse = async (
   parameters?: object
 ): Promise<ApiResponse_OK<any> | null> => {
   let config = {
-    method: "get",
+    method: "GET",
     url: "https://v3.football.api-sports.io/" + endpoint,
     params: parameters,
     headers: {
@@ -19,10 +19,16 @@ export const apiResponse = async (
   };
   return axios(config)
     .then(function (response) {
+      if (response.data.errors.length != 0) {
+        console.log("error:", response.data.errors);
+        throw new Error(String(response.data.errors));
+      }
+
       return response.data;
     })
     .catch(function (error: any) {
-      console.log(error);
-      return false;
+      console.log("error detected", error.message);
+      let res = { response: [] };
+      return res;
     });
 };

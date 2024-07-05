@@ -1,7 +1,7 @@
 import Timmer from "../../Shared/domain/timmer.js";
 import CompetitionsTimmerModel from "../infrastructure/timmer.schema.js";
 
-export default class GlobalCompetitions {
+export default class CompetitionsTimmer {
   static timmerInMinutes = 10 * 24 * 60; // 10 days
 
   timmer: Timmer;
@@ -14,7 +14,7 @@ export default class GlobalCompetitions {
     }
   }
   public competitionsUpdated() {
-    return this.timmer.isUpdated(GlobalCompetitions.timmerInMinutes);
+    return this.timmer.isUpdated(CompetitionsTimmer.timmerInMinutes);
   }
 
   public async updateTimmer() {

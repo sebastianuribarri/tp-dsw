@@ -7,29 +7,12 @@ import Team from "../../Team/domain/team.entity.js";
 export default class CompetitionMongoRepository
   implements ICompetitionRepository
 {
-  public async findAll(): Promise<CompetitionDetail[] | null> {
+  public async findAll(filters?: object): Promise<Competition[] | null> {
     try {
-      const mongoCompetitions = await CompetitionModel.find();
+      const mongoCompetitions = await CompetitionModel.find(filters);
 
       return mongoCompetitions.map((competition) => {
-        const standings = competition.standings.map((standing)=> {
-          const team = new Team({
-            id: standing.team.id,
-            name: standing.team.name,
-            logo: standing.team.logo,
-
-
-          })
-          return new Standing({
-            team: team,
-            goalsDiff: standing.goalsDiff,
-            group: standing.group,
-            description: standing.description,
-            points: standing.points
-          })
-        })
-      
-        return new CompetitionDetail({
+        return new Competition({
           id: competition.id,
           start: competition.start,
           end: competition.end,
@@ -37,7 +20,7 @@ export default class CompetitionMongoRepository
           type: competition.type,
           logo: competition.logo,
           standingsTimmer: competition.standingsTimmer,
-        }, standings);
+        });
       });
     } catch (err) {
       console.log("ocurrio un error en MongoRepository(findAll):", err);
@@ -46,36 +29,40 @@ export default class CompetitionMongoRepository
 
   public async findById(id: number): Promise<CompetitionDetail | null> {
     const competition = await CompetitionModel.findOne({ id: id });
-    const standings = competition.standings.map((standing ) =>  {
-      
-      const team = new Team({
-      id: standing.team.id,
-      name: standing.team.name,
-      logo: standing.team.logo,
 
-
-    })
-    return new Standing({
-      team: team,
-      goalsDiff: standing.goalsDiff,
-      group: standing.group,
-      description: standing.description,
-      points: standing.points
-    })
-  })
-    return new CompetitionDetail({
-      id: competition.id,
-      start: competition.start,
-      end: competition.end,
-      name: competition.name,
-      type: competition.type,
-      logo: competition.logo,
-      standingsTimmer: competition.standingsTimmer,
-
-    }, standings );
+    if (!competition) return null;
+    let standings;
+    if (competition.standings) {
+      standings = competition.standings.map((standing) => {
+        const team = new Team({
+          id: standing.team.id,
+          name: standing.team.name,
+          logo: standing.team.logo,
+        });
+        return new Standing({
+          team: team,
+          goalsDiff: standing.goalsDiff,
+          group: standing.group,
+          description: standing.description,
+          points: standing.points,
+        });
+      });
+    } else standings = [];
+    return new CompetitionDetail(
+      {
+        id: competition.id,
+        start: competition.start,
+        end: competition.end,
+        name: competition.name,
+        type: competition.type,
+        logo: competition.logo,
+        standingsTimmer: competition.standingsTimmer,
+      },
+      standings
+    );
   }
 
-  public async insertOne(competition: Competition): Promise<void> {
+  public async insertOne(competition: CompetitionDetail): Promise<void> {
     await CompetitionModel.create(competition);
   }
   public async updateOne(

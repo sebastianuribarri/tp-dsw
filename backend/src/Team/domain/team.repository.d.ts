@@ -4,5 +4,5 @@ export default interface ITeamRepository {
   findAll(): Promise<TeamDetail[] | null>;
   findById(id: number): Promise<TeamDetail | null>;
   insertOne(team: Team): Promise<TeamDetail | void>;
-  updateOne(id: number, newData: Team): Promise<TeamDetail | null>;
+  updateOne(id: number, newData: Team): Promise<void>;
 }
