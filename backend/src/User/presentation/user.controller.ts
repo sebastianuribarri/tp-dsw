@@ -16,18 +16,19 @@ export default class UserController {
   }
 
   public async register(req: Request, res: Response) {
-    try{    const user = new User({
-      mail: req.body.mail as string,
-      password: req.body.password as string,
-      username: req.body.username as string,
-    });
-    await this.userUseCases.register(user);
-    res.status(200).json();}
-    catch (error){
+    try {
+      const user = new User({
+        mail: req.body.mail as string,
+        password: req.body.password as string,
+        username: req.body.username as string,
+      });
+      await this.userUseCases.register(user);
+      res.status(200).json();
+    } catch (error) {
       console.log(error);
     }
   }
-  public async login(req: Request, res: Response){
+  public async login(req: Request, res: Response) {
     try {
       const { email, password } = req.body;
       const userFound = await this.userUseCases.getUser(email);
