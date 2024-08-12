@@ -1,38 +1,38 @@
-import {useForm} from 'react-hook-form'
-import { Form } from 'react-router-dom';
-import { User, registerRequest } from '../../api/auth';
+import { useForm } from "react-hook-form";
+import { User, registerUser } from "../../api/auth";
 
 function RegisterPage() {
-
-      const {register, handleSubmit} = useForm()
+  const { register, handleSubmit } = useForm();
   return (
     <div>
-        <form onSubmit={handleSubmit(async(values)=> {
+      <form
+        onSubmit={handleSubmit(async (values) => {
           console.log(values);
-          const user:User = {username: values.username, email: values.email, password: values.password}
-          
-          const res = await registerRequest(user)
+          const user: User = {
+            username: values.username,
+            email: values.email,
+            password: values.password,
+          };
 
-          console.log(res)
-        } )}>
-      <input 
-      type="text" 
-      {...register('username', {required: true})}
-      placeholder= 'Username'
-      />
+          const res = await registerUser(user);
 
-      <input type="email" {...register('email', {required: true})} />
+          console.log(res);
+        })}
+      >
+        <input
+          type="text"
+          {...register("username", { required: true })}
+          placeholder="Username"
+        />
 
-      <input type="password" {...register('password', {required: true})} />
+        <input type="email" {...register("email", { required: true })} />
 
-      <button type='submit'>
-          Register
-      </button>
+        <input type="password" {...register("password", { required: true })} />
 
-
-        </form>
+        <button type="submit">Register</button>
+      </form>
     </div>
-  )
+  );
 }
 
-export default RegisterPage
+export default RegisterPage;
