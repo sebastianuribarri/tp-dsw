@@ -9,7 +9,7 @@ export default class StandingApp {
   public standingApiRepository: IApiRepository<Standing>;
   public standingUseCases: StandingUseCases;
 
-  constructor(server: Express) {
+  constructor() {
     // ----------------- infrastructure layer -------------------
     this.standingApiRepository = new StandingsApiRepository();
 

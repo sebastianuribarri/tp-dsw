@@ -1,7 +1,7 @@
 import ITeamRepository from "../domain/team.repository.js";
 import TeamModel from "./team.schema.js";
 import Team, { TeamDetail } from "../domain/team.entity.js";
-import Player from "../domain/player.entity.js";
+import Player from "../../Player/domain/player.entity.js";
 
 export default class TeamMongoRepository implements ITeamRepository {
   public async findAll(): Promise<TeamDetail[] | null> {

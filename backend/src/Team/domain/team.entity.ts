@@ -1,5 +1,5 @@
 import Timmer from "../../Shared/domain/timmer.js";
-import Player from "./player.entity.js";
+import Player from "../../Player/domain/player.entity.js";
 
 export default class Team {
   readonly id: number;

@@ -2,8 +2,8 @@ import IApiRepository from "../../Shared/domain/api.repository.js";
 import ITeamRepository from "../domain/team.repository.js";
 import TeamsTimmer from "../domain/team.timmer.js";
 import Team, { TeamDetail } from "../domain/team.entity.js";
-import PlayerUseCases from "./player.use_cases.js";
-import Player from "../domain/player.entity.js";
+import PlayerUseCases from "../../Player/application/player.use_cases.js";
+import Player from "../../Player/domain/player.entity.js";
 
 export default class TeamUseCases {
   private readonly teamsTimmer: TeamsTimmer;

@@ -6,6 +6,8 @@ import UserApp from "./User/user.app.js";
 import TeamApp from "./Team/team.app.js";
 import StandingApp from "./Standing/standing.app.js";
 import MongoDatabase from "./Shared/infrastructure/db.js";
+import Player from "./Player/domain/player.entity.js";
+import PlayerApp from "./Player/player.app.js";
 
 export default class App {
   server: Express;
@@ -26,10 +28,11 @@ export default class App {
     this.server = server;
 
     // apps setup
-    this.standingApp = new StandingApp(this.server);
+    this.standingApp = new StandingApp();
+    this.playerApp = new PlayerApp();
     this.competitionApp = new CompetitionApp(this.standingApp, this.server);
     this.userApp = new UserApp(this.server);
-    this.teamApp = new TeamApp(this.server);
+    this.teamApp = new TeamApp(this.server, this.playerApp);
   }
 
   public run(port: number, dbConnection: () => Promise<void>) {
