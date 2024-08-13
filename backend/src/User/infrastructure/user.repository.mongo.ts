@@ -13,7 +13,7 @@ export default class UserMongoRepository implements IUserRepository {
           password: elem.password,
           premium: elem.premium,
           username: elem.username,
-          id: elem.id,
+          id: String(elem._id),
           teams: elem.teams,
         });
       });
@@ -38,8 +38,8 @@ export default class UserMongoRepository implements IUserRepository {
     }
   }
 
-  public async insertOne(user: User): Promise<void> {
-    await UserModel.create(user);
+  public async insertOne(user: User): Promise<User> {
+    return await UserModel.create(user);
   }
 
   public async updateOne(

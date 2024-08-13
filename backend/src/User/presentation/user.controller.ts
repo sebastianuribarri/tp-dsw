@@ -1,6 +1,7 @@
 import UserUseCases from "../application/user.use_cases.js";
 import { Response, Request } from "express";
 import User from "../domain/user.entity.js";
+import bcrypt from "bcryptjs"
 
 export default class UserController {
   constructor(private userUseCases: UserUseCases) {
@@ -17,11 +18,13 @@ export default class UserController {
 
   public async register(req: Request, res: Response) {
     try {
+      const passwordhash = await bcrypt.hash(req.body.password, 10)
       const user = new User({
         mail: req.body.mail as string,
-        password: req.body.password as string,
+        password: passwordhash,
         username: req.body.username as string,
       });
+      
       await this.userUseCases.register(user);
       res.status(200).json();
     } catch (error) {
