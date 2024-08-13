@@ -5,9 +5,8 @@ export default class UsersRoutes {
     constructor(private userController: UserController, server: Express) {
         const userRouter = Router();
         server.use("/api/users", userRouter);
-
         userRouter.get("/:mail", userController.getOne);
-        userRouter.post("/", userController.register);
+        userRouter.post("/register", userController.register);
         userRouter.delete("/:mail", userController.deleteOne);
         userRouter.put("/follow", userController.followTeam);
         userRouter.put("/unfollow", userController.followTeam);

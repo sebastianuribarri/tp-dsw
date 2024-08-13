@@ -1,5 +1,6 @@
 import { Schema, model } from "mongoose";
 
+
 const userSchema = new Schema({
   mail: { type: String, require: true, default: "" },
   password: { type: String, require: true, default: "" },

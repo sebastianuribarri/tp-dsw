@@ -19,4 +19,5 @@ export default class User {
         this.premium = user.premium ? user.premium : false;
         this.teams = user.teams ? user.teams : [];
   }
+
 }
