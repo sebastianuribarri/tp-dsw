@@ -1,5 +1,5 @@
 import Timmer from "../../Shared/domain/timmer.js";
-import Standing from "./standing.entity.js";
+import Standing from "../../Standing/domain/standing.entity.js";
 
 export default class Competition {
   readonly id: number;

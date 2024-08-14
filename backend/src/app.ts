@@ -9,6 +9,7 @@ import MongoDatabase from "./Shared/infrastructure/db.js";
 import Player from "./Player/domain/player.entity.js";
 import PlayerApp from "./Player/player.app.js";
 import PredictionApp from "./Prediction/prediction.app.js";
+import VoteApp from "./Vote/vote.app.js";
 
 export default class App {
   server: Express;
@@ -23,7 +24,7 @@ export default class App {
   eventApp: any;
   formationApp: any;
   voteApp: any;
-  predicitionApp: any;
+  predictionApp: PredictionApp;
 
   constructor(server: Express) {
     this.server = server;
@@ -31,10 +32,11 @@ export default class App {
     // apps setup
     this.standingApp = new StandingApp();
     this.playerApp = new PlayerApp();
-    //this.competitionApp = new CompetitionApp(this.standingApp, this.server);
+    this.competitionApp = new CompetitionApp(this.standingApp, this.server);
     this.userApp = new UserApp(this.server);
     this.teamApp = new TeamApp(this.server, this.playerApp);
-    this.predicitionApp = new PredictionApp(this.server);
+    this.predictionApp = new PredictionApp(this.server);
+    this.voteApp = new VoteApp(this.server);
   }
 
   public run(port: number, dbConnection: () => Promise<void>) {

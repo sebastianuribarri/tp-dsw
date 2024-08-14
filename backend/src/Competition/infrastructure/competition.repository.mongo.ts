@@ -1,7 +1,7 @@
 import ICompetitionRepository from "../domain/competition.repository.js";
 import CompetitionModel from "./competition.schema.js";
 import Competition, { CompetitionDetail } from "../domain/competiton.entity.js";
-import Standing from "../domain/standing.entity.js";
+import Standing from "../../Standing/domain/standing.entity.js";
 import Team from "../../Team/domain/team.entity.js";
 
 export default class CompetitionMongoRepository
