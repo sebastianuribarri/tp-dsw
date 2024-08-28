@@ -13,4 +13,26 @@ export default class Event {
   };
   type: string;
   detail: string;
+
+  constructor (event:{
+    time: number;
+    team: Team;
+    player: {
+      id: number | null;
+      name: string | null;
+    };
+    assist: {
+      id: number | null;
+      name: string | null;
+    }
+    type: string;
+    detail: string;
+  }) {
+    this.time= event.time
+    this.team = event.team
+    this.player = event.player
+    this.assist = event.assist
+    this.type = event.type
+    this.detail = event.detail
+  }
 }
