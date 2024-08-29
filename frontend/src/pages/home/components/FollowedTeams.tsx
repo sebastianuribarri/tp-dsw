@@ -5,7 +5,7 @@ import Section from "../../../ui-components/Section";
 import Team from "../../../types/Team";
 import TeamsList from "../../../components/Teams/TeamsList";
 
-const FollowedTeamsSection: React.FC = () => {
+const FollowedTeams: React.FC = () => {
   const [teams, setTeams] = useState<Team[]>([]);
 
   useEffect(() => {
@@ -21,4 +21,4 @@ const FollowedTeamsSection: React.FC = () => {
   );
 };
 
-export default FollowedTeamsSection;
+export default FollowedTeams;

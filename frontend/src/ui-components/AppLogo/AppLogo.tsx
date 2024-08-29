@@ -1,25 +1,18 @@
 import styled from "styled-components";
 
-interface HeaderProps {
-  title: string;
-  children?: React.ReactNode;
-}
-
-const HeaderContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-
-  padding: 7px 15px;
-  background-color: #333;
-
+const LogoContainer = styled.div`
+  display: none;
   @media (min-width: 768px) {
+    display: flex;
+    flex-direction: row;
+    padding: 7px 15px;
     align-items: center;
     justify-content: center;
     flex-direction: column;
   }
 `;
 
-const Logo = styled.img`
+const Image = styled.img`
   width: 2.3rem;
   height: auto;
   margin-right: 10px;
@@ -31,7 +24,7 @@ const Logo = styled.img`
   }
 `;
 
-const HeaderTitle = styled.h1`
+const AppName = styled.h1`
   font-size: 1.3em;
   margin: 0;
   color: white;
@@ -42,13 +35,13 @@ const HeaderTitle = styled.h1`
   }
 `;
 
-const Header: React.FC<HeaderProps> = ({ title }) => {
+const AppLogo: React.FC = () => {
   return (
-    <HeaderContainer>
-      <Logo src="logo.png" alt="Logo" />
-      <HeaderTitle>{title}</HeaderTitle>
-    </HeaderContainer>
+    <LogoContainer>
+      <Image src="logo.png" alt="Logo" />
+      <AppName>TodoFulbo</AppName>
+    </LogoContainer>
   );
 };
 
-export default Header;
+export default AppLogo;

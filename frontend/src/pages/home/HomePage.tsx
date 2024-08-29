@@ -1,5 +1,5 @@
 import React from "react";
-import FollowedTeamsSection from "./components/Teams";
+import FollowedTeams from "./components/FollowedTeams";
 import LiveMatches from "./components/LiveMatches";
 import UpcomingMatches from "./components/UpcomingMathes";
 import Page from "../../ui-components/Page";
@@ -8,7 +8,7 @@ const Homepage: React.FC = () => {
   return (
     <>
       <Page>
-        <FollowedTeamsSection />
+        <FollowedTeams />
         <LiveMatches />
         <UpcomingMatches />
       </Page>
