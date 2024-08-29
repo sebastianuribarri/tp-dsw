@@ -14,11 +14,12 @@ const Title = styled.h2`
 interface SectionProps {
   title: string;
   children: React.ReactNode;
+  id?: string;
 }
 
-const Section: React.FC<SectionProps> = ({ title, children }) => {
+const Section: React.FC<SectionProps> = ({ title, children, id }) => {
   return (
-    <SectionContainer>
+    <SectionContainer id={id}>
       <Title>{title}</Title>
       {children}
     </SectionContainer>

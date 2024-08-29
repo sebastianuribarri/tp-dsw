@@ -3,14 +3,8 @@ import styled from "styled-components";
 import Team from "../../../types/Team";
 import TeamLogo from "../../../components/TeamLogo/TeamLogo";
 
-interface LinkItem {
-  name: string;
-  url: string; // Should be an anchor identifier, like "#section1"
-}
-
 interface TeamHeaderProps {
   team: Team;
-  links: LinkItem[];
 }
 
 const HeaderContainer = styled.div`
@@ -26,29 +20,21 @@ const HeaderContainer = styled.div`
   }
 `;
 
-const FollowButtonMobile = styled.button`
+const FollowButton = styled.button`
   background-color: #167f45;
   color: white;
   border-radius: 9999px; /* Full rounded */
   padding: 5px 15px;
-  margin-top: 10px;
+  margin: 10px 0;
   cursor: pointer;
 
   &:hover {
     background-color: #484848;
   }
-
-  @media (min-width: 768px) {
-    display: none;
-  }
-`;
-
-const FollowButtonDesktop = styled(FollowButtonMobile)`
-  display: none;
-
   @media (min-width: 768px) {
     display: inline-block;
-    margin-top: 0;
+    margin: 0;
+    margin-right: 20px;
   }
 `;
 
@@ -79,19 +65,11 @@ export const Tabs = styled.nav`
   }
 `;
 
-const TeamHeader: React.FC<TeamHeaderProps> = ({ team, links }) => {
+const TeamHeader: React.FC<TeamHeaderProps> = ({ team }) => {
   return (
     <HeaderContainer>
       <TeamLogo team={team}></TeamLogo>
-      <FollowButtonMobile>Seguir</FollowButtonMobile>
-      <Tabs>
-        {links.map((link) => (
-          <a key={link.url} href={link.url}>
-            {link.name}
-          </a>
-        ))}
-      </Tabs>
-      <FollowButtonDesktop>Seguir</FollowButtonDesktop>
+      <FollowButton>Seguir</FollowButton>
     </HeaderContainer>
   );
 };

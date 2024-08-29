@@ -6,14 +6,18 @@ import Page from "../../ui-components/Page";
 import PageMenu from "../../ui-components/PageMenu/PageMenu";
 
 import TeamHeader from "./TeamHeader/TeamHeader";
-import Team from "../../types/Team";
+import { TeamDetail } from "../../types/Team";
+import TeamMatches from "./TeamMatches/TeamMatches";
+import TeamSeason from "./TeamSeason/TeamSeason";
+import TeamPlayersList from "./PlayersList/PlayersList";
 
 const TeamPage = () => {
   const { id } = useParams();
-  const [team, setTeamData] = useState<Team | null>(null);
+  const [teamDetail, setTeamData] = useState<TeamDetail | null>(null);
 
   useEffect(() => {
     // Fetch data from the API
+
     const fetchTeamData = async () => {
       try {
         const response = await getTeamById(Number(id));
@@ -22,6 +26,7 @@ const TeamPage = () => {
           id: data.id,
           name: data.name,
           logo: data.logo,
+          players: data.players,
         });
       } catch (error) {
         console.error("Error fetching team data:", error);
@@ -31,20 +36,18 @@ const TeamPage = () => {
     fetchTeamData();
   }, []);
 
-  const links = [
-    { name: "Partidos", url: "#Partidos" },
-    { name: "Temporada", url: "#Temporada" },
-    { name: "Jugadores", url: "#Jugadores" },
-  ];
   return (
     <>
-      {team ? (
+      {teamDetail ? (
         <>
-          {" "}
           <PageMenu>
-            <TeamHeader team={team} links={links} />
+            <TeamHeader team={teamDetail} />
           </PageMenu>
-          <Page>TeamPage</Page>{" "}
+          <Page>
+            <TeamSeason />
+            <TeamMatches />
+            <TeamPlayersList players={teamDetail.players} />
+          </Page>
         </>
       ) : (
         <p> Team No existe</p>
