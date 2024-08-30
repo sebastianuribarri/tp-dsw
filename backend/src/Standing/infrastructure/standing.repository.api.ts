@@ -2,10 +2,15 @@ import { apiResponse } from "../../Shared/infrastructure/api-football.js";
 import IApiRepository from "../../Shared/domain/api.repository.js";
 import Standing from "../domain/standing.entity.js";
 import Team from "../../Team/domain/team.entity.js";
+import ApiFootball from "../../Shared/infrastructure/api-connection.js";
 
 export default class StandingApiRepository implements IApiRepository<Standing> {
+  apiFootball: ApiFootball;
+  constructor(apiFootball: ApiFootball) {
+    this.apiFootball = apiFootball;
+  }
   public async findAll(parameters: any): Promise<Standing[] | null> {
-    const res = await apiResponse("standings", parameters);
+    const res = await this.apiFootball.getResponse("standings", parameters);
     let apiStandings: Standing[] = [];
     // if is empty
     if (res.response.length === 0) {

@@ -1,18 +1,16 @@
 import { Express } from "express";
-import express from "express";
-import dbInit from "./Shared/infrastructure/db.js";
 import CompetitionApp from "./Competition/competition.app.js";
 import UserApp from "./User/user.app.js";
 import TeamApp from "./Team/team.app.js";
 import StandingApp from "./Standing/standing.app.js";
-import MongoDatabase from "./Shared/infrastructure/db.js";
-import Player from "./Player/domain/player.entity.js";
 import PlayerApp from "./Player/player.app.js";
 import PredictionApp from "./Prediction/prediction.app.js";
 import VoteApp from "./Vote/vote.app.js";
+import ApiFootball from "./Shared/infrastructure/api-connection.js";
 
 export default class App {
   server: Express;
+  apiFootball: ApiFootball;
 
   // contained apps
   competitionApp: CompetitionApp;
@@ -26,15 +24,20 @@ export default class App {
   voteApp: any;
   predictionApp: PredictionApp;
 
-  constructor(server: Express) {
+  constructor(server: Express, apiFootball: ApiFootball) {
     this.server = server;
+    this.apiFootball = apiFootball;
 
     // apps setup
-    this.standingApp = new StandingApp();
-    this.playerApp = new PlayerApp();
-    this.competitionApp = new CompetitionApp(this.standingApp, this.server);
+    this.standingApp = new StandingApp(this.apiFootball);
+    this.playerApp = new PlayerApp(this.apiFootball);
+    this.competitionApp = new CompetitionApp(
+      this.standingApp,
+      this.apiFootball,
+      this.server
+    );
     this.userApp = new UserApp(this.server);
-    this.teamApp = new TeamApp(this.server, this.playerApp);
+    this.teamApp = new TeamApp(this.server, this.apiFootball, this.playerApp);
     this.predictionApp = new PredictionApp(this.server);
     this.voteApp = new VoteApp(this.server);
   }

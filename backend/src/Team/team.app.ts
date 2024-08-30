@@ -11,6 +11,7 @@ import PlayerUseCases from "../Player/application/player.use_cases.js";
 import Player from "../Player/domain/player.entity.js";
 import PlayerApiRepository from "../Player/infrastructure/player.repository.api.js";
 import PlayerApp from "../Player/player.app.js";
+import ApiFootball from "../Shared/infrastructure/api-connection.js";
 
 export default class TeamApp {
   teamApiRepository: IApiRepository<Team>;
@@ -18,11 +19,10 @@ export default class TeamApp {
   teamUseCases: TeamUseCases;
   teamController: TeamController;
   teamRoutes: TeamRoutes;
-  
 
-  constructor(server: Express, playerApp: PlayerApp) {
+  constructor(server: Express, apiFootball: ApiFootball, playerApp: PlayerApp) {
     // ----------------- infrastructure layer -------------------
-    this.teamApiRepository = new TeamApiRepository();
+    this.teamApiRepository = new TeamApiRepository(apiFootball);
     this.teamDbRepository = new TeamMongoRepository();
 
     // -----------------  application layer  --------------------
@@ -30,7 +30,7 @@ export default class TeamApp {
     this.teamUseCases = new TeamUseCases(
       this.teamApiRepository,
       this.teamDbRepository,
-      playerApp.playerUseCases,
+      playerApp.playerUseCases
     );
 
     // -----------------  presentation layer  -------------------

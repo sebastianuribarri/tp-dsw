@@ -2,7 +2,7 @@ import mongo from "mongoose";
 
 const DB_URI = "mongodb://localhost:27017/todofulbo";
 
-export default class MongoDatabase {
+class MongoDatabase {
   URL: string;
   constructor(port: number, databaseName: string) {
     this.URL = `mongodb://localhost:${port}/${databaseName}`;
@@ -13,3 +13,5 @@ export default class MongoDatabase {
     await mongo.connect(this.URL);
   }
 }
+
+export default MongoDatabase;

@@ -9,6 +9,7 @@ import CompetitionRoutes from "./presentation/competition.routes.js";
 import { Express } from "express";
 import StandingApp from "../Standing/standing.app.js";
 import StandingUseCases from "../Standing/application/standing.use_cases.js";
+import ApiFootball from "../Shared/infrastructure/api-connection.js";
 
 export default class CompetitionApp {
   competitionApiRepository: IApiRepository<Competition>;
@@ -17,10 +18,14 @@ export default class CompetitionApp {
   competitionController: CompetitionController;
   competitionRoutes: CompetitionRoutes;
 
-  constructor(public readonly standingApp: StandingApp, server: Express) {
+  constructor(
+    public readonly standingApp: StandingApp,
+    api: ApiFootball,
+    server: Express
+  ) {
     // ----------------- infrastructure layer -------------------
 
-    this.competitionApiRepository = new CompetitionApiRepository();
+    this.competitionApiRepository = new CompetitionApiRepository(api);
     this.competitionDbRepository = new CompetitionMongoRepository();
 
     // ----------------- application layer -----------------

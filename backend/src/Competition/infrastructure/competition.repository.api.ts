@@ -3,16 +3,19 @@ import { apiResponse } from "../../Shared/infrastructure/api-football.js";
 import Competition from "../domain/competiton.entity.js";
 import { ApiResponse_OK } from "../../Shared/infrastructure/api_response.js";
 import ApiCompetition from "./competition.api_response.js";
+import ApiFootball from "../../Shared/infrastructure/api-connection.js";
 
 export default class CompetitionApiRepository
   implements IApiRepository<Competition>
 {
+  apiFootball: ApiFootball;
+  constructor(apiFootball: ApiFootball) {
+    this.apiFootball = apiFootball;
+  }
   public async findAll(parameters?: object): Promise<Competition[] | null> {
     let n = 0;
-    const res: ApiResponse_OK<ApiCompetition> | null = await apiResponse(
-      "leagues",
-      parameters
-    );
+    const res: ApiResponse_OK<ApiCompetition> | null =
+      await this.apiFootball.getResponse("leagues", parameters);
     const competitions = res.response.map((apiCompetition) => {
       let competition_ = new Competition({
         id: apiCompetition.league.id,
