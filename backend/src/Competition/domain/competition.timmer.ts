@@ -6,9 +6,16 @@ export default class CompetitionsTimmer {
 
   timmer: Timmer;
   public async createTimmer() {
-    const timmer = await CompetitionsTimmerModel.findOne();
-    this.timmer = new Timmer(timmer);
-    if (!this.timmer) {
+    const timmerDoc = await CompetitionsTimmerModel.findOne();
+
+    if (timmerDoc) {
+      this.timmer = new Timmer({
+        lastUpdate: new Date(timmerDoc.lastUpdate),
+        active: timmerDoc.active,
+      });
+      console.log("timmer encontrado");
+    } else {
+      console.log("timmer creado");
       this.timmer = new Timmer();
       await CompetitionsTimmerModel.create(this.timmer);
     }

@@ -1,10 +1,8 @@
 import IApiRepository from "../Shared/domain/api.repository.js";
 import StandingsApiRepository from "./infrastructure/standing.repository.api.js";
-
-import { Express } from "express";
 import Standing from "./domain/standing.entity.js";
 import StandingUseCases from "./application/standing.use_cases.js";
-import ApiFootball from "../Shared/infrastructure/api-connection.js";
+import ApiFootball from "../ApiFootball/api.js";
 
 export default class StandingApp {
   public standingApiRepository: IApiRepository<Standing>;

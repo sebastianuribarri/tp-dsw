@@ -1,6 +1,6 @@
 import CompetitionUseCases from "./application/competition.use_cases.js";
 import IApiRepository from "../Shared/domain/api.repository.js";
-import Competition from "./domain/competiton.entity.js";
+import Competition, { CompetitionDetail } from "./domain/competiton.entity.js";
 import ICompetitionRepository from "./domain/competition.repository.js";
 import CompetitionApiRepository from "./infrastructure/competition.repository.api.js";
 import CompetitionMongoRepository from "./infrastructure/competition.repository.mongo.js";
@@ -9,7 +9,7 @@ import CompetitionRoutes from "./presentation/competition.routes.js";
 import { Express } from "express";
 import StandingApp from "../Standing/standing.app.js";
 import StandingUseCases from "../Standing/application/standing.use_cases.js";
-import ApiFootball from "../Shared/infrastructure/api-connection.js";
+import ApiFootball from "../ApiFootball/api.js";
 
 export default class CompetitionApp {
   competitionApiRepository: IApiRepository<Competition>;
@@ -45,5 +45,20 @@ export default class CompetitionApp {
       this.competitionController,
       server
     );
+  }
+
+  public async setup() {
+    const competitions = await this.competitionUseCases.listAll();
+    for (let competition of competitions) {
+      let newCompetitionStandings =
+        await this.standingApp.standingUseCases.needCreation(competition);
+      if (newCompetitionStandings) {
+        let competitionDetail = new CompetitionDetail(
+          competition,
+          newCompetitionStandings
+        );
+        await this.competitionUseCases.updateCompetition(competitionDetail);
+      }
+    }
   }
 }

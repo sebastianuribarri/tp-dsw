@@ -3,6 +3,7 @@ import CompetitionModel from "./competition.schema.js";
 import Competition, { CompetitionDetail } from "../domain/competiton.entity.js";
 import Standing from "../../Standing/domain/standing.entity.js";
 import Team from "../../Team/domain/team.entity.js";
+import Timmer from "../../Shared/domain/timmer.js";
 
 export default class CompetitionMongoRepository
   implements ICompetitionRepository
@@ -19,7 +20,10 @@ export default class CompetitionMongoRepository
           name: competition.name,
           type: competition.type,
           logo: competition.logo,
-          standingsTimmer: competition.standingsTimmer,
+          standingsTimmer: new Timmer({
+            lastUpdate: new Date(competition.standingsTimmer.lastUpdate),
+            active: competition.standingsTimmer.active,
+          }),
         });
       });
     } catch (err) {
@@ -56,7 +60,10 @@ export default class CompetitionMongoRepository
         name: competition.name,
         type: competition.type,
         logo: competition.logo,
-        standingsTimmer: competition.standingsTimmer,
+        standingsTimmer: new Timmer({
+          lastUpdate: new Date(competition.standingsTimmer.lastUpdate),
+          active: competition.standingsTimmer.active,
+        }),
       },
       standings
     );

@@ -38,7 +38,9 @@ export default class Competition {
   }
 
   public standingsUpdated() {
-    return this.standingsTimmer.isUpdated(Competition.standingsTimmerInMinutes);
+    const updated = this.standingsTimmer.isUpdated(60);
+    console.log(this.standingsTimmer.lastUpdate, updated);
+    return updated;
   }
 
   public updateStandingsTimmerStatus() {

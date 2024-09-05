@@ -6,43 +6,41 @@ import { PageButton } from "../../ui-components/PageButton";
 import { Link } from "react-router-dom";
 
 const CompetitionsGrid = styled.div`
-  display: flex; // Changed from grid to flex for horizontal layout
-  flex-wrap: wrap; // Allows wrapping of items if they overflow
+  display: flex;
+  flex-wrap: wrap;
   gap: 10px;
 `;
 
 const CompetitionCard = styled(Link)`
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
   background-color: #2b2b2b;
-  border-radius: 5px;
-  padding: 10px;
-  text-align: center;
-  transition: transform 0.3s;
+  border-radius: 15px;
+  padding: 0 10px;
+  text-align: left;
+  transition: transform 0.4s;
   cursor: pointer;
-  max-width: 100px; // Set maximum width for the card
-  width: 100px; // Set fixed width for consistency
+  height: 60px; /* Constant height */
+  width: 100%;
 
+  @media (min-width: 768px) {
+    width: auto; /* Fit content on desktop */
+  }
   &:hover {
-    transform: scale(1.05);
+    background-color: #454545;
   }
 `;
 
 const CompetitionLogo = styled.img`
-  width: 3rem;
-  height: 3rem;
-  margin-bottom: 10px;
+  width: 2rem;
+  height: 2rem;
+  margin-right: 10px;
   transition: transform 0.3s;
-
-  ${CompetitionCard}:hover & {
-    transform: scale(1.2);
-  }
 `;
 
 const CompetitionName = styled.div`
   font-size: 0.8em;
+  flex-grow: 1; /* Dynamic width based on name length */
   color: white;
 `;
 
@@ -61,7 +59,7 @@ const CompetitionsList: React.FC<CompetitionsListProps> = ({
   competitions,
   message,
 }) => {
-  const minItemWidth = 150;
+  const minItemWidth = 100;
   const { visibleItems, handleSeeMore } = useSeeMore(
     competitions.length,
     minItemWidth,
@@ -77,7 +75,7 @@ const CompetitionsList: React.FC<CompetitionsListProps> = ({
           <CompetitionsGrid>
             {competitions.slice(0, visibleItems).map((competition) => (
               <CompetitionCard
-                to={`/league/${competition.id}`} // Use absolute path
+                to={`/league/${competition.id}`}
                 key={competition.id}
               >
                 <CompetitionLogo

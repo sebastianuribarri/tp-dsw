@@ -1,6 +1,4 @@
 import { Schema, model } from "mongoose";
-import Team from "../../Team/domain/team.entity.js";
-import { teamSchema } from "../../Team/infrastructure/team.schema.js";
 import timmerSchema from "../../Shared/infrastructure/timmer.schema.js";
 import standingSchema from "../../Standing/infrastructure/standing.schema.js";
 

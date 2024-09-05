@@ -4,24 +4,33 @@ import CompetitionsTimmer from "../domain/competition.timmer.js";
 import Competition, { CompetitionDetail } from "../domain/competiton.entity.js";
 import StandingUseCases from "../../Standing/application/standing.use_cases.js";
 
+// const REGIONS = ["Argentina", "World"];
+const REGIONS = ["Argentina"];
 export default class CompetitionUseCases {
-  private readonly competitionsTimmer: CompetitionsTimmer;
+  private competitionsTimmer: CompetitionsTimmer;
   public constructor(
     private readonly competitionApiRepository: IApiRepository<Competition>,
     private readonly competitionDbRepository: ICompetitionRepository,
     private readonly standingUseCases: StandingUseCases
-  ) {
+  ) {}
+
+  public async getCompetitionsTimmer() {
     this.competitionsTimmer = new CompetitionsTimmer();
-    this.competitionsTimmer.createTimmer();
+    await this.competitionsTimmer.createTimmer();
   }
 
   public async needUpdate() {
+    if (!this.competitionsTimmer) await this.getCompetitionsTimmer();
     if (this.competitionsTimmer.competitionsUpdated()) return false;
-    const apiCompetitions = await this.competitionApiRepository.findAll({
-      country: "Argentina",
-      current: true,
+    const apiCompetitionsPromises = REGIONS.map(async (region) => {
+      return await this.competitionApiRepository.findAll({
+        country: region,
+        current: true,
+      });
     });
+    const competitionsResults = await Promise.all(apiCompetitionsPromises);
 
+    const apiCompetitions = competitionsResults.flat();
     this.updateCompetitions(apiCompetitions);
     await this.competitionsTimmer.updateTimmer();
     return apiCompetitions;
@@ -85,7 +94,7 @@ export default class CompetitionUseCases {
       dbCompetitions.forEach((dbCompetition, i) => {
         if (dbCompetition.id === apiCompetition.id) {
           if (apiCompetition.start != dbCompetition.start) {
-            this.updateCompetition(apiCompetition, dbCompetition);
+            this.updateCompetition(apiCompetition);
           }
           dbCompetitions.splice(i, 1);
           founded = true;
@@ -95,10 +104,7 @@ export default class CompetitionUseCases {
     });
   }
 
-  public async updateCompetition(
-    newCompetition: Competition,
-    oldCompetition?: Competition
-  ) {
+  public async updateCompetition(newCompetition: Competition) {
     return await this.competitionDbRepository.updateOne(
       newCompetition.id,
       newCompetition

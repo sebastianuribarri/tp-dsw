@@ -5,8 +5,10 @@ export default class Timmer {
   public lastUpdate: Date;
   public active: boolean;
 
-  constructor(standingTimmer?: { lastUpdate: Date; active: boolean }) {
-    this.lastUpdate = standingTimmer ? standingTimmer.lastUpdate : null;
+  constructor(standingTimmer?: { lastUpdate: Date | string; active: boolean }) {
+    this.lastUpdate = standingTimmer
+      ? new Date(standingTimmer.lastUpdate)
+      : null;
     this.active = standingTimmer ? standingTimmer.active : true;
   }
 
@@ -16,6 +18,7 @@ export default class Timmer {
       return true;
     }
 
+    console.log("now:", new Date(), "last:", this.lastUpdate);
     if (!this.lastUpdate) {
       console.log("no hay registros, hay que actualizar");
       return false;
@@ -42,6 +45,8 @@ export default class Timmer {
   }
 
   public existUpdate() {
+    const exist = this.lastUpdate !== null;
+    if (!exist) console.log("No hay registros, hay que crear");
     return this.lastUpdate != null;
   }
   public activateTimmer() {

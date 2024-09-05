@@ -55,8 +55,6 @@ export default class ApiFootball {
         .toArray();
 
       if (accounts) {
-        console.log(accounts);
-
         this.accounts = accounts.map((account) => {
           return new ApiAccount({
             mail: account.mail,

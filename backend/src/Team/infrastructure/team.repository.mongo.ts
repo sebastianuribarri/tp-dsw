@@ -2,6 +2,7 @@ import ITeamRepository from "../domain/team.repository.js";
 import TeamModel from "./team.schema.js";
 import Team, { TeamDetail } from "../domain/team.entity.js";
 import Player from "../../Player/domain/player.entity.js";
+import Timmer from "../../Shared/domain/timmer.js";
 
 export default class TeamMongoRepository implements ITeamRepository {
   public async findAll(): Promise<TeamDetail[] | null> {
@@ -13,7 +14,7 @@ export default class TeamMongoRepository implements ITeamRepository {
             id: elem.id,
             name: elem.name,
             logo: elem.logo,
-            playersTimmer: elem.playersTimmer,
+            playersTimmer: new Timmer(elem.playersTimmer),
           },
           elem.players
         );
@@ -31,7 +32,7 @@ export default class TeamMongoRepository implements ITeamRepository {
         id: team.id,
         name: team.name,
         logo: team.logo,
-        playersTimmer: team.playersTimmer,
+        playersTimmer: new Timmer(team.playersTimmer),
       },
       players
     );

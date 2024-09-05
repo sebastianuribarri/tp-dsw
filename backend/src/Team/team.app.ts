@@ -7,11 +7,8 @@ import TeamMongoRepository from "./infrastructure/team.repository.mongo.js";
 import TeamController from "./presentation/team.controller.js";
 import TeamRoutes from "./presentation/team.routes.js";
 import { Express } from "express";
-import PlayerUseCases from "../Player/application/player.use_cases.js";
-import Player from "../Player/domain/player.entity.js";
-import PlayerApiRepository from "../Player/infrastructure/player.repository.api.js";
 import PlayerApp from "../Player/player.app.js";
-import ApiFootball from "../Shared/infrastructure/api-connection.js";
+import ApiFootball from "../ApiFootball/api.js";
 
 export default class TeamApp {
   teamApiRepository: IApiRepository<Team>;

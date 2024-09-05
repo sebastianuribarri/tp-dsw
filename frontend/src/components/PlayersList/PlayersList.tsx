@@ -7,7 +7,7 @@ import { PageButton } from "../../ui-components/PageButton";
 const PlayersGrid = styled.div`
   display: flex;
   flex-wrap: wrap;
-  gap: 20px;
+  gap: 10px; /* Further reduced gap to make the grid more compact */
   justify-content: center;
 `;
 
@@ -17,10 +17,10 @@ const PlayerCard = styled.div`
   align-items: center;
   background-color: #2b2b2b;
   border-radius: 8px;
-  padding: 10px;
+  padding: 8px;
   text-align: center;
-  max-width: 150px; // Adjust the width as needed
-  width: 140px; // Set fixed width for consistency
+  width: 90px; /* Reduced width */
+  height: 130px; /* Reduced height */
   transition: transform 0.3s;
 
   &:hover {
@@ -29,26 +29,32 @@ const PlayerCard = styled.div`
 `;
 
 const PlayerImage = styled.img`
-  width: 100px; // Adjust the width as needed
-  height: 100px; // Adjust the height as needed
+  width: 50px; /* Further reduced image width */
+  height: 50px; /* Further reduced image height */
   border-radius: 50%;
-  margin-bottom: 10px;
+  margin-bottom: 5px; /* Reduced margin */
 `;
 
 const PlayerName = styled.div`
-  font-size: 1em;
+  font-size: 0.7em; /* Further reduced font size */
   font-weight: bold;
   color: white;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; /* Add ellipsis if the name is too long */
+  max-width: 80px; /* Ensure name fits within the card */
 `;
 
 const PlayerNumber = styled.div`
-  font-size: 0.9em;
+  font-size: 0.65em; /* Further reduced font size */
   color: #bbb;
+  margin-top: 2px; /* Slightly adjust spacing */
 `;
 
 const PlayerPosition = styled.div`
-  font-size: 0.8em;
+  font-size: 0.65em; /* Further reduced font size */
   color: #bbb;
+  margin-top: 2px; /* Slightly adjust spacing */
 `;
 
 const NoPlayersMessage = styled.div`
@@ -68,11 +74,11 @@ interface PlayersListProps {
 }
 
 const PlayersList: React.FC<PlayersListProps> = ({ players, message }) => {
-  const minItemWidth = 150;
+  const minItemWidth = 90;
   const { visibleItems, handleSeeMore } = useSeeMore(
     players.length,
     minItemWidth,
-    3 // Number of items to show initially
+    2 // Number of items to show initially
   );
 
   return (

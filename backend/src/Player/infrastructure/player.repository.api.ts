@@ -1,6 +1,5 @@
 import IApiRepository from "../../Shared/domain/api.repository.js";
-import ApiFootball from "../../Shared/infrastructure/api-connection.js";
-import { apiResponse } from "../../Shared/infrastructure/api-football.js";
+import ApiFootball from "../../ApiFootball/api.js";
 import Player from "../domain/player.entity.js";
 
 export default class PlayerApiRepository implements IApiRepository<Player> {

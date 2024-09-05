@@ -1,9 +1,8 @@
 import IApiRepository from "../../Shared/domain/api.repository.js";
-import { apiResponse } from "../../Shared/infrastructure/api-football.js";
 import Competition from "../domain/competiton.entity.js";
 import { ApiResponse_OK } from "../../Shared/infrastructure/api_response.js";
 import ApiCompetition from "./competition.api_response.js";
-import ApiFootball from "../../Shared/infrastructure/api-connection.js";
+import ApiFootball from "../../ApiFootball/api.js";
 
 export default class CompetitionApiRepository
   implements IApiRepository<Competition>

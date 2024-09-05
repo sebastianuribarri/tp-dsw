@@ -1,6 +1,5 @@
 import IApiRepository from "../../Shared/domain/api.repository.js";
-import ApiFootball from "../../Shared/infrastructure/api-connection.js";
-import { apiResponse } from "../../Shared/infrastructure/api-football.js";
+import ApiFootball from "../../ApiFootball/api.js";
 import Team from "../domain/team.entity.js";
 
 export default class TeamApiRepository implements IApiRepository<Team> {
@@ -9,7 +8,7 @@ export default class TeamApiRepository implements IApiRepository<Team> {
     this.apiFootball = apiFootball;
   }
   public async findAll(parameters?: object): Promise<Team[] | null> {
-    const res = await apiResponse("teams", parameters);
+    const res = await this.apiFootball.getResponse("teams", parameters);
     const apiTeams = res.response.map(
       (elem) =>
         new Team({

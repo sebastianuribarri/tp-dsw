@@ -6,7 +6,7 @@ import StandingApp from "./Standing/standing.app.js";
 import PlayerApp from "./Player/player.app.js";
 import PredictionApp from "./Prediction/prediction.app.js";
 import VoteApp from "./Vote/vote.app.js";
-import ApiFootball from "./Shared/infrastructure/api-connection.js";
+import ApiFootball from "./ApiFootball/api.js";
 
 export default class App {
   server: Express;
@@ -42,10 +42,10 @@ export default class App {
     this.voteApp = new VoteApp(this.server);
   }
 
-  public run(port: number, dbConnection: () => Promise<void>) {
-    dbConnection().then();
-    this.server.listen(port, () => {
+  public run(port: number) {
+    this.server.listen(port, async () => {
       console.log("escuchando...", port);
+      await this.competitionApp.setup();
     });
   }
 }
