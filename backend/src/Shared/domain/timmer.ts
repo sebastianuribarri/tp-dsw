@@ -14,13 +14,11 @@ export default class Timmer {
 
   public isUpdated(entityTimmer: number) {
     if (!this.active) {
-      console.log("actualizacion desactivada");
+      console.log("TIMMER DISABLE (no need creation, no need update)");
       return true;
     }
-
-    console.log("now:", new Date(), "last:", this.lastUpdate);
     if (!this.lastUpdate) {
-      console.log("no hay registros, hay que actualizar");
+      console.log("NO DATA (need creation)");
       return false;
     }
 
@@ -28,10 +26,10 @@ export default class Timmer {
     let difference = (now.getTime() - this.lastUpdate.getTime()) / (1000 * 60); // tiempo transcurrido en minutos
 
     if (difference < entityTimmer) {
-      console.log("esta actualizado");
+      console.log("DATA UPDATED");
       return true;
     }
-    console.log("hay que actualizar");
+    console.log("DATA UNUPDATED (need update)");
     return false;
   }
 
@@ -44,10 +42,19 @@ export default class Timmer {
     this.lastUpdate = undefined;
   }
 
-  public existUpdate() {
-    const exist = this.lastUpdate !== null;
-    if (!exist) console.log("No hay registros, hay que crear");
-    return this.lastUpdate != null;
+  public isCreated() {
+    if (!this.active) {
+      console.log("TIMMER DISABLE (no need creation)");
+      return true;
+    }
+    if (!this.lastUpdate) {
+      console.log("NO DATA (need creation)");
+      return false;
+    }
+
+    console.log("DATA CREATED");
+
+    return true;
   }
   public activateTimmer() {
     this.active = true;

@@ -31,8 +31,10 @@ export default class TeamUseCases {
     }
     return teamDetail;
   }
-
   private async needUpdate() {
+    console.log(
+      `Teams -------------------------------------------------------------------------------------`
+    );
     if (this.teamsTimmer.updated) return false;
     const apiTeams = await this.teamApiRepository.findAll({
       country: "Argentina",

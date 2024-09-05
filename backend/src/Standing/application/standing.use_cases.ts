@@ -8,8 +8,11 @@ export default class StandingUseCases {
   ) {}
 
   public async needCreation(competition: Competition) {
+    console.log(
+      `Standings (Competition ${competition.id}) ---------------------------------------------------------------`
+    );
     // check if the standings of the competition exist or not
-    const timmerExist = competition.standingsTimmer.existUpdate();
+    const timmerExist = competition.standingsTimmer.isCreated();
     //  - if it not exist, they are created and deleted standings of old seasons
     if (!timmerExist) {
       const apiCompetitionStandings = await this.standingApiRepository.findAll({
@@ -25,6 +28,9 @@ export default class StandingUseCases {
   }
 
   public async needUpdate(competition: Competition) {
+    console.log(
+      `Standings (Competition ${competition.id}) ---------------------------------------------------------------`
+    );
     // check if the competition standings need update
     const standingsUpdated = competition.standingsUpdated();
     if (!standingsUpdated) {

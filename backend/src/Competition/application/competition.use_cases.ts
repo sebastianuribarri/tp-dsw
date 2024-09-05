@@ -20,6 +20,9 @@ export default class CompetitionUseCases {
   }
 
   public async needUpdate() {
+    console.log(
+      `Competitions ------------------------------------------------------------------------------`
+    );
     if (!this.competitionsTimmer) await this.getCompetitionsTimmer();
     if (this.competitionsTimmer.competitionsUpdated()) return false;
     const apiCompetitionsPromises = REGIONS.map(async (region) => {
