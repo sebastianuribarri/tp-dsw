@@ -9,15 +9,11 @@ interface TeamHeaderProps {
 
 const HeaderContainer = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: row; /* Use row layout for both mobile and desktop */
   align-items: center;
   width: 100%;
-
-  @media (min-width: 768px) {
-    flex-direction: row;
-    justify-content: space-between;
-    padding: 0 20px;
-  }
+  justify-content: space-between; /* Ensure items are spaced out */
+  padding: 0 10px;
 `;
 
 const FollowButton = styled.button`
@@ -25,16 +21,13 @@ const FollowButton = styled.button`
   color: white;
   border-radius: 9999px; /* Full rounded */
   padding: 5px 15px;
-  margin: 10px 0;
   cursor: pointer;
-
+  margin-right: 15px;
+  @media (min-width: 768px) {
+    margin-right: 20px;
+  }
   &:hover {
     background-color: #484848;
-  }
-  @media (min-width: 768px) {
-    display: inline-block;
-    margin: 0;
-    margin-right: 20px;
   }
 `;
 
@@ -43,8 +36,8 @@ export const Tabs = styled.nav`
   flex-direction: row;
   justify-content: center;
   width: 100%;
-
   padding-top: 10px;
+
   a {
     color: white;
     text-decoration: none;
@@ -58,6 +51,7 @@ export const Tabs = styled.nav`
     width: auto;
     align-items: center;
     padding-top: 0;
+
     a {
       font-size: 0.9rem;
       margin: 0 2.5rem;
@@ -65,10 +59,21 @@ export const Tabs = styled.nav`
   }
 `;
 
+const TeamLogoWrapper = styled.div`
+  display: flex;
+  align-items: center; /* Center vertically */
+  @media (min-width: 768px) {
+    justify-content: center;
+    width: 100%;
+  }
+`;
+
 const TeamHeader: React.FC<TeamHeaderProps> = ({ team }) => {
   return (
     <HeaderContainer>
-      <TeamLogo team={team}></TeamLogo>
+      <TeamLogoWrapper>
+        <TeamLogo team={team} />
+      </TeamLogoWrapper>
       <FollowButton>Seguir</FollowButton>
     </HeaderContainer>
   );

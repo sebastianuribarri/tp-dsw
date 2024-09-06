@@ -1,13 +1,12 @@
 import React from "react";
 import styled from "styled-components";
 import Player from "../../types/Player";
-import useSeeMore from "../../hooks/useSeeMore";
 import { PageButton } from "../../ui-components/PageButton";
 
 const PlayersGrid = styled.div`
   display: flex;
   flex-wrap: wrap;
-  gap: 10px; /* Further reduced gap to make the grid more compact */
+  gap: 15px; /* Reduced gap for tighter layout */
   justify-content: center;
 `;
 
@@ -16,11 +15,11 @@ const PlayerCard = styled.div`
   flex-direction: column;
   align-items: center;
   background-color: #2b2b2b;
-  border-radius: 8px;
-  padding: 8px;
+  border-radius: 10px;
+  padding: 7px;
   text-align: center;
-  width: 90px; /* Reduced width */
-  height: 130px; /* Reduced height */
+  width: 110px; /* Reduced width */
+  height: 160px; /* Reduced height */
   transition: transform 0.3s;
 
   &:hover {
@@ -29,32 +28,30 @@ const PlayerCard = styled.div`
 `;
 
 const PlayerImage = styled.img`
-  width: 50px; /* Further reduced image width */
-  height: 50px; /* Further reduced image height */
+  width: 80px; /* Reduced image width */
+  height: 80px; /* Reduced image height */
   border-radius: 50%;
-  margin-bottom: 5px; /* Reduced margin */
+  margin-bottom: 3px; /* Reduced margin */
 `;
 
 const PlayerName = styled.div`
-  font-size: 0.7em; /* Further reduced font size */
+  font-size: 0.85em; /* Increased font size for better visibility */
   font-weight: bold;
   color: white;
   white-space: nowrap;
   overflow: hidden;
-  text-overflow: ellipsis; /* Add ellipsis if the name is too long */
-  max-width: 80px; /* Ensure name fits within the card */
+  text-overflow: ellipsis;
+  max-width: 100px; /* Ensure the name fits within the card */
 `;
 
 const PlayerNumber = styled.div`
-  font-size: 0.65em; /* Further reduced font size */
+  font-size: 0.75em; /* Adjusted font size */
   color: #bbb;
-  margin-top: 2px; /* Slightly adjust spacing */
 `;
 
 const PlayerPosition = styled.div`
-  font-size: 0.65em; /* Further reduced font size */
+  font-size: 0.75em; /* Adjusted font size */
   color: #bbb;
-  margin-top: 2px; /* Slightly adjust spacing */
 `;
 
 const NoPlayersMessage = styled.div`
@@ -63,24 +60,12 @@ const NoPlayersMessage = styled.div`
   padding: 20px;
 `;
 
-const SeeMoreButton = styled(PageButton)`
-  display: block;
-  margin: 20px auto;
-`;
-
 interface PlayersListProps {
   players: Player[];
   message: string;
 }
 
 const PlayersList: React.FC<PlayersListProps> = ({ players, message }) => {
-  const minItemWidth = 90;
-  const { visibleItems, handleSeeMore } = useSeeMore(
-    players.length,
-    minItemWidth,
-    2 // Number of items to show initially
-  );
-
   return (
     <>
       {players.length === 0 ? (
@@ -88,20 +73,19 @@ const PlayersList: React.FC<PlayersListProps> = ({ players, message }) => {
       ) : (
         <>
           <PlayersGrid>
-            {players.slice(0, visibleItems).map((player) => (
+            {players.map((player) => (
               <PlayerCard key={player.id}>
                 <PlayerImage src={player.image} alt={player.name} />
-                <PlayerName>{player.name}</PlayerName>
+                <PlayerName>
+                  {player.name.replace("&apos;", "'").replace("Ã©", "é")}
+                </PlayerName>
                 <PlayerNumber>
-                  {player.number ? "#" + String(player.number) : "-"}
+                  {player.number ? `#${player.number}` : "-"}
                 </PlayerNumber>
                 <PlayerPosition>{player.position}</PlayerPosition>
               </PlayerCard>
             ))}
           </PlayersGrid>
-          {visibleItems < players.length && (
-            <SeeMoreButton onClick={handleSeeMore}>Ver más</SeeMoreButton>
-          )}
         </>
       )}
     </>
