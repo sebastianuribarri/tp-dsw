@@ -2,31 +2,30 @@ import { useState, useEffect } from "react";
 
 const useSeeMore = (
   totalItems: number,
-  minItemWidth: number,
-  rowsPerPage: number,
-  gap: number = 10
+  itemsPerRowMobile: number,
+  itemsPerRowDesktop: number,
+  rowsPerClick: number
 ) => {
   const [visibleItems, setVisibleItems] = useState(0);
-  const [itemsPerPage, setItemsPerPage] = useState(0);
 
   useEffect(() => {
-    const updateItemsPerPage = () => {
-      const availableWidth = window.innerWidth - gap;
-      const itemsPerRow = Math.floor(availableWidth / (minItemWidth + gap));
-      let itemsToShow = itemsPerRow * rowsPerPage;
-      if (itemsToShow < 1) itemsToShow = 3;
-      setItemsPerPage(itemsToShow);
-      setVisibleItems(itemsToShow); // Initialize visible items
+    const updateVisibleItems = () => {
+      const itemsPerRow =
+        window.innerWidth >= 768 ? itemsPerRowDesktop : itemsPerRowMobile;
+      const itemsToShow = itemsPerRow * rowsPerClick;
+      setVisibleItems(itemsToShow);
     };
 
-    updateItemsPerPage();
-    window.addEventListener("resize", updateItemsPerPage);
-    return () => window.removeEventListener("resize", updateItemsPerPage);
-  }, [gap, minItemWidth]);
+    updateVisibleItems();
+    window.addEventListener("resize", updateVisibleItems);
+    return () => window.removeEventListener("resize", updateVisibleItems);
+  }, [itemsPerRowMobile, itemsPerRowDesktop, rowsPerClick]);
 
   const handleSeeMore = () => {
+    const itemsPerRow =
+      window.innerWidth >= 768 ? itemsPerRowDesktop : itemsPerRowMobile;
     setVisibleItems((prevVisibleItems) =>
-      Math.min(prevVisibleItems + itemsPerPage, totalItems)
+      Math.min(prevVisibleItems + itemsPerRow * rowsPerClick, totalItems)
     );
   };
 

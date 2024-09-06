@@ -4,7 +4,7 @@ import CompetitionDetails from "./CompetitionDetails/CompetitionDetails";
 import MatchDetails from "./MatchDetails/MatchDetails";
 import { MatchesGrid, NoMatchesMessage, MatchCard } from "./MatchesList.styles";
 import useSeeMore from "../../hooks/useSeeMore";
-import { PageButton } from "../../ui-components/PageButton";
+import SeeMoreButton from "../../ui-components/SeeMoreButton";
 interface MatchesListProps {
   matches: Match[];
   message: string;
@@ -33,7 +33,7 @@ const MatchesList: React.FC<MatchesListProps> = ({ matches, message }) => {
             ))}
           </MatchesGrid>
           {visibleItems < matches.length && (
-            <PageButton onClick={handleSeeMore}>Ver mas</PageButton>
+            <SeeMoreButton onClick={handleSeeMore} />
           )}
         </>
       )}

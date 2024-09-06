@@ -7,8 +7,11 @@ import Timmer from "../../Shared/domain/timmer.js";
 export default class TeamMongoRepository implements ITeamRepository {
   public async findAll(): Promise<TeamDetail[] | null> {
     try {
-      const mongoTeams = await TeamModel.find();
-      return mongoTeams.map((elem) => {
+      const mongoTeams = await TeamModel.find().sort({ id: 1 });
+      const uniqueTeams = mongoTeams.filter((team, index, array) => {
+        return index === 0 || team.id !== array[index - 1].id;
+      });
+      return uniqueTeams.map((elem) => {
         return new TeamDetail(
           {
             id: elem.id,

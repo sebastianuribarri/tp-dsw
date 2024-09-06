@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import Competition from "../../types/Competition";
 import useSeeMore from "../../hooks/useSeeMore";
-import { PageButton } from "../../ui-components/PageButton";
+import SeeMoreButton from "../../ui-components/SeeMoreButton";
 import { Link } from "react-router-dom";
 
 const CompetitionsGrid = styled.div`
@@ -65,10 +65,10 @@ const CompetitionsList: React.FC<CompetitionsListProps> = ({
   competitions,
   message,
 }) => {
-  const minItemWidth = 100;
   const { visibleItems, handleSeeMore } = useSeeMore(
     competitions.length,
-    minItemWidth,
+    1,
+    5,
     2
   );
 
@@ -93,7 +93,7 @@ const CompetitionsList: React.FC<CompetitionsListProps> = ({
             ))}
           </CompetitionsGrid>
           {visibleItems < competitions.length && (
-            <PageButton onClick={handleSeeMore}>Ver más</PageButton>
+            <SeeMoreButton onClick={handleSeeMore} />
           )}
         </>
       )}

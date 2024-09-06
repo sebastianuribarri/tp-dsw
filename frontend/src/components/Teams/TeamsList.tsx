@@ -3,7 +3,7 @@ import styled from "styled-components";
 import Team from "../../types/Team";
 import { Link } from "react-router-dom";
 import useSeeMore from "../../hooks/useSeeMore";
-import { PageButton } from "../../ui-components/PageButton";
+import SeeMoreButton from "../../ui-components/SeeMoreButton";
 
 const TeamsGrid = styled.div`
   display: grid;
@@ -22,6 +22,7 @@ const TeamCard = styled(Link)`
   text-align: center;
   transition: transform 0.3s;
   cursor: pointer;
+  height: 110px;
 
   &:hover {
     transform: scale(1.05);
@@ -31,6 +32,8 @@ const TeamCard = styled(Link)`
 const TeamLogo = styled.img`
   width: 3rem;
   height: 3rem;
+  padding: 5px; /* Optional: Add padding around the logo */
+  object-fit: contain;
   transition: transform 0.3s;
 
   ${TeamCard}:hover & {
@@ -39,7 +42,7 @@ const TeamLogo = styled.img`
 `;
 
 const TeamName = styled.div`
-  margin-top: 10px;
+  margin-top: 5px;
   font-size: 0.8em;
 `;
 
@@ -55,12 +58,7 @@ interface TeamsListProps {
 }
 
 const TeamsList: React.FC<TeamsListProps> = ({ teams, message }) => {
-  const minItemWidth = 100;
-  const { visibleItems, handleSeeMore } = useSeeMore(
-    teams.length,
-    minItemWidth,
-    2
-  );
+  const { visibleItems, handleSeeMore } = useSeeMore(teams.length, 3, 11, 2);
 
   return (
     <>
@@ -80,7 +78,7 @@ const TeamsList: React.FC<TeamsListProps> = ({ teams, message }) => {
             ))}
           </TeamsGrid>
           {visibleItems < teams.length && (
-            <PageButton onClick={handleSeeMore}>Ver mas</PageButton>
+            <SeeMoreButton onClick={handleSeeMore} />
           )}
         </>
       )}
