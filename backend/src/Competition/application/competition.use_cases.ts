@@ -4,8 +4,8 @@ import CompetitionsTimmer from "../domain/competition.timmer.js";
 import Competition, { CompetitionDetail } from "../domain/competiton.entity.js";
 import StandingUseCases from "../../Standing/application/standing.use_cases.js";
 
-// const REGIONS = ["Argentina", "World"];
-const REGIONS = ["Argentina"];
+const REGIONS = ["Argentina", "World"];
+//const REGIONS = ["Argentina"];
 export default class CompetitionUseCases {
   private competitionsTimmer: CompetitionsTimmer;
   public constructor(
@@ -63,20 +63,6 @@ export default class CompetitionUseCases {
   }
 
   public async getCompetitionsByTeam(teamId: number) {
-    const competitions = await this.listAll();
-    for (let competition of competitions) {
-      let newCompetitionStandings = await this.standingUseCases.needCreation(
-        competition
-      );
-      if (newCompetitionStandings) {
-        let competitionDetail = new CompetitionDetail(
-          competition,
-          newCompetitionStandings
-        );
-        await this.updateCompetition(competitionDetail);
-      }
-    }
-
     return await this.competitionDbRepository.findAll({
       "standings.team.id": teamId,
     });

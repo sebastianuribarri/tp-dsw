@@ -71,7 +71,10 @@ const TeamsList: React.FC<TeamsListProps> = ({ teams, message }) => {
           <TeamsGrid>
             {teams.slice(0, visibleItems).map((team) => (
               <TeamCard to={`/team/${team.id}`} key={team.id}>
-                <TeamLogo src={team.logo} alt={team.name} />
+                <TeamLogo
+                  src={team.logo ? team.logo : "shield.png"}
+                  alt={team.name}
+                />
                 <TeamName>{team.name}</TeamName>
               </TeamCard>
             ))}

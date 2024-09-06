@@ -11,14 +11,10 @@ const CompetitionsGrid = styled.div`
   justify-content: center;
   flex-wrap: wrap;
   gap: 10px;
-  @media (min-width: 768px) {
-    justify-content: left;
-  }
 `;
 
 const CompetitionCard = styled(Link)`
   display: flex;
-  justify-content: center;
   align-items: center;
   background-color: #2b2b2b;
   border-radius: 15px;
@@ -27,12 +23,10 @@ const CompetitionCard = styled(Link)`
   transition: transform 0.4s;
   cursor: pointer;
   height: 60px; /* Constant height */
-  min-width: 8%;
-  width: auto;
+  width: 80%;
 
   @media (min-width: 768px) {
-    min-width: 0;
-    width: auto; /* Fit content on desktop */
+    width: 19%;
   }
   &:hover {
     background-color: #454545;
@@ -43,10 +37,18 @@ const CompetitionLogo = styled.img`
   width: 2rem;
   height: 2rem;
   margin-right: 10px;
-  transition: transform 0.3s;
 `;
 
-const CompetitionName = styled.div``;
+const CompetitionName = styled.div`
+  font-size: 1.1em;
+  display: flex;
+  width: 100%;
+  justify-content: center;
+
+  @media (min-width: 768px) {
+    font-size: 0.9em;
+  }
+`;
 
 const NoCompetitionsMessage = styled.div`
   text-align: center;

@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 import Player from "../../types/Player";
-import { PageButton } from "../../ui-components/PageButton";
 
 const PlayersGrid = styled.div`
   display: flex;

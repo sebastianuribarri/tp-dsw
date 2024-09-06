@@ -26,6 +26,7 @@ export default class TeamMongoRepository implements ITeamRepository {
 
   public async findById(id: number): Promise<TeamDetail | null> {
     const team = await TeamModel.findOne({ id: id });
+    if (!team) return null;
     const players = team.players.map((player) => new Player(player));
     return new TeamDetail(
       {

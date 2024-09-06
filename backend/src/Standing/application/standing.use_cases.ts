@@ -1,10 +1,12 @@
 import IApiRepository from "../../Shared/domain/api.repository.js";
 import Competition from "../../Competition/domain/competiton.entity.js";
 import Standing from "../domain/standing.entity.js";
+import TeamUseCases from "../../Team/application/team.use_cases.js";
 
 export default class StandingUseCases {
   constructor(
-    private readonly standingApiRepository: IApiRepository<Standing>
+    private readonly standingApiRepository: IApiRepository<Standing>,
+    private readonly teamUseCases: TeamUseCases
   ) {}
 
   public async needCreation(competition: Competition) {
@@ -13,7 +15,7 @@ export default class StandingUseCases {
     );
     // check if the standings of the competition exist or not
     const timmerExist = competition.standingsTimmer.isCreated();
-    //  - if it not exist, they are created and deleted standings of old seasons
+    //  - if it not exist, they are created
     if (!timmerExist) {
       const apiCompetitionStandings = await this.standingApiRepository.findAll({
         league: competition.id,
@@ -22,7 +24,14 @@ export default class StandingUseCases {
 
       competition.standingsTimmer.setUpdate();
 
-      return apiCompetitionStandings;
+      const standingsWithTeam = apiCompetitionStandings.filter(
+        (standing) => standing.team.id !== null
+      );
+      standingsWithTeam.forEach(
+        async (standing) => await this.teamUseCases.createTeam(standing.team)
+      );
+
+      return standingsWithTeam;
     }
     return false;
   }

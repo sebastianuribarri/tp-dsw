@@ -7,7 +7,7 @@ export default class Team {
   readonly logo: string;
   playersTimmer: Timmer;
 
-  private static readonly playersTimmerInMinutes = 2 * 24 * 60;
+  private static readonly playersTimmerInMinutes = 20 * 24 * 60; // 20 dias
 
   constructor(team: {
     id: number;
