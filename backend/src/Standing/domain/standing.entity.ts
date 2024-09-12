@@ -2,7 +2,11 @@ import Competition from "../../Competition/domain/competiton.entity.js";
 import Team from "../../Team/domain/team.entity.js";
 
 export default class Standing {
-  readonly team: Team;
+  readonly team: {
+    id: number;
+    name: string;
+    logo: string;
+  };
   readonly points: number;
   readonly goalsDiff: number;
   readonly group: string;
@@ -19,7 +23,7 @@ export default class Standing {
     group: string;
     description?: string;
   }) {
-    this.team = new Team(standing.team);
+    this.team = standing.team;
     this.points = standing.points;
     this.goalsDiff = standing.goalsDiff;
     this.group = standing.group;

@@ -19,7 +19,7 @@ export default class Competition {
     name: string;
     type: string;
     logo: string;
-    standingsTimmer?: { lastUpdate: Date; active: boolean };
+    standingsTimmer?: { lastUpdate: Date | string; active: boolean };
   }) {
     this.id = competition.id;
     this.start = new Date(competition.start);
@@ -69,7 +69,7 @@ export class CompetitionDetail extends Competition {
       name: string;
       type: string;
       logo: string;
-      standingsTimmer?: { lastUpdate: Date; active: boolean };
+      standingsTimmer?: { lastUpdate: Date | string; active: boolean };
     },
     standings: Standing[]
   ) {

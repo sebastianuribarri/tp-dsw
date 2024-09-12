@@ -13,7 +13,7 @@ export default class Team {
     id: number;
     name: string;
     logo: string;
-    playersTimmer?: { lastUpdate: Date; active: boolean };
+    playersTimmer?: { lastUpdate: Date | string; active: boolean };
   }) {
     this.id = team.id;
     this.name = team.name;
@@ -36,7 +36,7 @@ export class TeamDetail extends Team {
       id: number;
       name: string;
       logo: string;
-      playersTimmer?: { lastUpdate: Date; active: boolean };
+      playersTimmer?: { lastUpdate: Date | string; active: boolean };
     },
     players: Player[]
   ) {

@@ -4,8 +4,8 @@ import CompetitionsTimmer from "../domain/competition.timmer.js";
 import Competition, { CompetitionDetail } from "../domain/competiton.entity.js";
 import StandingUseCases from "../../Standing/application/standing.use_cases.js";
 
-const REGIONS = ["Argentina", "World"];
-//const REGIONS = ["Argentina"];
+// const REGIONS = ["Argentina", "World"];
+const REGIONS = ["Argentina"];
 export default class CompetitionUseCases {
   public constructor(
     private readonly competitionApiRepository: IApiRepository<Competition>,

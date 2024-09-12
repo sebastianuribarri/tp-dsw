@@ -16,10 +16,11 @@ export default class CompetitionsTimmer extends Timmer {
         lastUpdate: new Date(timmerDoc.lastUpdate),
         active: timmerDoc.active,
       });
-      return CompetitionsTimmer.instance;
+    } else {
+      CompetitionsTimmer.instance = new CompetitionsTimmer();
+      await CompetitionsTimmerModel.create(CompetitionsTimmer.instance);
     }
-    CompetitionsTimmer.instance = new CompetitionsTimmer();
-    await CompetitionsTimmerModel.create(CompetitionsTimmer.instance);
+    return CompetitionsTimmer.instance;
   }
 
   public competitionsUpdated() {

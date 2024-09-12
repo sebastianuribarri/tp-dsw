@@ -5,22 +5,14 @@ import Player from "../../Player/domain/player.entity.js";
 import Timmer from "../../Shared/domain/timmer.js";
 
 export default class TeamMongoRepository implements ITeamRepository {
-  public async findAll(): Promise<TeamDetail[] | null> {
+  public async findAll(): Promise<Team[] | null> {
     try {
       const mongoTeams = await TeamModel.find().sort({ id: 1 });
       const uniqueTeams = mongoTeams.filter((team, index, array) => {
         return index === 0 || team.id !== array[index - 1].id;
       });
-      return uniqueTeams.map((elem) => {
-        return new TeamDetail(
-          {
-            id: elem.id,
-            name: elem.name,
-            logo: elem.logo,
-            playersTimmer: new Timmer(elem.playersTimmer),
-          },
-          elem.players
-        );
+      return uniqueTeams.map((team) => {
+        return new Team(team);
       });
     } catch (err) {
       console.log("ocurrio un error en MongoRepository(findAll):", err);
@@ -30,16 +22,7 @@ export default class TeamMongoRepository implements ITeamRepository {
   public async findById(id: number): Promise<TeamDetail | null> {
     const team = await TeamModel.findOne({ id: id });
     if (!team) return null;
-    const players = team.players.map((player) => new Player(player));
-    return new TeamDetail(
-      {
-        id: team.id,
-        name: team.name,
-        logo: team.logo,
-        playersTimmer: new Timmer(team.playersTimmer),
-      },
-      players
-    );
+    return new TeamDetail(team, team.players);
   }
 
   public async insertOne(team: Team): Promise<void> {

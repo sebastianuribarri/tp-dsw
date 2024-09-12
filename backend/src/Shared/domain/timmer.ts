@@ -5,11 +5,9 @@ export default class Timmer {
   public lastUpdate: Date;
   public active: boolean;
 
-  constructor(standingTimmer?: { lastUpdate: Date | string; active: boolean }) {
-    this.lastUpdate = standingTimmer
-      ? new Date(standingTimmer.lastUpdate)
-      : null;
-    this.active = standingTimmer ? standingTimmer.active : true;
+  constructor(timmer?: { lastUpdate: Date | string; active: boolean }) {
+    this.lastUpdate = timmer ? new Date(timmer.lastUpdate) : null;
+    this.active = timmer ? timmer.active : true;
   }
 
   public isUpdated(entityTimmer: number) {
