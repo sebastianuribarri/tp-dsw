@@ -17,15 +17,13 @@ export default class TeamApp {
   teamController: TeamController;
   teamRoutes: TeamRoutes;
 
-  constructor(server: Express, apiFootball: ApiFootball, playerApp: PlayerApp) {
+  constructor(server: Express, playerApp: PlayerApp) {
     // ----------------- infrastructure layer -------------------
-    this.teamApiRepository = new TeamApiRepository(apiFootball);
     this.teamDbRepository = new TeamMongoRepository();
 
     // -----------------  application layer  --------------------
 
     this.teamUseCases = new TeamUseCases(
-      this.teamApiRepository,
       this.teamDbRepository,
       playerApp.playerUseCases
     );

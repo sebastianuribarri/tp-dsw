@@ -7,7 +7,6 @@ import PlayerUseCases from "../../Player/application/player.use_cases.js";
 export default class TeamUseCases {
   private readonly teamsTimmer: TeamsTimmer;
   public constructor(
-    private readonly teamApiRepository: IApiRepository<Team>,
     private readonly teamDbRepository: ITeamRepository,
     private readonly playerUseCases: PlayerUseCases
   ) {

@@ -30,7 +30,7 @@ export default class App {
 
     // apps setup
     this.playerApp = new PlayerApp(this.apiFootball);
-    this.teamApp = new TeamApp(this.server, this.apiFootball, this.playerApp);
+    this.teamApp = new TeamApp(this.server, this.playerApp);
     this.standingApp = new StandingApp(this.apiFootball, this.teamApp);
     this.competitionApp = new CompetitionApp(
       this.standingApp,

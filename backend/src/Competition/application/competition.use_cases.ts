@@ -7,24 +7,18 @@ import StandingUseCases from "../../Standing/application/standing.use_cases.js";
 const REGIONS = ["Argentina", "World"];
 //const REGIONS = ["Argentina"];
 export default class CompetitionUseCases {
-  private competitionsTimmer: CompetitionsTimmer;
   public constructor(
     private readonly competitionApiRepository: IApiRepository<Competition>,
     private readonly competitionDbRepository: ICompetitionRepository,
     private readonly standingUseCases: StandingUseCases
   ) {}
 
-  public async getCompetitionsTimmer() {
-    this.competitionsTimmer = new CompetitionsTimmer();
-    await this.competitionsTimmer.createTimmer();
-  }
-
   public async needUpdate() {
     console.log(
       `Competitions ------------------------------------------------------------------------------`
     );
-    if (!this.competitionsTimmer) await this.getCompetitionsTimmer();
-    if (this.competitionsTimmer.competitionsUpdated()) return false;
+    const competitionTimmer = await CompetitionsTimmer.getInstance();
+    if (competitionTimmer.competitionsUpdated()) return false;
     const apiCompetitionsPromises = REGIONS.map(async (region) => {
       return await this.competitionApiRepository.findAll({
         country: region,
@@ -35,7 +29,7 @@ export default class CompetitionUseCases {
 
     const apiCompetitions = competitionsResults.flat();
     this.updateCompetitions(apiCompetitions);
-    await this.competitionsTimmer.updateTimmer();
+    await competitionTimmer.updateTimmer();
     return apiCompetitions;
   }
 

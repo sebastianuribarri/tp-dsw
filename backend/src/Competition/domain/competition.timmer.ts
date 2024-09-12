@@ -1,31 +1,35 @@
+import { cp } from "fs";
 import Timmer from "../../Shared/domain/timmer.js";
 import CompetitionsTimmerModel from "../infrastructure/timmer.schema.js";
 
-export default class CompetitionsTimmer {
+// Singleton Pattern
+export default class CompetitionsTimmer extends Timmer {
   static timmerInMinutes = 10 * 24 * 60; // 10 days
 
-  timmer: Timmer;
-  public async createTimmer() {
-    const timmerDoc = await CompetitionsTimmerModel.findOne();
+  protected static instance: CompetitionsTimmer;
+  public static async getInstance() {
+    if (CompetitionsTimmer.instance) return CompetitionsTimmer.instance;
 
+    const timmerDoc = await CompetitionsTimmerModel.findOne();
     if (timmerDoc) {
-      this.timmer = new Timmer({
+      CompetitionsTimmer.instance = new CompetitionsTimmer({
         lastUpdate: new Date(timmerDoc.lastUpdate),
         active: timmerDoc.active,
       });
-      console.log("timmer encontrado");
-    } else {
-      console.log("timmer creado");
-      this.timmer = new Timmer();
-      await CompetitionsTimmerModel.create(this.timmer);
+      return CompetitionsTimmer.instance;
     }
+    CompetitionsTimmer.instance = new CompetitionsTimmer();
+    await CompetitionsTimmerModel.create(CompetitionsTimmer.instance);
   }
+
   public competitionsUpdated() {
-    return this.timmer.isUpdated(CompetitionsTimmer.timmerInMinutes);
+    return CompetitionsTimmer.instance.isUpdated(
+      CompetitionsTimmer.timmerInMinutes
+    );
   }
 
   public async updateTimmer() {
-    this.timmer.setUpdate();
-    await CompetitionsTimmerModel.updateOne({}, this.timmer);
+    CompetitionsTimmer.instance.setUpdate();
+    await CompetitionsTimmerModel.updateOne({}, CompetitionsTimmer.instance);
   }
 }

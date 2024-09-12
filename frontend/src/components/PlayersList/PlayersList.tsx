@@ -76,7 +76,12 @@ const PlayersList: React.FC<PlayersListProps> = ({ players, message }) => {
               <PlayerCard key={player.id}>
                 <PlayerImage src={player.image} alt={player.name} />
                 <PlayerName>
-                  {player.name.replace("&apos;", "'").replace("Ã©", "é")}
+                  {player.name
+                    .replace("&apos;", "'")
+                    .replace("Ã©", "é")
+                    .replace("Ã¡", "a") //https://stackoverflow.com/questions/44011963/how-to-replace-encoded-characters-to-string-literals-like-udxyzw-or-something
+                    .replace("Ã³", "o")
+                    .replace("Ã", "i")}
                 </PlayerName>
                 <PlayerNumber>
                   {player.number ? `#${player.number}` : "-"}
