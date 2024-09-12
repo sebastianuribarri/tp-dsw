@@ -8,10 +8,12 @@ export default class Competition {
   readonly name: string;
   readonly type: string;
   readonly logo: string;
+  readonly coverage: {events: boolean; lineup: boolean};
 
   private static readonly standingsTimmerInMinutes = 60;
 
   standingsTimmer: Timmer;
+  matchesTimmer: Timmer;
   constructor(competition: {
     id: number;
     start: Date;
@@ -19,7 +21,10 @@ export default class Competition {
     name: string;
     type: string;
     logo: string;
+    coverage: {events: boolean; lineup: boolean}
     standingsTimmer?: { lastUpdate: Date | string; active: boolean };
+    matchesTimmer?: { lastUpdate: Date | string; active: boolean };
+
   }) {
     this.id = competition.id;
     this.start = new Date(competition.start);
@@ -27,8 +32,12 @@ export default class Competition {
     this.name = competition.name;
     this.type = competition.type;
     this.logo = competition.logo;
+    this.coverage = competition.coverage;
     this.standingsTimmer = competition.standingsTimmer
       ? new Timmer(competition.standingsTimmer)
+      : new Timmer();
+    this.matchesTimmer = competition.matchesTimmer
+      ? new Timmer(competition.matchesTimmer)
       : new Timmer();
   }
 
@@ -69,7 +78,10 @@ export class CompetitionDetail extends Competition {
       name: string;
       type: string;
       logo: string;
+      coverage: {events: boolean; lineup: boolean}
       standingsTimmer?: { lastUpdate: Date | string; active: boolean };
+      matchesTimmer?: { lastUpdate: Date | string; active: boolean };
+
     },
     standings: Standing[]
   ) {

@@ -17,7 +17,8 @@
     "cors": "^2.8.5",
     "express": "^4.19.2",
     "mongodb": "^6.6.0",
-    "mongoose": "^8.3.4"
+    "mongoose": "^8.3.4",
+    "mongosh": "^2.3.1"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
