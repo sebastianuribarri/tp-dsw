@@ -14,6 +14,12 @@ export const competitionSchema = new Schema({
     default: undefined,
   },
   standings: { type: [standingSchema], default: [] },
+  matchesTimmer: {
+    type:timmerSchema,
+    default:undefined,
+  },
+  coverage: {type:{events: Boolean, lineups: Boolean}}
+
 });
 
 const CompetitionModel = model("competitions", competitionSchema);
