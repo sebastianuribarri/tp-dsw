@@ -1,4 +1,4 @@
-import Competition from "../../Competition/domain/competiton.entity.js";
+import Competition from "../../Competition/domain/competition.entity.js";
 import LineUp from "../../LineUp/domain/lineup.entity.js";
 import Timmer from "../../Shared/domain/timmer.js";
 import Team from "../../Team/domain/team.entity.js";

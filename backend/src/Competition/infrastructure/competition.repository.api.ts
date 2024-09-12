@@ -1,5 +1,5 @@
 import IApiRepository from "../../Shared/domain/api.repository.js";
-import Competition from "../domain/competiton.entity.js";
+import Competition from "../domain/competition.entity.js";
 import { ApiResponse_OK } from "../../Shared/infrastructure/api_response.js";
 import ApiCompetition from "./competition.api_response.js";
 import ApiFootball from "../../ApiFootball/api.js";

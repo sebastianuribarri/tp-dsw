@@ -1,5 +1,5 @@
 import { error } from "console";
-import Competition from "../../Competition/domain/competiton.entity.js";
+import Competition from "../../Competition/domain/competition.entity.js";
 import User from "../domain/user.entity.js";
 import { IUserRepository } from "../domain/user.repository.js";
 

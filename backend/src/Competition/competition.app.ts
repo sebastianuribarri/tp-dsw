@@ -1,6 +1,6 @@
 import CompetitionUseCases from "./application/competition.use_cases.js";
 import IApiRepository from "../Shared/domain/api.repository.js";
-import Competition, { CompetitionDetail } from "./domain/competiton.entity.js";
+import Competition, { CompetitionDetail } from "./domain/competition.entity.js";
 import ICompetitionRepository from "./domain/competition.repository.js";
 import CompetitionApiRepository from "./infrastructure/competition.repository.api.js";
 import CompetitionMongoRepository from "./infrastructure/competition.repository.mongo.js";

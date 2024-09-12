@@ -1,4 +1,4 @@
-import Competition, { CompetitionDetail } from "./competiton.entity.ts";
+import Competition, { CompetitionDetail } from "./competition.entity.ts";
 
 export default interface ICompetitionRepository {
   findAll(filters?: object): Promise<Competition[] | null>;

@@ -1,4 +1,4 @@
-import Competition from "../../Competition/domain/competiton.entity.js";
+import Competition from "../../Competition/domain/competition.entity.js";
 import Team from "../../Team/domain/team.entity.js";
 
 export default class Standing {

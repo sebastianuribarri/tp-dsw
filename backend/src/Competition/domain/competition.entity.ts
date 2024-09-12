@@ -51,6 +51,11 @@ export default class Competition {
     return updated;
   }
 
+  public matchesUpdated() {
+    const updated = this.matchesTimmer.isUpdated(60);
+    return false;
+  }
+
   public updateStandingsTimmerStatus() {
     const lastUpdate = this.standingsTimmer.lastUpdate;
     const oldStatus = this.standingsTimmer.active;
@@ -64,6 +69,10 @@ export default class Competition {
     // if the status change, return true, instead return false
     if (oldStatus != this.standingsTimmer.active) return true;
     return false;
+  }
+
+  public updateMatchesTimmerStatus() {
+  
   }
 }
 

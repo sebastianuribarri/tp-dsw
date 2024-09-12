@@ -1,7 +1,7 @@
 import IApiRepository from "../../Shared/domain/api.repository.js";
 import ICompetitionRepository from "../domain/competition.repository.js";
 import CompetitionsTimmer from "../domain/competition.timmer.js";
-import Competition, { CompetitionDetail } from "../domain/competiton.entity.js";
+import Competition, { CompetitionDetail } from "../domain/competition.entity.js";
 import StandingUseCases from "../../Standing/application/standing.use_cases.js";
 
 // const REGIONS = ["Argentina", "World"];

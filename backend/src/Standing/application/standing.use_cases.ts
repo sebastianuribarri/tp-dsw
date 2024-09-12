@@ -1,5 +1,5 @@
 import IApiRepository from "../../Shared/domain/api.repository.js";
-import Competition from "../../Competition/domain/competiton.entity.js";
+import Competition from "../../Competition/domain/competition.entity.js";
 import Standing from "../domain/standing.entity.js";
 import TeamUseCases from "../../Team/application/team.use_cases.js";
 import Team from "../../Team/domain/team.entity.js";
