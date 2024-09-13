@@ -15,15 +15,15 @@ export default class StandingUseCases {
       `Standings (Competition ${competition.id}) ---------------------------------------------------------------`
     );
     // check if the standings of the competition exist or not
-    const timmerExist = competition.standingsTimmer.isCreated();
+    const exist = competition.standingsTimmer.standingsCreated(competition.end);
     //  - if it not exist, they are created
-    if (!timmerExist) {
+    if (!exist) {
       const apiCompetitionStandings = await this.standingApiRepository.findAll({
         league: competition.id,
         season: competition.season,
       });
 
-      competition.standingsTimmer.setUpdate();
+      competition.standingsTimmer.updateTimmer();
 
       const standingsWithTeam = apiCompetitionStandings.filter(
         (standing) => standing.team.id !== null
@@ -43,7 +43,9 @@ export default class StandingUseCases {
       `Standings (Competition ${competition.id}) ---------------------------------------------------------------`
     );
     // check if the competition standings need update
-    const standingsUpdated = competition.standingsUpdated();
+    const standingsUpdated = competition.standingsTimmer.standingsUpdated(
+      competition.end
+    );
     if (!standingsUpdated) {
       // if they need update:
       //   - seach all on the api repository
@@ -52,9 +54,7 @@ export default class StandingUseCases {
         season: competition.season,
       });
 
-      competition.standingsTimmer.setUpdate();
-
-      competition.updateStandingsTimmerStatus();
+      competition.standingsTimmer.updateTimmer();
 
       //  - return the new data and set update with the actual date
       return apiCompetitionStandings;

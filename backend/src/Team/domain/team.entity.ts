@@ -1,11 +1,12 @@
-import Timmer from "../../Shared/domain/timmer.js";
+import Timmer, { TimmerInput } from "../../Shared/domain/timmer.js";
 import Player from "../../Player/domain/player.entity.js";
+import TeamPlayersTimmer from "../../Player/domain/player.timmer.js";
 
 export default class Team {
   readonly id: number;
   readonly name: string;
   readonly logo: string;
-  playersTimmer: Timmer;
+  playersTimmer: TeamPlayersTimmer;
 
   private static readonly playersTimmerInMinutes = 20 * 24 * 60; // 20 dias
 
@@ -13,18 +14,14 @@ export default class Team {
     id: number;
     name: string;
     logo: string;
-    playersTimmer?: { lastUpdate: Date | string; active: boolean };
+    playersTimmer?: TimmerInput;
   }) {
     this.id = team.id;
     this.name = team.name;
     this.logo = team.logo;
     this.playersTimmer = team.playersTimmer
-      ? new Timmer(team.playersTimmer)
-      : new Timmer();
-  }
-
-  public playersUpdated() {
-    return this.playersTimmer.isUpdated(Team.playersTimmerInMinutes);
+      ? new TeamPlayersTimmer(team.playersTimmer)
+      : new TeamPlayersTimmer();
   }
 }
 
@@ -36,7 +33,7 @@ export class TeamDetail extends Team {
       id: number;
       name: string;
       logo: string;
-      playersTimmer?: { lastUpdate: Date | string; active: boolean };
+      playersTimmer?: TimmerInput;
     },
     players: Player[]
   ) {

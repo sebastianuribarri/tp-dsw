@@ -9,13 +9,13 @@ export default class PlayerUseCases {
     console.log(
       `Players (Team ${teamDetail.id}) ------------------------------------------------------------------------`
     );
-    const playersUpdated = teamDetail.playersUpdated();
+    const playersUpdated = teamDetail.playersTimmer.playersUpdated();
     if (!playersUpdated) {
       const apiTeamPlayers = await this.playerApiRepository.findAll({
         team: teamDetail.id,
       });
 
-      teamDetail.playersTimmer.setUpdate();
+      teamDetail.playersTimmer.updateTimmer();
 
       return apiTeamPlayers;
     }

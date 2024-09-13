@@ -17,7 +17,10 @@ export default interface ApiCompetition {
       end: Date;
       current: boolean;
       coverage: {
-        fixtures: object;
+        fixtures: {
+          events: boolean;
+          lineups: boolean;
+        };
         standings: boolean;
       };
     }

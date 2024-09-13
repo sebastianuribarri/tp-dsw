@@ -12,24 +12,25 @@ export default class CompetitionApiRepository
     this.apiFootball = apiFootball;
   }
   public async findAll(parameters?: object): Promise<Competition[] | null> {
-    let n = 0;
     const res: ApiResponse_OK<ApiCompetition> | null =
       await this.apiFootball.getResponse("leagues", parameters);
     const competitions = res.response.map((apiCompetition) => {
-      let competition_ = new Competition({
+      let competition = new Competition({
         id: apiCompetition.league.id,
         start: apiCompetition.seasons[0].start,
         end: apiCompetition.seasons[0].end,
         name: apiCompetition.league.name,
         type: apiCompetition.league.type,
         logo: apiCompetition.league.logo,
+        coverage: {
+          events: apiCompetition.seasons[0].coverage.fixtures.events,
+          lineups: apiCompetition.seasons[0].coverage.fixtures.lineups,
+        },
       });
-      let standingsExist = apiCompetition.seasons[0].coverage.standings;
-      if (!standingsExist) competition_.standingsTimmer.disableTimmer();
-      else n = n + 1;
-      return competition_;
+      let standingsCoverage = apiCompetition.seasons[0].coverage.standings;
+      competition.standingsTimmer.checkStandingsCoverage(standingsCoverage);
+      return competition;
     });
-    console.log("competitions with standings", n);
     return competitions;
   }
 }

@@ -12,10 +12,7 @@ export default class CompetitionsTimmer extends Timmer {
 
     const timmerDoc = await CompetitionsTimmerModel.findOne();
     if (timmerDoc) {
-      CompetitionsTimmer.instance = new CompetitionsTimmer({
-        lastUpdate: new Date(timmerDoc.lastUpdate),
-        active: timmerDoc.active,
-      });
+      CompetitionsTimmer.instance = new CompetitionsTimmer(timmerDoc);
     } else {
       CompetitionsTimmer.instance = new CompetitionsTimmer();
       await CompetitionsTimmerModel.create(CompetitionsTimmer.instance);

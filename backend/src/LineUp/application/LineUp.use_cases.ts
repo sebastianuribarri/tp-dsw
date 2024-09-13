@@ -3,20 +3,18 @@ import LineUp from "../domain/lineup.entity.js";
 import { MatchDetail } from "../../Match/domain/match.entity.js";
 
 export default class LineUpUseCases {
-    constructor (private readonly lineupApiRepository: IApiRepository <LineUp>) {
+  constructor(private readonly lineupApiRepository: IApiRepository<LineUp>) {}
+  public async needUpdate(matchDetail: MatchDetail) {
+    const lineupsUpdated = matchDetail.lineupsTimmer.lineUpUpdated(
+      matchDetail.status
+    );
+    if (lineupsUpdated) return false;
+    // lineups unupdated -> get updated lineups
+    const apiMatchPlayers = await this.lineupApiRepository.findAll({
+      match: matchDetail.id,
+    });
+    matchDetail.lineupsTimmer.updateTimmer();
 
-    }
-  public async needUpdate (matchDetail: MatchDetail) {
-      const lineupUpdated = matchDetail.lineupsUpdated();
-      if (!lineupUpdated) {
-          const apiMatchPlayers = await this. 
-          lineupApiRepository.findAll({
-              match: matchDetail.id
-          })
-          matchDetail.lineupsTimmer.setUpdate()
-
-          return apiMatchPlayers;
-      }
-      return false;
+    return apiMatchPlayers;
   }
 }

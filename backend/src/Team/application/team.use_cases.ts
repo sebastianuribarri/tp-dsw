@@ -1,17 +1,12 @@
-import IApiRepository from "../../Shared/domain/api.repository.js";
 import ITeamRepository from "../domain/team.repository.js";
-import TeamsTimmer from "../domain/team.timmer.js";
 import Team, { TeamDetail } from "../domain/team.entity.js";
 import PlayerUseCases from "../../Player/application/player.use_cases.js";
 
 export default class TeamUseCases {
-  private readonly teamsTimmer: TeamsTimmer;
   public constructor(
     private readonly teamDbRepository: ITeamRepository,
     private readonly playerUseCases: PlayerUseCases
-  ) {
-    this.teamsTimmer = new TeamsTimmer();
-  }
+  ) {}
 
   public async listAll() {
     return await this.teamDbRepository.findAll();

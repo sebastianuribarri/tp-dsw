@@ -15,11 +15,17 @@ export const competitionSchema = new Schema({
   },
   standings: { type: [standingSchema], default: [] },
   matchesTimmer: {
-    type:timmerSchema,
-    default:undefined,
+    type: timmerSchema,
+    default: undefined,
   },
-  coverage: {type:{events: Boolean, lineups: Boolean}}
-
+  coverage: {
+    type: {
+      events: { type: Boolean, require: true, default: true },
+      lineups: { type: Boolean, require: true, default: true },
+    },
+    require: true,
+    default: { events: true, lineups: true },
+  },
 });
 
 const CompetitionModel = model("competitions", competitionSchema);

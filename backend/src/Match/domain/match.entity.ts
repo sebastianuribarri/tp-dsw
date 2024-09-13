@@ -1,6 +1,8 @@
 import Competition from "../../Competition/domain/competition.entity.js";
+import MatchEventsTimmer from "../../Event/domain/event.timmer.js";
 import LineUp from "../../LineUp/domain/lineup.entity.js";
-import Timmer from "../../Shared/domain/timmer.js";
+import MatchLineUpTimmer from "../../LineUp/domain/lineup.timmer.js";
+import Timmer, { TimmerInput } from "../../Shared/domain/timmer.js";
 import Team from "../../Team/domain/team.entity.js";
 
 export default class Match {
@@ -14,63 +16,63 @@ export default class Match {
     home: number;
     away: number;
   };
-  eventsTimmer: Timmer;
-  lineupsTimmer: Timmer;
+  eventsTimmer: MatchEventsTimmer;
+  lineupsTimmer: MatchLineUpTimmer;
 
-    private static readonly eventsTimmerInMinutes = 2;
-    private static readonly lineupsTimmerInMinutes = 10;
-
-  constructor (match:{
-  id: number;
-  competition: Competition;
-  date: Date;
-  status: string;
-  home: Team;
-  away: Team;
-  goals: {
-    home: number;
-    away: number;
-  };
-  eventsTimmer: Timmer;
-  lineupsTimmer: Timmer;
+  constructor(match: {
+    id: number;
+    competition: Competition;
+    date: Date;
+    status: string;
+    home: Team;
+    away: Team;
+    goals: {
+      home: number;
+      away: number;
+    };
+    eventsTimmer: TimmerInput;
+    lineupsTimmer: TimmerInput;
   }) {
-    this.id= match.id
-    this.competition= match.competition
-    this.date= match.date
-    this.status= match.status
-    this.home= match.home
-    this.away= match.away
-    this.goals= match.goals
-    this.eventsTimmer=match.eventsTimmer
-      ? new Timmer(match.eventsTimmer)
-      : new Timmer();
-    this.lineupsTimmer=match.lineupsTimmer 
-      ? new Timmer(match.lineupsTimmer)
-      : new Timmer();
-      
-  }
-
-    public eventsUpdated() {
-    return this.eventsTimmer.isUpdated(Match.eventsTimmerInMinutes);
-  }
-
-    public lineupsUpdated() {
-    return this.lineupsTimmer.isUpdated(Match.lineupsTimmerInMinutes);
+    this.id = match.id;
+    this.competition = match.competition;
+    this.date = match.date;
+    this.status = match.status;
+    this.home = match.home;
+    this.away = match.away;
+    this.goals = match.goals;
+    this.eventsTimmer = match.eventsTimmer
+      ? new MatchEventsTimmer(match.eventsTimmer)
+      : new MatchEventsTimmer();
+    this.lineupsTimmer = match.lineupsTimmer
+      ? new MatchLineUpTimmer(match.lineupsTimmer)
+      : new MatchLineUpTimmer();
   }
 }
-
 
 export class MatchDetail extends Match {
   events: Event[];
   lineups: LineUp[];
 
   constructor(
-    match: Match,
+    match: {
+      id: number;
+      competition: Competition;
+      date: Date;
+      status: string;
+      home: Team;
+      away: Team;
+      goals: {
+        home: number;
+        away: number;
+      };
+      eventsTimmer: TimmerInput;
+      lineupsTimmer: TimmerInput;
+    },
     events: Event[],
     lineups: LineUp[]
   ) {
     super(match);
-    this.events=events;
-    this.lineups=lineups;
+    this.events = events;
+    this.lineups = lineups;
   }
 }
