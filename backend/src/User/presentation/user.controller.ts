@@ -1,7 +1,7 @@
 import UserUseCases from "../application/user.use_cases.js";
 import { Response, Request } from "express";
 import User from "../domain/user.entity.js";
-import bcrypt from "bcryptjs"
+import bcrypt from "bcryptjs";
 
 export default class UserController {
   constructor(private userUseCases: UserUseCases) {
