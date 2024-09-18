@@ -12,7 +12,7 @@ export default class UserUseCases {
 
   public async getUser(mail: string) {
     const user = await this.userDbRepository.findByMail(mail);
-    if (!user)throw new Error("user not found");
+    if (!user) throw new Error("user not found");
     return user;
   }
   public async updatePassword(mail: string, newPassword: string) {
@@ -35,26 +35,24 @@ export default class UserUseCases {
   public async deleteUser(mail: string) {
     return await this.userDbRepository.deleteOne(mail);
   }
-  public async login(mail: string, password: string){
-    const userFound = await this.getUser(mail)
-    if (userFound.password != password) throw new Error ("usuario y/o contraseña incorrecto"); 
-    else return userFound
+  public async login(mail: string, password: string) {
+    const userFound = await this.getUser(mail);
+    if (userFound.password != password)
+      throw new Error("usuario y/o contraseña incorrecto");
+    else return userFound;
   }
-  public async followTeam(mail:string, idcompetition: number){
-    let user = await this.userDbRepository.findByMail (mail);
-    user.teams.push(idcompetition)
-    await this.userDbRepository.updateOne(mail,{teams:user.teams} )
+  public async followTeam(mail: string, idcompetition: number) {
+    let user = await this.userDbRepository.findByMail(mail);
+    user.teams.push(idcompetition);
+    await this.userDbRepository.updateOne(mail, { teams: user.teams });
   }
-  public async unfollowTeam(mail:string, idcompetition: number){
+  public async unfollowTeam(mail: string, idcompetition: number) {
     let user = await this.userDbRepository.findByMail(mail);
     for (var i = 0; i < user.teams.length; i++) {
       if (idcompetition == user.teams[i]) {
-        user.teams.splice(i,1);
+        user.teams.splice(i, 1);
       }
-    await this. userDbRepository.updateOne(mail,{teams:user.teams})
+      await this.userDbRepository.updateOne(mail, { teams: user.teams });
     }
   }
-  
 }
-
-

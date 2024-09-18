@@ -1,5 +1,6 @@
-const url = "http://localhost:5000/api/teams/";
+import API_URL from "./api_url";
 
-export const getTeamById = async (id: number) => await fetch(url + String(id));
+export const getTeamById = async (id: number) =>
+  await fetch(API_URL + String(id));
 
-export const getTeams = async () => await fetch(url);
+export const getTeams = async () => await fetch(API_URL);
