@@ -1,4 +1,5 @@
 import Competition from "../../Competition/domain/competition.entity.js";
+import Event from "../../Event/domain/event.entity.js";
 import MatchEventsTimmer from "../../Event/domain/event.timmer.js";
 import LineUp from "../../LineUp/domain/lineup.entity.js";
 import MatchLineUpTimmer from "../../LineUp/domain/lineup.timmer.js";
@@ -49,6 +50,17 @@ export default class Match {
       ? new MatchLineUpTimmer(match.lineupsTimmer)
       : new MatchLineUpTimmer();
   }
+  public updateMatch(
+    date:Date, 
+    status:string, 
+    goals: {
+      home: number;
+      away: number;
+    }) {
+      this.date=date;
+      this.status=status;
+      this.goals=goals;
+    }
 }
 
 export class MatchDetail extends Match {

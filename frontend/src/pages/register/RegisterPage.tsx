@@ -1,5 +1,6 @@
 import { useForm } from "react-hook-form";
-import { User, registerUser } from "../../api/auth";
+import { registerUser } from "../../api/user";
+import { User } from "../../types/User";
 
 function RegisterPage() {
   const { register, handleSubmit } = useForm();
@@ -10,8 +11,11 @@ function RegisterPage() {
           console.log(values);
           const user: User = {
             username: values.username,
-            email: values.email,
+            mail: values.email,
             password: values.password,
+            id: values.id,
+            premium: values.premium,
+            teams: values.teams,
           };
 
           const res = await registerUser(user);

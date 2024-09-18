@@ -1,7 +1,12 @@
+
 import API_URL from "./api_url";
+const url = API_URL + "competitions/"
 
 export const getCompetitionsByTeam = async (teamId: number) =>
-  await fetch(API_URL + "team/" + String(teamId));
+  await fetch(url + "team/" + String(teamId));
 
 export const getCompetitionById = async (id: number) =>
-  await fetch(API_URL + String(id));
+  await fetch(url + String(id));
+
+export const getAllCompetitions = async() => 
+  await fetch (url);

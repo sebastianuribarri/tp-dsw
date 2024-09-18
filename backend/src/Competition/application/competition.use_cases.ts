@@ -65,7 +65,17 @@ export default class CompetitionUseCases {
   }
 
   public async createCompetition(competition: Competition) {
-    const competitionDetail = new CompetitionDetail(competition, []);
+    let newCompetitionStandings =
+        await this.standingUseCases.needCreation(competition);
+        let competitionDetail;
+      if (newCompetitionStandings) {
+        competitionDetail = new CompetitionDetail(
+          competition,
+          newCompetitionStandings
+        );
+      }else{    
+        competitionDetail = new CompetitionDetail(competition, []);
+      }
     return await this.competitionDbRepository.insertOne(competitionDetail);
   }
 

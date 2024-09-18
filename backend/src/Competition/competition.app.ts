@@ -49,16 +49,6 @@ export default class CompetitionApp {
 
   public async setup() {
     const competitions = await this.competitionUseCases.listAll();
-    for (let competition of competitions) {
-      let newCompetitionStandings =
-        await this.standingApp.standingUseCases.needCreation(competition);
-      if (newCompetitionStandings) {
-        let competitionDetail = new CompetitionDetail(
-          competition,
-          newCompetitionStandings
-        );
-        await this.competitionUseCases.updateCompetition(competitionDetail);
-      }
-    }
+    
   }
 }
