@@ -36,7 +36,7 @@ export default abstract class Timmer {
     }
 
     // Case 2) data do not exist -> return false
-    if (!this.lastUpdate) {
+    if (this.lastUpdate === null) {
       console.log("NO DATA AVAILABLE (need creation)");
       return false;
     }
@@ -70,7 +70,7 @@ export default abstract class Timmer {
     }
 
     // lastUpdate not exist -> info do not exist yet -> return false
-    if (!this.lastUpdate) {
+    if (this.lastUpdate === null) {
       console.log("NO DATA AVAILABLE: need creation");
       return false;
     }

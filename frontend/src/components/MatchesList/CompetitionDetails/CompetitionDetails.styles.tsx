@@ -12,17 +12,13 @@ export const CompetitionDetailsLink = styled(Link)`
 
   @media (min-width: 768px) {
     width: 30%;
-    min-width: 25%;
+    min-width: 130px;
     margin-bottom: 0;
     margin-right: 15px;
     border-bottom: none;
     border-right: 1px solid #444;
     padding-right: 15px;
     padding-bottom: 0;
-  }
-  transition: transform 0.3s ease; /* Smooth transition for hover effect */
-  &:hover {
-    transform: scale(1.07); /* Enlarge logo on hover */
   }
 `;
 

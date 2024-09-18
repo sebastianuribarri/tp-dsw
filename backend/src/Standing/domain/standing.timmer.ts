@@ -25,6 +25,8 @@ export default class CompetitionStandingsTimmer extends Timmer {
 
   public checkActiveness(competitionEnd: Date) {
     // if the competitions ended 2 days ago or more from the last update the timmer gets disable
+    if (!this.lastUpdate) return;
+
     const differenceInDays =
       (this.lastUpdate.getTime() - competitionEnd.getTime()) / (1000 * 60 * 24);
     if (differenceInDays >= 2) this.changeMode(TIMMER_MODE.POST_UPDATE);

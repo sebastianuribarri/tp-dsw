@@ -2,7 +2,7 @@ import styled, { createGlobalStyle } from "styled-components";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import HomePage from "./pages/home/HomePage";
 import LoginPage from "./pages/login/LoginPage";
-import LeaguePage from "./pages/league/LeaguePage";
+import CompetitionPage from "./pages/competition/CompetitionPage";
 import MatchPage from "./pages/match/MatchPage";
 import RegisterPage from "./pages/register/RegisterPage";
 import TeamPage from "./pages/team/TeamPage";
@@ -50,7 +50,7 @@ function App() {
           <MainContent>
             <Routes>
               <Route path="/" element={<HomePage />} />
-              <Route path="/league/:id" element={<LeaguePage />} />
+              <Route path="/league/:id" element={<CompetitionPage />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/match/:id" element={<MatchPage />} />
               <Route path="/register" element={<RegisterPage />} />

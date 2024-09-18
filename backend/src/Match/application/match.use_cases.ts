@@ -53,13 +53,27 @@ export default class MatchUseCases {
     }
   }
 
-  public async listAll() {
-    const competitions = await this.competitionUseCases.listAll();
-    for (let competition of competitions) {
-      await this.needUpdate(competition);
-    }
-    return await this.matchApiRepository.findAll();
-  }
+  // public async listAll() {
+  //   const competitions = await this.competitionUseCases.listAll();
+  //   for (let competition of competitions) {
+  //     await this.needUpdate(competition);
+  //   }
+  //   return await this.matchApiRepository.findAll();
+  // }
+
+  // public async listMatchesByDate(date: Date) {}
+
+  // public async listMatchesByCompetition(competitionId: number) {}
+
+  // public async listMatchesByTeam(teamId: number) {}
+
+  // public async listMatchesByTeams(teamIds: number[]) {}
+
+  public async listMatches(filters: object) {}
+
+  public async listLiveMatches() {}
+
+  public async getMatch(id: number) {}
 
   private async updateMatch(match: Match) {
     let dbMatch = await this.matchDbRepository.updateOne(match.id, match);

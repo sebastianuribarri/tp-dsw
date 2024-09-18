@@ -17,10 +17,12 @@ const CompetitionCard = styled(Link)`
   display: flex;
   align-items: center;
   background-color: #2b2b2b;
-  border-radius: 15px;
-  padding: 0 10px;
+  border-radius: 5px;
+  padding-left: 10px;
+  border-left-width: 5px;
+  border-color: #008641;
   text-align: left;
-  transition: transform 0.4s;
+  transition: 0.2s;
   cursor: pointer;
   height: 60px; /* Constant height */
   width: 80%;
@@ -29,7 +31,7 @@ const CompetitionCard = styled(Link)`
     width: 19%;
   }
   &:hover {
-    background-color: #454545;
+    background-color: #008641;
   }
 `;
 

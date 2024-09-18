@@ -1,4 +1,3 @@
-import { cp } from "fs";
 import Timmer from "../../Shared/domain/timmer.js";
 import CompetitionsTimmerModel from "../infrastructure/timmer.schema.js";
 

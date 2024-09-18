@@ -19,7 +19,7 @@ interface Match {
   venue: any;
 }
 
-export interface MatchDetailed extends Match {
+export interface MatchDetail extends Match {
   events: Event[];
   lineups: {
     home: Lineup;

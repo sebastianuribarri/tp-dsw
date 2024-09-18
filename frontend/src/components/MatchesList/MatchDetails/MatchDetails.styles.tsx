@@ -1,63 +1,55 @@
-// MatchDetails.styles.ts
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
 export const MatchDetailsLink = styled(Link)`
   display: flex;
-  justify-content: space-between;
+  justify-content: space-between; /* Space out home and away teams */
   align-items: center;
-  width: 100%;
   text-decoration: none;
   color: white;
-  transition: transform 0.3s ease; /* Smooth transition for hover effect */
-
-  &:hover {
-    transform: scale(1.05); /* Slightly enlarge the whole container */
-  }
-
-  @media (min-width: 768px) {
-    flex-direction: row;
-  }
+  padding: 10px; /* Reduced padding for smaller elements */
+  background-color: #2b2b2b;
+  border-radius: 8px;
+  transition: background-color 0.3s;
+  width: 100%;
+  flex-direction: column;
 `;
 
-export const HomeTeam = styled.div`
+export const TeamSection = styled.div`
   display: flex;
+  flex-direction: column;
   align-items: center;
+  flex: 1;
+`;
+
+export const TeamHomeLogo = styled.img`
+  width: 40px; /* Smaller logo */
+  height: 40px;
+  margin-bottom: 5px;
   justify-content: flex-start;
-  width: 40%;
-  transition: transform 0.3s ease; /* Smooth transition for hover effect */
 `;
-
-export const AwayTeam = styled.div`
-  display: flex;
-  align-items: center;
+export const TeamAwayLogo = styled.img`
+  width: 40px; /* Smaller logo */
+  height: 40px;
+  margin-bottom: 5px;
   justify-content: flex-end;
-  width: 40%;
-  transition: transform 0.3s ease; /* Smooth transition for hover effect */
 `;
-
-export const TeamLogo = styled.img`
-  width: 30px;
-  height: 30px;
-  margin: 0 0.3rem;
-  transition: transform 0.3s ease; /* Smooth transition for hover effect */
-
-  ${MatchDetailsLink}:hover & {
-    transform: scale(1.2); /* Enlarge logo on hover */
-  }
+export const TeamName = styled.div`
+  font-size: 14px; /* Smaller font size for team names */
+  text-align: center;
+  white-space: nowrap;
 `;
 
 export const ScoreContainer = styled.div`
   display: flex;
-  justify-content: center;
-  align-self: center;
-  flex-grow: 1;
-  margin: 5px;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 10px; /* Margin for spacing between teams */
 `;
 
 export const Score = styled.div`
-  font-size: 1.35em;
+  font-size: 1.8em; /* Smaller font size for score */
   font-weight: bold;
   text-align: center;
-  white-space: nowrap; /* Prevents score from wrapping to multiple lines */
+  white-space: nowrap;
 `;

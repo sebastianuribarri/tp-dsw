@@ -2,12 +2,17 @@ import React, { useEffect, useState } from "react";
 import MatchesList from "../../../components/MatchesList/MatchesList";
 import Match from "../../../types/Match";
 import Section from "../../../ui-components/Section";
+import { getMatches } from "../../../api/match";
 
 const UpcomingMatches: React.FC = () => {
   const [matches, setMatches] = useState<Match[]>([]);
 
   useEffect(() => {
-    setMatches([]);
+    const fetchMatchesData = async () => {
+      const res = await getMatches();
+      setMatches(res);
+    };
+    fetchMatchesData();
   }, []);
 
   return (

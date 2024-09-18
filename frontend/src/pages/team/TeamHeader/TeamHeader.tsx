@@ -27,7 +27,7 @@ const FollowButton = styled.button`
     margin-right: 20px;
   }
   &:hover {
-    background-color: #484848;
+    background-color: #008641;
   }
 `;
 

@@ -7,7 +7,7 @@ export const MatchesGrid = styled.div`
   gap: 15px;
 
   @media (min-width: 768px) {
-    grid-template-columns: repeat(auto-fit, minmax(600px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
   }
 `;
 
@@ -16,10 +16,11 @@ export const MatchCard = styled.div`
   flex-direction: column;
   background-color: #2b2b2b;
   border-radius: 5px;
-  padding: 10px;
   transition: transform 0.3s;
   cursor: pointer;
-
+  padding: 5px 10px;
+  border-left-width: 5px;
+  border-color: #008641;
   @media (min-width: 768px) {
     flex-direction: row;
     align-items: center;
