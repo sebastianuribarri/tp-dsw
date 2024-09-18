@@ -42,4 +42,9 @@ export default class CompetitionMongoRepository
       new: true,
     });
   }
+  public async deleteOne(
+      id: number
+  ) {
+    await CompetitionModel.deleteOne({id: id});
+  }
 }

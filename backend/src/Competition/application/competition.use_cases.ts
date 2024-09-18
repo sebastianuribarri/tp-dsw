@@ -86,10 +86,11 @@ export default class CompetitionUseCases {
     // update data on database
     apiCompetitions.forEach((apiCompetition) => {
       let founded = false;
-      dbCompetitions.forEach((dbCompetition, i) => {
+      dbCompetitions.forEach(async (dbCompetition, i) => {
         if (dbCompetition.id === apiCompetition.id) {
           if (apiCompetition.start != dbCompetition.start) {
-            this.updateCompetition(apiCompetition);
+            await this.deleteCompetition(dbCompetition.id);
+            await this.createCompetition(apiCompetition);
           }
           dbCompetitions.splice(i, 1);
           founded = true;
@@ -103,6 +104,12 @@ export default class CompetitionUseCases {
     return await this.competitionDbRepository.updateOne(
       newCompetition.id,
       newCompetition
+    );
+  }
+
+    public async deleteCompetition( id: number) {
+    return await this.competitionDbRepository.deleteOne(
+      id,
     );
   }
 }

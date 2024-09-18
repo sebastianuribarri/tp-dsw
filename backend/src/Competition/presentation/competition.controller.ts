@@ -9,8 +9,12 @@ export default class CompetitionController {
   }
 
   public async getAll(req: Request, res: Response) {
+    try {
     const result = await this.competitionUseCases.listAll();
-    res.json(result);
+    res.json(result); } catch (error) {
+        console.log(error);
+        res.status(404).send({message: "competitions not founded"});
+    }
   }
 
   public async getOne(req: Request, res: Response) {
