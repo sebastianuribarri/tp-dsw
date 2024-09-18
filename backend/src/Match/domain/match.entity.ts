@@ -3,15 +3,17 @@ import MatchEventsTimmer from "../../Event/domain/event.timmer.js";
 import LineUp from "../../LineUp/domain/lineup.entity.js";
 import MatchLineUpTimmer from "../../LineUp/domain/lineup.timmer.js";
 import Timmer, { TimmerInput } from "../../Shared/domain/timmer.js";
+import CompetitionStandingsTimmer from "../../Standing/domain/standing.timmer.js";
 import Team from "../../Team/domain/team.entity.js";
+import CompetitionMatchesTimmer from "./match.timmer.js";
 
 export default class Match {
   id: number;
   competition: Competition;
   date: Date;
   status: string;
-  home: Team;
-  away: Team;
+  home: {id: number; name: string; logo: string};
+  away: {id: number; name: string; logo: string};
   goals: {
     home: number;
     away: number;
@@ -21,11 +23,11 @@ export default class Match {
 
   constructor(match: {
     id: number;
-    competition: Competition;
+    competition: {id: number; start: Date; end: Date ; name: string; type: string; logo: string; coverage: { events: boolean; lineups: boolean}};
     date: Date;
     status: string;
-    home: Team;
-    away: Team;
+    home: {id: number; name: string; logo: string};
+    away: {id: number; name: string; logo: string};
     goals: {
       home: number;
       away: number;
@@ -34,7 +36,7 @@ export default class Match {
     lineupsTimmer: TimmerInput;
   }) {
     this.id = match.id;
-    this.competition = match.competition;
+    this.competition = new Competition(match.competition);
     this.date = match.date;
     this.status = match.status;
     this.home = match.home;
@@ -56,7 +58,7 @@ export class MatchDetail extends Match {
   constructor(
     match: {
       id: number;
-      competition: Competition;
+      competition: {id: number; start: Date; end: Date ; name: string; type: string; logo: string; coverage: { events: boolean; lineups: boolean}};
       date: Date;
       status: string;
       home: Team;
