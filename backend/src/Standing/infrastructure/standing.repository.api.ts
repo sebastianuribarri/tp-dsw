@@ -13,7 +13,7 @@ export default class StandingApiRepository implements IApiRepository<Standing> {
     let apiStandings: Standing[] = [];
     // if is empty
     if (!res) return [];
-    if (!res.response) return [];
+    if (!res.response[0]) return [];
     const standingsGroups: Standing[][] = res.response[0].league.standings;
     for (let standingsGroup of standingsGroups) {
       for (let standing of standingsGroup) {

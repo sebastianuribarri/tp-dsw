@@ -48,7 +48,6 @@ export default class CompetitionApp {
   }
 
   public async setup() {
-    const competitions = await this.competitionUseCases.listAll();
-    
+    // await this.competitionUseCases.listAll();
   }
 }

@@ -15,12 +15,12 @@ import { getMatches } from "../../api/match";
 
 const CompetitionContentContainer = styled.div`
   display: flex;
-  flex-direction: column; /* Default to column for mobile */
+  flex-direction: column;
 
   @media (min-width: 768px) {
-    flex-direction: row-reverse; /* Row layout for desktop */
-    flex-wrap: wrap; /* Wrap items if they don't fit */
-    justify-content: space-between; /* Space between items */
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
   }
 `;
 

@@ -11,7 +11,7 @@ export const CompetitionDetailsLink = styled(Link)`
   color: white;
 
   @media (min-width: 768px) {
-    width: 30%;
+    width: 250px;
     min-width: 130px;
     margin-bottom: 0;
     margin-right: 15px;
@@ -23,8 +23,8 @@ export const CompetitionDetailsLink = styled(Link)`
 `;
 
 export const CompetitionLogo = styled.img`
-  width: 50px; /* Increased size of competition logo */
-  height: 50px; /* Increased size of competition logo */
+  width: 50px;
+  height: 50px;
   margin-right: 10px;
 `;
 

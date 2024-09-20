@@ -9,7 +9,7 @@ interface StandingsGroupProps {
 }
 
 const StandingsGroupContainer = styled.div`
-  margin-top: 15px;
+  margin-top: 10px;
   background-color: #008641;
   border-radius: 10px;
   padding-bottom: 10px;
@@ -17,14 +17,14 @@ const StandingsGroupContainer = styled.div`
 
   @media (min-width: 768px) {
     margin-top: 0;
-    margin-bottom: 15px; /* Space between tables */
+    margin-bottom: 5px; /* Space between tables */
     max-width: 350px;
   }
 `;
 
 const GroupTitle = styled.h3`
   color: white;
-  margin-bottom: 10px; /* Space between title and table */
+  margin-bottom: 8px; /* Space between title and table */
   font-weight: bold; /* Make the title bold */
   padding-top: 5px;
   text-align: center;
@@ -41,10 +41,9 @@ const Table = styled.table`
 
 const TableHeader = styled.th`
   width: 100%;
-  font-weight: bold;
   background-color: #026130;
   color: white;
-  padding: 10px;
+  padding: 5px 10px;
   text-align: left;
   white-space: nowrap; /* Prevent wrapping of header text */
 `;
@@ -57,7 +56,7 @@ const TableRow = styled.tr`
 `;
 
 const TableData = styled.td`
-  padding: 10px;
+  padding: 8px 10px;
   border-bottom: 1px solid #444;
   color: white;
   white-space: nowrap; /* Prevent wrapping of data text */

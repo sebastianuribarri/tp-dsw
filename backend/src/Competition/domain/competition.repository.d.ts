@@ -8,5 +8,5 @@ export default interface ICompetitionRepository {
     id: number,
     newData: Competition
   ): Promise<CompetitionDetail | null>;
-  deleteOne( id : number): Promise< void >;
+  deleteOne(id: number): Promise<void>;
 }

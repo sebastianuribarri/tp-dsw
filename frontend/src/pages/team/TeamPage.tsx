@@ -10,7 +10,18 @@ import { TeamDetail } from "../../types/Team";
 import TeamMatches from "./TeamMatches/TeamMatches";
 import TeamSeason from "./TeamSeason/TeamSeason";
 import TeamPlayersList from "./PlayersList/PlayersList";
+import styled from "styled-components";
 
+const TeamContentContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  @media (min-width: 768px) {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+`;
 const TeamPage = () => {
   const { id } = useParams();
   const [teamDetail, setTeamData] = useState<TeamDetail | null>(null);
@@ -44,9 +55,11 @@ const TeamPage = () => {
             <TeamHeader team={teamDetail} />
           </PageMenu>
           <Page>
-            <TeamSeason />
-            <TeamMatches />
-            <TeamPlayersList players={teamDetail.players} />
+            <TeamContentContainer>
+              <TeamSeason />
+              <TeamMatches />
+              <TeamPlayersList players={teamDetail.players} />
+            </TeamContentContainer>
           </Page>
         </>
       ) : (

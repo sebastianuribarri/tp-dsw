@@ -64,21 +64,6 @@ export default class CompetitionUseCases {
     });
   }
 
-  public async createCompetition(competition: Competition) {
-    let newCompetitionStandings =
-        await this.standingUseCases.needCreation(competition);
-        let competitionDetail;
-      if (newCompetitionStandings) {
-        competitionDetail = new CompetitionDetail(
-          competition,
-          newCompetitionStandings
-        );
-      }else{    
-        competitionDetail = new CompetitionDetail(competition, []);
-      }
-    return await this.competitionDbRepository.insertOne(competitionDetail);
-  }
-
   private async updateCompetitions(apiCompetitions: Competition[]) {
     // get database competitions
     let dbCompetitions = await this.competitionDbRepository.findAll();
@@ -100,6 +85,22 @@ export default class CompetitionUseCases {
     });
   }
 
+  public async createCompetition(competition: Competition) {
+    let newCompetitionStandings = await this.standingUseCases.needCreation(
+      competition
+    );
+    let competitionDetail: CompetitionDetail;
+    if (newCompetitionStandings) {
+      competitionDetail = new CompetitionDetail(
+        competition,
+        newCompetitionStandings
+      );
+    } else {
+      competitionDetail = new CompetitionDetail(competition, []);
+    }
+    return await this.competitionDbRepository.insertOne(competitionDetail);
+  }
+
   public async updateCompetition(newCompetition: Competition) {
     return await this.competitionDbRepository.updateOne(
       newCompetition.id,
@@ -107,9 +108,7 @@ export default class CompetitionUseCases {
     );
   }
 
-    public async deleteCompetition( id: number) {
-    return await this.competitionDbRepository.deleteOne(
-      id,
-    );
+  public async deleteCompetition(id: number) {
+    return await this.competitionDbRepository.deleteOne(id);
   }
 }

@@ -15,7 +15,7 @@ await mongoDatabase.connect();
 // api setup
 const apiFootball = new ApiFootball(
   "https://api-football-v1.p.rapidapi.com/v3/",
-  "mongodb+srv://sebauribarri:todofulbo@todofulbodb.sfbeehk.mongodb.net"
+  "mongodb+srv://sebauribarri:todofulbo@todofulbodb.sfbeehk.mongodb.net/?retryWrites=true&w=majority&appName=TodoFulboDB"
 );
 await apiFootball.setup();
 

@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 
 const CompetitionsGrid = styled.div`
   display: flex;
-
+  flex-direction: column;
   justify-content: center;
   flex-wrap: wrap;
   gap: 10px;
@@ -18,17 +18,18 @@ const CompetitionCard = styled(Link)`
   align-items: center;
   background-color: #2b2b2b;
   border-radius: 5px;
-  padding-left: 10px;
+  padding: 0 15px;
   border-left-width: 5px;
   border-color: #008641;
   text-align: left;
   transition: 0.2s;
   cursor: pointer;
   height: 60px; /* Constant height */
-  width: 80%;
+  width: 100%;
 
   @media (min-width: 768px) {
-    width: 19%;
+    width: 100%;
+    min-width: 180px;
   }
   &:hover {
     background-color: #008641;
@@ -42,7 +43,7 @@ const CompetitionLogo = styled.img`
 `;
 
 const CompetitionName = styled.div`
-  font-size: 1.1em;
+  font-size: 1em;
   display: flex;
   width: 100%;
   justify-content: center;

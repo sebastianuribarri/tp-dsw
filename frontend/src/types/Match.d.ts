@@ -3,18 +3,24 @@ import Competition from "./Competition";
 import Event from "./Event";
 interface Match {
   id: number;
-  competition: Competition;
+  competition: {
+    id: number;
+    name: string;
+    start?: Date;
+    end?: Date;
+    logo: string;
+  };
   round: string;
   status: string;
   timezone: string;
-  date: Date;
+  date: string;
   teams: {
     home: Team;
     away: Team;
   };
   goals: {
-    home: number;
-    away: number;
+    home: number | null;
+    away: number | null;
   };
   venue: any;
 }

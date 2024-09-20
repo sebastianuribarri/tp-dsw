@@ -16,7 +16,10 @@ export default class CompetitionStandingsTimmer extends Timmer {
   }
 
   public checkStandingsCoverage(coverage: boolean) {
-    if (!coverage) this.changeMode(TIMMER_MODE.NOT_UPDATE);
+    if (!coverage) {
+      console.log("not coverage");
+      this.changeMode(TIMMER_MODE.NOT_UPDATE);
+    }
   }
 
   public updateTimmer() {
