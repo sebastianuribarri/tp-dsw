@@ -2,6 +2,12 @@ import Timmer, { TimmerInput } from "../../Shared/domain/timmer.js";
 import Player from "../../Player/domain/player.entity.js";
 import TeamPlayersTimmer from "../../Player/domain/player.timmer.js";
 
+export interface TeamInput {
+  id: number;
+  name: string;
+  logo: string;
+  playersTimmer?: TimmerInput;
+}
 export default class Team {
   readonly id: number;
   readonly name: string;
@@ -10,12 +16,7 @@ export default class Team {
 
   private static readonly playersTimmerInMinutes = 20 * 24 * 60; // 20 dias
 
-  constructor(team: {
-    id: number;
-    name: string;
-    logo: string;
-    playersTimmer?: TimmerInput;
-  }) {
+  constructor(team: TeamInput) {
     this.id = team.id;
     this.name = team.name;
     this.logo = team.logo;

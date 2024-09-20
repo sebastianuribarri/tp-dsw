@@ -1,11 +1,28 @@
-import {Schema } from "mongoose";
+import { Schema } from "mongoose";
+import {
+  RequireNumber,
+  RequireString,
+} from "../../Shared/infrastructure/schema_types.js";
 
-const eventSchema = new Schema ({
-  time: { type:Number, default:0 },
-  team: { type:String, default:"" },
-  player: {type:{id:Number, name:String}, default:{id:0,name:""}},
-  assist: {type:{id:Number, name:String}, default:{id:0,name:""}},
-  type: {type:String, default:""},
-  detail: {type:String, default: ""}
-})
-export default eventSchema
+const eventSchema = new Schema({
+  time: RequireNumber,
+  team: {
+    type: {
+      id: RequireNumber,
+      name: RequireString,
+      logo: RequireString,
+    },
+    default: "",
+  },
+  player: {
+    type: { id: RequireNumber, name: RequireString },
+    default: { id: 0, name: "" },
+  },
+  assist: {
+    type: { id: RequireNumber, name: RequireString },
+    default: { id: 0, name: "" },
+  },
+  type: RequireString,
+  detail: RequireString,
+});
+export default eventSchema;

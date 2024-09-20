@@ -14,11 +14,7 @@ class ApiAccountsUseCases {
   }
 
   public async getAccount(): Promise<ApiAccount | null> {
-    this.accounts.forEach((account) => {
-      if (account.remainingRequests === 0 && account.endRequestTime) {
-        account.checkReset();
-      }
-    });
+    this.accounts.forEach((account) => account.checkReset());
 
     const validAccounts = this.sortAccounts();
 
@@ -48,15 +44,10 @@ class ApiAccountsUseCases {
     return validAccounts;
   }
 
-  public async updateDayRequests(
-    account: ApiAccount,
-    resetTimeInSeconds: number
-  ): Promise<void> {
-    // Si remainingRequests llega a 0, almacenamos la fecha actual y el resetTimeInSeconds
-    if (account.remainingRequests === 0) {
-      account.endRequestTime = new Date();
-      account.resetTimeInSeconds = resetTimeInSeconds; // Guardamos el resetTimeInSeconds de ese momento
-    }
+  public async updateDayRequests(account: ApiAccount): Promise<void> {
+    // Si remainingRequests llega a 0, almacenamos la fecha actual
+
+    account.lastRequestTime = new Date();
 
     console.log(
       `${account.mail} (${account.api_key}): ${account.remainingRequests}`

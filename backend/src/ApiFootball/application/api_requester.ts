@@ -47,16 +47,13 @@ class ApiRequester {
       account.remainingRequests = Number(
         response.headers.get("x-ratelimit-requests-remaining")
       );
-      const resetTimeInSeconds = Number(
+      account.resetTimeInSeconds = Number(
         response.headers.get("x-ratelimit-requests-reset")
       );
 
       const data = await response.json();
 
-      await this.apiAccountsUseCases.updateDayRequests(
-        account,
-        resetTimeInSeconds
-      );
+      await this.apiAccountsUseCases.updateDayRequests(account);
 
       return data;
     } catch (error) {

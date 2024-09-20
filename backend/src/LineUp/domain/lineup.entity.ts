@@ -1,54 +1,48 @@
-import Player from "../../Player/domain/player.entity.js";
+import Player, { PlayerInput } from "../../Player/domain/player.entity.js";
+
+export interface PlayerLineUpInput extends PlayerInput {
+  grid?:
+    | string
+    | {
+        x: number;
+        y: number;
+      };
+}
 
 export class PlayerLineUp extends Player {
-  grid: {
-    x: number | null;
-    y: number | null;
+  grid?: {
+    x: number;
+    y: number;
   };
+
+  constructor(player: PlayerLineUpInput) {
+    super(player);
+    if (typeof player.grid === "string") {
+      this.grid = {
+        x: Number(player.grid ? player.grid[0] : 0),
+        y: Number(player.grid ? player.grid[2] : 0),
+      };
+    } else this.grid = player.grid;
+  }
+}
+
+export interface LineUpInput {
+  team: number;
+  formation: string;
+  starters: PlayerLineUpInput[];
+  substitutes: Player[];
 }
 
 export default class LineUp {
   team: number;
   formation: string;
   starters: PlayerLineUp[];
-  substitutes: PlayerLineUp[];
+  substitutes: Player[];
 
-  constructor (lineUp: {
-      team: number;
-      formation: string;
-      starters: [ {
-          id: number;
-          name: string;
-          number: number;
-          image? : string;
-          position: string;
-          grid? : string | null;
-
-      } ]
-      subtitutes : [ { 
-        id: number;
-          name: string;
-          number: number;
-          image? : string;
-          position: string;
-          grid? : string | null;
-      } ]
-  }) 
-  {
-      this.formation = lineUp.formation
-      this.team = lineUp.team
-      this.starters = this.playersTransformation(lineUp.starters)
-      this.substitutes = this.playersTransformation(lineUp.subtitutes)
-
-     
+  constructor(lineUp: LineUpInput) {
+    this.formation = lineUp.formation;
+    this.team = lineUp.team;
+    this.starters = lineUp.starters.map((player) => new PlayerLineUp(player));
+    this.substitutes = lineUp.substitutes.map((player) => new Player(player));
   }
-   private playersTransformation (players) {
-      return players.map((player) => { 
-        player.grid = {x: Number(player.grid? player.grid[0]: 0), y: Number(player.grid? player.grid[2]: 0)}
-        return new PlayerLineUp (
-          player
-        )}
-      )
-   }
-
 }

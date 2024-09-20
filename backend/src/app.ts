@@ -29,17 +29,22 @@ export default class App {
     this.apiFootball = apiFootball;
 
     // apps setup
+    this.userApp = new UserApp(this.server);
+
     this.playerApp = new PlayerApp(this.apiFootball);
+
     this.teamApp = new TeamApp(this.server, this.playerApp);
+
     this.standingApp = new StandingApp(this.apiFootball, this.teamApp);
+
     this.competitionApp = new CompetitionApp(
       this.standingApp,
       this.apiFootball,
       this.server
     );
-    this.userApp = new UserApp(this.server);
 
     this.predictionApp = new PredictionApp(this.server);
+
     this.voteApp = new VoteApp(this.server);
   }
 

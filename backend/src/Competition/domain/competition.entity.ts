@@ -3,6 +3,21 @@ import { TimmerInput } from "../../Shared/domain/timmer.js";
 import Standing from "../../Standing/domain/standing.entity.js";
 import CompetitionStandingsTimmer from "../../Standing/domain/standing.timmer.js";
 
+export interface CompetitionInput {
+  id: number;
+  start: Date;
+  end: Date;
+  name: string;
+  type: string;
+  logo: string;
+  coverage: {
+    events: boolean;
+    lineups: boolean;
+  };
+  standingsTimmer?: TimmerInput;
+  matchesTimmer?: TimmerInput;
+}
+
 export default class Competition {
   readonly id: number;
   readonly start: Date;
@@ -18,20 +33,7 @@ export default class Competition {
   standingsTimmer: CompetitionStandingsTimmer;
   matchesTimmer: CompetitionMatchesTimmer;
 
-  constructor(competition: {
-    id: number;
-    start: Date;
-    end: Date;
-    name: string;
-    type: string;
-    logo: string;
-    coverage: {
-      events: boolean;
-      lineups: boolean;
-    };
-    standingsTimmer?: TimmerInput;
-    matchesTimmer?: TimmerInput;
-  }) {
+  constructor(competition: CompetitionInput) {
     this.id = competition.id;
     this.start = new Date(competition.start);
     this.end = new Date(competition.end);
@@ -56,20 +58,7 @@ export default class Competition {
 export class CompetitionDetail extends Competition {
   standings: Standing[];
 
-  constructor(
-    competition: {
-      id: number;
-      start: Date;
-      end: Date;
-      name: string;
-      type: string;
-      logo: string;
-      coverage: { events: boolean; lineups: boolean };
-      standingsTimmer?: TimmerInput;
-      matchesTimmer?: TimmerInput;
-    },
-    standings: Standing[]
-  ) {
+  constructor(competition: CompetitionInput, standings: Standing[]) {
     super(competition);
     this.standings = standings;
   }

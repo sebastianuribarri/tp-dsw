@@ -10,12 +10,12 @@ export enum TIMMER_MODE {
 }
 
 export interface TimmerInput {
-  lastUpdate: Date | string | null;
+  lastUpdate?: Date;
   mode: string;
 }
 
 export default abstract class Timmer {
-  public lastUpdate: Date | null;
+  public lastUpdate: Date;
   public mode: TIMMER_MODE;
 
   constructor(

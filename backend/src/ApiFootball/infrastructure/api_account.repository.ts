@@ -41,7 +41,7 @@ class ApiAccountsRepository {
     // Crear un objeto con los campos a actualizar
     const updateFields = {
       remainingRequests: account.remainingRequests,
-      endRequestTime: account.endRequestTime,
+      endRequestTime: account.lastRequestTime,
       resetTimeInSeconds: account.resetTimeInSeconds,
     };
 

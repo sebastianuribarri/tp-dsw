@@ -1,14 +1,14 @@
+import ApiFootball from "../../ApiFootball/api.js";
 import IApiRepository from "../../Shared/domain/api.repository.js";
-import { apiResponse } from "../../Shared/infrastructure/api-football.js";
-import { ApiResponse } from "../../Shared/infrastructure/api_response.js";
 import Event from "../domain/event.entity.js";
 
 export default class EventApiRepository implements IApiRepository<Event> {
+  constructor(private readonly api: ApiFootball) {}
   public async findAll(parameters?: object): Promise<Event[] | null> {
-    const res = await apiResponse ("fixtures/events", parameters);
+    const res = await this.api.getResponse("fixtures/events", parameters);
     const apiEvents = res.response[0].events.map(
-      (event)=>
-        new Event ({
+      (event) =>
+        new Event({
           time: event.time,
           team: event.player,
           player: event.player,

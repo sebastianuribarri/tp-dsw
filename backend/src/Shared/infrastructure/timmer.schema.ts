@@ -1,7 +1,7 @@
 import { Schema } from "mongoose";
 
 const timmerSchema = new Schema({
-  lastUpdate: { type: String, default: null },
+  lastUpdate: { type: Date },
   mode: { type: String, default: String },
 });
 

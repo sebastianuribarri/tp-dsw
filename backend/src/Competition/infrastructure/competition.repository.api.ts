@@ -11,9 +11,10 @@ export default class CompetitionApiRepository
   constructor(apiFootball: ApiFootball) {
     this.apiFootball = apiFootball;
   }
-  public async findAll(parameters?: object): Promise<Competition[] | null> {
+  public async findAll(parameters?: object): Promise<Competition[] | []> {
     const res: ApiResponse_OK<ApiCompetition> | null =
       await this.apiFootball.getResponse("leagues", parameters);
+    if (!res) return [];
     const competitions = res.response.map((apiCompetition) => {
       let competition = new Competition({
         id: apiCompetition.league.id,

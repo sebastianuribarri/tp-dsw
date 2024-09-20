@@ -1,8 +1,23 @@
-import Team from "../../Team/domain/team.entity.js";
+import Team, { TeamInput } from "../../Team/domain/team.entity.js";
+
+export interface EventInput {
+  time: number;
+  team: TeamInput;
+  player: {
+    id: number | null;
+    name: string | null;
+  };
+  assist: {
+    id: number | null;
+    name: string | null;
+  };
+  type: string;
+  detail: string;
+}
 
 export default class Event {
   time: number;
-  team: Team;
+  team: TeamInput;
   player: {
     id: number;
     name: string;
@@ -14,25 +29,12 @@ export default class Event {
   type: string;
   detail: string;
 
-  constructor (event:{
-    time: number;
-    team: Team;
-    player: {
-      id: number | null;
-      name: string | null;
-    };
-    assist: {
-      id: number | null;
-      name: string | null;
-    }
-    type: string;
-    detail: string;
-  }) {
-    this.time= event.time
-    this.team = event.team
-    this.player = event.player
-    this.assist = event.assist
-    this.type = event.type
-    this.detail = event.detail
+  constructor(event: EventInput) {
+    this.time = event.time;
+    this.team = event.team;
+    this.player = event.player;
+    this.assist = event.assist;
+    this.type = event.type;
+    this.detail = event.detail;
   }
 }
