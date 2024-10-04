@@ -23,6 +23,7 @@ export default class CompetitionApiRepository
         name: apiCompetition.league.name,
         type: apiCompetition.league.type,
         logo: apiCompetition.league.logo,
+        country: apiCompetition.country.name,
         coverage: {
           events: apiCompetition.seasons[0].coverage.fixtures.events,
           lineups: apiCompetition.seasons[0].coverage.fixtures.lineups,

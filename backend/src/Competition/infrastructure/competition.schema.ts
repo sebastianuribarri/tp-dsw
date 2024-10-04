@@ -1,6 +1,7 @@
 import { Schema, model } from "mongoose";
 import timmerSchema from "../../Shared/infrastructure/timmer.schema.js";
 import standingSchema from "../../Standing/infrastructure/standing.schema.js";
+import { RequireString } from "../../Shared/infrastructure/schema_types.js";
 
 export const competitionSchema = new Schema({
   id: { type: Number, require: true, default: 0 },
@@ -9,6 +10,7 @@ export const competitionSchema = new Schema({
   name: { type: String, require: true, default: "" },
   type: { type: String, default: "League" },
   logo: { type: String, require: true, default: "" },
+  country: RequireString,
   standingsTimmer: {
     type: timmerSchema,
     default: undefined,

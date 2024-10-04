@@ -10,6 +10,7 @@ export interface CompetitionInput {
   name: string;
   type: string;
   logo: string;
+  country: string;
   coverage: {
     events: boolean;
     lineups: boolean;
@@ -25,6 +26,7 @@ export default class Competition {
   readonly name: string;
   readonly type: string;
   readonly logo: string;
+  readonly country: string;
   readonly coverage: {
     events: boolean;
     lineups: boolean;
@@ -40,6 +42,7 @@ export default class Competition {
     this.name = competition.name;
     this.type = competition.type;
     this.logo = competition.logo;
+    this.country = competition.country;
     this.coverage = competition.coverage;
     this.standingsTimmer = competition.standingsTimmer
       ? new CompetitionStandingsTimmer(competition.standingsTimmer)

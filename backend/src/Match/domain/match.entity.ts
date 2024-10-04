@@ -13,7 +13,7 @@ import { TeamInput } from "../../Team/domain/team.entity.js";
 // - add competition season and country
 export interface MatchInput {
   id: number;
-  competition: CompetitionInput;
+  competition: number;
   date: Date;
   status: string;
   home: TeamInput;
@@ -22,13 +22,13 @@ export interface MatchInput {
     home: number;
     away: number;
   };
-  eventsTimmer: TimmerInput;
-  lineupsTimmer: TimmerInput;
+  eventsTimmer?: TimmerInput;
+  lineupsTimmer?: TimmerInput;
 }
 
 export default class Match {
   id: number;
-  competition: Competition;
+  competition: number;
   date: Date;
   status: string;
   home: { id: number; name: string; logo: string };
@@ -42,7 +42,7 @@ export default class Match {
 
   constructor(match: MatchInput) {
     this.id = match.id;
-    this.competition = new Competition(match.competition);
+    this.competition = match.competition;
     this.date = match.date;
     this.status = match.status;
     this.home = match.home;
