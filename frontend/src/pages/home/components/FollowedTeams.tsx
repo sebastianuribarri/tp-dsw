@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Section from "../../../ui-components/Section";
 import Team from "../../../types/Team";
-import TeamsList from "../../../components/Teams/TeamsList";
+import TeamsList from "../../../components/TeamsList/TeamsList";
 
 const FollowedTeams: React.FC = () => {
   const [teams, setTeams] = useState<Team[]>([]);

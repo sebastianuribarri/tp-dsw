@@ -1,6 +1,6 @@
 import React from "react";
 import Section from "../../../ui-components/Section";
-import VerticalTeamsList from "../../../components/Teams/VerticalTeamList";
+import VerticalTeamsList from "../../../components/TeamsList/VerticalTeamList";
 import Team from "../../../types/Team";
 
 interface CompetitionTeamsListProps {

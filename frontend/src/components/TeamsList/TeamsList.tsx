@@ -18,14 +18,15 @@ const TeamCard = styled(Link)`
   justify-content: center;
   background-color: #2b2b2b;
   border-radius: 5px;
-  padding: 10px;
+  padding: 5px;
   text-align: center;
-  transition: transform 0.3s;
   cursor: pointer;
-  height: 110px;
-
+  height: 100px;
   &:hover {
+    padding-bottom: 0;
     transform: scale(1.05);
+    border-bottom-width: 5px;
+    border-bottom-color: #008641;
   }
 `;
 

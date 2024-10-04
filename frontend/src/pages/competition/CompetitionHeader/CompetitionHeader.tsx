@@ -1,6 +1,7 @@
 import React from "react";
 import { CompetitionDetail } from "../../../types/Competition";
 import styled from "styled-components";
+import BackButton from "../../../ui-components/BackButton/BackButton";
 
 interface CompetitionHeaderProps {
   competition: CompetitionDetail;
@@ -10,6 +11,8 @@ const HeaderContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding: 0 10px;
+  width: 100%;
 `;
 
 const Logo = styled.img`
@@ -35,6 +38,7 @@ const CompetitionHeader: React.FC<CompetitionHeaderProps> = ({
 }) => {
   return (
     <HeaderContainer>
+      <BackButton />
       <Logo src={competition.logo} alt={`${competition.name} logo`} />
       <InfoContainer>
         <CompetitionName>{competition.name}</CompetitionName>

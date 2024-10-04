@@ -14,13 +14,9 @@ const LogoContainer = styled.div`
 `;
 
 const LogoImage = styled.img`
-  width: 50px; /* Unified size for both mobile and desktop */
-  height: 50px;
-
-  @media (min-width: 768px) {
-    width: 50px; /* Keep the same size on desktop */
-    height: 50px;
-  }
+  width: 3rem;
+  height: 3rem;
+  object-fit: contain;
 `;
 
 const TeamName = styled.span`

@@ -29,13 +29,13 @@ const CompetitionPage = () => {
   const [competitionDetail, setCompetitionDetail] =
     useState<CompetitionDetail | null>(null);
   const [matches, setMatches] = useState<Match[]>([]);
-
   useEffect(() => {
     // Fetch data from the API
     const fetchCompetitionData = async () => {
       try {
         const response = await getCompetitionById(Number(id));
         const data = await response.json();
+
         setCompetitionDetail({
           id: data.id,
           name: data.name,
@@ -55,7 +55,7 @@ const CompetitionPage = () => {
     };
 
     fetchCompetitionData();
-  }, [id]);
+  }, []);
 
   return (
     <>

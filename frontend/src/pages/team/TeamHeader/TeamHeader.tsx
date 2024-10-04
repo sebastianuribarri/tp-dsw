@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import Team from "../../../types/Team";
 import TeamLogo from "../../../components/TeamLogo/TeamLogo";
+import BackButton from "../../../ui-components/BackButton/BackButton";
 
 interface TeamHeaderProps {
   team: Team;
@@ -71,6 +72,7 @@ const TeamLogoWrapper = styled.div`
 const TeamHeader: React.FC<TeamHeaderProps> = ({ team }) => {
   return (
     <HeaderContainer>
+      <BackButton />
       <TeamLogoWrapper>
         <TeamLogo team={team} />
       </TeamLogoWrapper>

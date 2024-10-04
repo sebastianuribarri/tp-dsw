@@ -12,7 +12,6 @@ const TeamSeason: React.FC = () => {
   useEffect(() => {
     const fetchTeamCompetitions = async () => {
       try {
-        console.log(id);
         const response = await getCompetitionsByTeam(Number(id));
         const data = await response.json();
         setTeamCompetitions(data);

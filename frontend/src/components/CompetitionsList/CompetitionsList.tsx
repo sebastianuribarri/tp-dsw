@@ -5,9 +5,9 @@ import useSeeMore from "../../hooks/useSeeMore";
 import SeeMoreButton from "../../ui-components/SeeMoreButton";
 import { Link } from "react-router-dom";
 
-const CompetitionsGrid = styled.div`
+const CompetitionsGrid = styled.div<{ layoutDirection: "row" | "column" }>`
   display: flex;
-  flex-direction: column;
+  flex-direction: ${({ layoutDirection }) => layoutDirection};
   justify-content: center;
   flex-wrap: wrap;
   gap: 10px;
@@ -28,8 +28,8 @@ const CompetitionCard = styled(Link)`
   width: 100%;
 
   @media (min-width: 768px) {
-    width: 100%;
     min-width: 180px;
+    width: 300px;
   }
   &:hover {
     background-color: #008641;
@@ -62,17 +62,19 @@ const NoCompetitionsMessage = styled.div`
 interface CompetitionsListProps {
   competitions: Competition[];
   message: string;
+  layoutDirection?: "row" | "column"; // New prop for setting grid layout
 }
 
 const CompetitionsList: React.FC<CompetitionsListProps> = ({
   competitions,
   message,
+  layoutDirection = "column", // Default to 'column' if not provided
 }) => {
   const { visibleItems, handleSeeMore } = useSeeMore(
     competitions.length,
     1,
-    5,
-    2
+    4,
+    5
   );
 
   return (
@@ -81,7 +83,7 @@ const CompetitionsList: React.FC<CompetitionsListProps> = ({
         <NoCompetitionsMessage>{message}</NoCompetitionsMessage>
       ) : (
         <>
-          <CompetitionsGrid>
+          <CompetitionsGrid layoutDirection={layoutDirection}>
             {competitions.slice(0, visibleItems).map((competition) => (
               <CompetitionCard
                 to={`/league/${competition.id}`}

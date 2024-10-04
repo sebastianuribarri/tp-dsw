@@ -50,15 +50,17 @@ export default class MatchUseCases {
 
     if (liveMatchesTimmer.liveMatchesUpdated()) return false;
 
-    const competitions = await this.competitionUseCases.listAll();
     let apiLiveMatches = await this.matchApiRepository.findAll({ live: "all" });
-    apiLiveMatches = apiLiveMatches.filter((match) =>
-      competitions.find(
-        (competition) => competition.id === match.competition.id
-      )
-    );
+    // HANDLE WITH COUNTRY PROP INSTEAD
+    // const competitions = await this.competitionUseCases.listAll();
+    // apiLiveMatches = apiLiveMatches.filter((match) =>
+    //   competitions.find(
+    //     (competition) => competition.id === match.competition.id
+    //   )
+    // );
 
     for (let liveMatch of apiLiveMatches) {
+      // INCLUDE ALL THIS DIRECTLY ON THE UPDATE METHOD
       const dbMatch = await this.matchDbRepository.findById(liveMatch.id);
       if (!dbMatch) await this.createMatch(liveMatch);
       else {
@@ -88,14 +90,16 @@ export default class MatchUseCases {
   public async getMatch(id: number) {
     let matchDetail = await this.matchDbRepository.findById(id);
 
-    let competitionMatches = await this.needUpdate(matchDetail.competition);
-    if (competitionMatches) {
-      const match = competitionMatches.find(
-        (match_) => match_.id === matchDetail.id
+    let newCompetitionMatches = await this.needUpdate(matchDetail.competition);
+    if (newCompetitionMatches) {
+      const newMatch = newCompetitionMatches.find(
+        (match) => match.id === matchDetail.id
       );
-      matchDetail.updateMatch(match.date, match.status, match.goals);
+      matchDetail.updateMatch(newMatch.date, newMatch.status, newMatch.goals);
+    } else {
+      // chequear si se puede estar jugando
+      // matchDetail.isPlaying() : boolean -> true: liveMatchesNeedUpdate
     }
-    //chequear si se esta jugando
 
     const newEvents = await this.eventUseCases.needUpdate(matchDetail);
     if (newEvents) {
@@ -107,7 +111,7 @@ export default class MatchUseCases {
       matchDetail.lineups = newLineUps;
     }
 
-    if (newEvents || newLineUps || competitionMatches)
+    if (newEvents || newLineUps || newCompetitionMatches)
       this.matchDbRepository.updateOne(matchDetail.id, matchDetail);
 
     return matchDetail;
@@ -129,7 +133,11 @@ export default class MatchUseCases {
 
   // public async listMatchesByTeams(teamIds: number[]) {}
 
-  public async listMatches(filters: object) {}
+  public async listMatches(filters: object) {
+    // get matches from db repo
+    // ensure for each match competition that marches are updated
+    // get matches updated from db repo
+  }
 
   public async listLiveMatches() {}
 

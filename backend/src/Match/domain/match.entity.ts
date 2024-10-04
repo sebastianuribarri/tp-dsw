@@ -8,6 +8,9 @@ import MatchLineUpTimmer from "../../LineUp/domain/lineup.timmer.js";
 import { TimmerInput } from "../../Shared/domain/timmer.js";
 import { TeamInput } from "../../Team/domain/team.entity.js";
 
+// - add method isPlaying()
+// - update method updateMatch(): should return boolean (change implementation also)
+// - add competition season and country
 export interface MatchInput {
   id: number;
   competition: CompetitionInput;

@@ -1,6 +1,8 @@
 import ICompetitionRepository from "../domain/competition.repository.js";
 import CompetitionModel from "./competition.schema.js";
-import Competition, { CompetitionDetail } from "../domain/competition.entity.js";
+import Competition, {
+  CompetitionDetail,
+} from "../domain/competition.entity.js";
 import Standing from "../../Standing/domain/standing.entity.js";
 
 export default class CompetitionMongoRepository
@@ -42,9 +44,7 @@ export default class CompetitionMongoRepository
       new: true,
     });
   }
-  public async deleteOne(
-      id: number
-  ) {
-    await CompetitionModel.deleteOne({id: id});
+  public async deleteOne(id: number) {
+    await CompetitionModel.deleteOne({ id: id });
   }
 }
