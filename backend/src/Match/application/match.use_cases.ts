@@ -68,6 +68,7 @@ export default class MatchUseCases {
         await this.updateMatch(dbMatch);
       }
     }
+    return true;
   }
 
   private async updateCompetitionMatches(
@@ -139,7 +140,19 @@ export default class MatchUseCases {
     // get matches updated from db repo
   }
 
-  public async listLiveMatches() {}
+  public async listLiveMatches() {
+    let matchesUpdates = await this.liveMatchesNeedUpdate();
+    let endDate = new Date();
+    let startDate = new Date();
+    startDate.setHours(startDate.getHours() - 2)
+    let dbMatches = await this.matchDbRepository.findAll({date: {
+    $gte: startDate,
+    $lte: endDate,
+  },}) ;
+
+    return dbMatches;
+    }
+  
 
   private async updateMatch(match: Match) {
     let dbMatch = await this.matchDbRepository.updateOne(match.id, match);
