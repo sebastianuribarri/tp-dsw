@@ -1,16 +1,18 @@
-import mongo from "mongoose";
-
-const DB_URI = "mongodb://localhost:27017/todofulbo";
+import { MongoClient, Db } from "mongodb";
+import mongoose from "mongoose";
 
 class MongoDatabase {
-  URL: string;
-  constructor(port: number, databaseName: string) {
-    this.URL = `mongodb://localhost:${port}/${databaseName}`;
-    this.connect = this.connect.bind(this);
+  private URI: string;
+  private client: MongoClient;
+
+  constructor(URL: string) {
+    this.URI = URL;
+    this.client = new MongoClient(this.URI);
   }
-  public async connect() {
-    console.log("database connected");
-    await mongo.connect(this.URL);
+
+  public async connect(): Promise<void> {
+    await mongoose.connect(this.URI);
+    console.log("Mongo Atlas database connected");
   }
 }
 

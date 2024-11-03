@@ -1,10 +1,12 @@
 import IApiRepository from "../../Shared/domain/api.repository.js";
 import IMatchRepository from "../domain/match.repository.js";
-import Match, { MatchDetail } from "../domain/match.entity.js";
+import Match, {
+  MatchCompetition,
+  MatchDetail,
+} from "../domain/match.entity.js";
 import Competition from "../../Competition/domain/competition.entity.js";
 import EventUseCases from "../../Event/application/event.use_cases.js";
 import CompetitionUseCases from "../../Competition/application/competition.use_cases.js";
-import CompetitionsRoutes from "../../Competition/presentation/competition.routes.js";
 import LineUpUseCases from "../../LineUp/application/LineUp.use_cases.js";
 import LiveMatchesTimmer from "../domain/live_match.timmer.js";
 
@@ -20,9 +22,12 @@ export default class MatchUseCases {
     private readonly competitionUseCases: CompetitionUseCases
   ) {}
 
-  public async needUpdate(competition: Competition) {
+  public async needUpdate(matchCompetition: MatchCompetition) {
     console.log(
-      `Matchs (Competition ${competition.id})----------------------------------------------------------`
+      `Matches (Competition ${matchCompetition.id})----------------------------------------------------------`
+    );
+    const competition = await this.competitionUseCases.getCompetition(
+      matchCompetition.id
     );
     const matchesUpdated = competition.matchesTimmer.matchesUpdated(
       competition.end
@@ -64,8 +69,7 @@ export default class MatchUseCases {
       const dbMatch = await this.matchDbRepository.findById(liveMatch.id);
       if (!dbMatch) await this.createMatch(liveMatch);
       else {
-        dbMatch.updateMatch(liveMatch.date, liveMatch.status, liveMatch.goals);
-        await this.updateMatch(dbMatch);
+        await this.updateMatch(dbMatch, liveMatch);
       }
     }
     return true;
@@ -82,21 +86,20 @@ export default class MatchUseCases {
       const dbMatch = dbMatches.find((dbMatch) => dbMatch.id === match.id);
       if (!dbMatch) await this.createMatch(match);
       else {
-        dbMatch.updateMatch(match.date, match.status, match.goals);
-        await this.updateMatch(dbMatch);
+        await this.updateMatch(dbMatch, match);
       }
     }
   }
 
   public async getMatch(id: number) {
     let matchDetail = await this.matchDbRepository.findById(id);
+    let newMatchDetail: MatchDetail | null;
 
     let newCompetitionMatches = await this.needUpdate(matchDetail.competition);
     if (newCompetitionMatches) {
       const newMatch = newCompetitionMatches.find(
         (match) => match.id === matchDetail.id
       );
-      matchDetail.updateMatch(newMatch.date, newMatch.status, newMatch.goals);
     } else {
       // chequear si se puede estar jugando
       // matchDetail.isPlaying() : boolean -> true: liveMatchesNeedUpdate
@@ -112,6 +115,7 @@ export default class MatchUseCases {
       matchDetail.lineups = newLineUps;
     }
 
+    if (newMatchDetail) await this.updateMatch(matchDetail, newMatchDetail);
     if (newEvents || newLineUps || newCompetitionMatches)
       this.matchDbRepository.updateOne(matchDetail.id, matchDetail);
 
@@ -134,9 +138,9 @@ export default class MatchUseCases {
 
   // public async listMatchesByTeams(teamIds: number[]) {}
 
-  public async listMatches(filters: object) {
+  public async listMatches(filters: Record<string, any>) {
     // get matches from db repo
-    // ensure for each match competition that marches are updated
+    // ensure for each match competition that matches are updated
     // get matches updated from db repo
   }
 
@@ -144,17 +148,29 @@ export default class MatchUseCases {
     let matchesUpdates = await this.liveMatchesNeedUpdate();
     let endDate = new Date();
     let startDate = new Date();
-    startDate.setHours(startDate.getHours() - 2)
-    let dbMatches = await this.matchDbRepository.findAll({date: {
-    $gte: startDate,
-    $lte: endDate,
-  },}) ;
+    startDate.setHours(startDate.getHours() - 2);
+    let dbMatches = await this.matchDbRepository.findAll({
+      date: {
+        $gte: startDate,
+        $lte: endDate,
+      },
+    });
 
     return dbMatches;
-    }
-  
+  }
 
-  private async updateMatch(match: Match) {
+  private async updateMatch(match: Match, newMatch: Match) {
+    let matchDataChange: boolean = false;
+    if (newMatch instanceof MatchDetail) {
+    }
+    if (
+      newMatch.date !== match.date ||
+      newMatch.goals !== match.goals ||
+      newMatch.status !== match.status
+    ) {
+      matchDataChange = true;
+    }
+
     let dbMatch = await this.matchDbRepository.updateOne(match.id, match);
   }
   private async createMatch(match: Match) {

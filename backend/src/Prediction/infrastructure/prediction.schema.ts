@@ -10,5 +10,4 @@ predictionSchema.index({ match: 1, user: 1 }, { unique: true });
 
 const PredictionModel = model("predictions", predictionSchema);
 
-PredictionModel.createIndexes();
 export default PredictionModel;

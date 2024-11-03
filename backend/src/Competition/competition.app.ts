@@ -48,6 +48,6 @@ export default class CompetitionApp {
   }
 
   public async setup() {
-    // await this.competitionUseCases.listAll();
+    await this.competitionUseCases.listAll();
   }
 }

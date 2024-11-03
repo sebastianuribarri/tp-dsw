@@ -14,6 +14,4 @@ voteSchema.index({ match: 1, user: 1 }, { unique: true });
 
 const VoteModel = model("votes", voteSchema);
 
-VoteModel.createIndexes();
-
 export default VoteModel;

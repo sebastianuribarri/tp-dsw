@@ -3,19 +3,19 @@ import App from "./app.js";
 import express from "express";
 import cors from "cors";
 import ApiFootball from "./ApiFootball/api.js";
+import dotenv from "dotenv";
 
-// database variables
-const db_port = 27017;
-const db_name = "tf";
+dotenv.config();
+
+const DB_URL = process.env.DB_URL;
 
 // database setup
-const mongoDatabase = new MongoDatabase(db_port, db_name);
+const mongoDatabase = new MongoDatabase(DB_URL);
 await mongoDatabase.connect();
 
 // api setup
 const apiFootball = new ApiFootball(
-  "https://api-football-v1.p.rapidapi.com/v3/",
-  "mongodb+srv://sebauribarri:todofulbo@todofulbodb.sfbeehk.mongodb.net/?retryWrites=true&w=majority&appName=TodoFulboDB"
+  "https://api-football-v1.p.rapidapi.com/v3/"
 );
 await apiFootball.setup();
 

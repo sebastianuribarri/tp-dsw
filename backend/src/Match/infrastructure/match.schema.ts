@@ -7,12 +7,34 @@ import { competitionSchema } from "../../Competition/infrastructure/competition.
 import { teamSchema } from "../../Team/infrastructure/team.schema.js";
 import eventSchema from "../../Event/infrastructure/event.schema.js";
 import lineUpSchema from "../../LineUp/infraestructure/LineUp.schema.js";
-import { RequireNumber } from "../../Shared/infrastructure/schema_types.js";
+import {
+  RequireNumber,
+  RequireString,
+} from "../../Shared/infrastructure/schema_types.js";
+
+const matchCompetitionSchema = new Schema({
+  id: RequireNumber,
+  name: RequireString,
+  season: RequireNumber,
+  country: RequireString,
+  logo: RequireString,
+});
 
 export const matchSchema = new Schema({
   id: { type: Number, require: true, default: 0 },
   team: { type: [teamSchema], default: [] },
-  competition: RequireNumber,
+  competition: {
+    type: matchCompetitionSchema,
+    require: true,
+    default: {
+      id: 0,
+      name: "No competition name",
+      season: 0,
+      country: "",
+      logo: "",
+    },
+  },
+  round: RequireString,
   date: { type: Date, require: true, default: undefined },
   status: { type: String, require: true, default: "" },
   home: {

@@ -9,9 +9,8 @@ export default class ApiFootball {
   private apiAccountsUseCases: ApiAccountsUseCases;
   private apiRequester: ApiRequester;
 
-  constructor(apiUri: string, dbUri: string) {
+  constructor(apiUri: string) {
     // Dependency injection
-    this.mongoAtlasDatabase = new MongoAtlasDatabase(dbUri);
     this.apiAccountsRepository = new ApiAccountsRepository();
     this.apiAccountsUseCases = new ApiAccountsUseCases(
       this.apiAccountsRepository
@@ -20,10 +19,6 @@ export default class ApiFootball {
   }
 
   public async setup() {
-    // setup mongo atlas db
-    const db = await this.mongoAtlasDatabase.connect();
-    this.apiAccountsRepository.db = db;
-    // save accounts as a variable
     await this.apiAccountsUseCases.setup();
   }
 

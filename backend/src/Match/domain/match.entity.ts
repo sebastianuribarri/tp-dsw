@@ -11,9 +11,18 @@ import { TeamInput } from "../../Team/domain/team.entity.js";
 // - add method isPlaying()
 // - update method updateMatch(): should return boolean (change implementation also)
 // - add competition season and country
+
+export interface MatchCompetition {
+  id: number;
+  name: string;
+  country: string;
+  season: number;
+  logo: string;
+}
 export interface MatchInput {
   id: number;
-  competition: number;
+  competition: MatchCompetition;
+  round: string;
   date: Date;
   status: string;
   home: TeamInput;
@@ -28,7 +37,8 @@ export interface MatchInput {
 
 export default class Match {
   id: number;
-  competition: number;
+  competition: MatchCompetition;
+  round: string;
   date: Date;
   status: string;
   home: { id: number; name: string; logo: string };
@@ -43,6 +53,7 @@ export default class Match {
   constructor(match: MatchInput) {
     this.id = match.id;
     this.competition = match.competition;
+    this.round = this.round;
     this.date = match.date;
     this.status = match.status;
     this.home = match.home;
@@ -55,17 +66,17 @@ export default class Match {
       ? new MatchLineUpTimmer(match.lineupsTimmer)
       : new MatchLineUpTimmer();
   }
-  public updateMatch(
-    date: Date,
-    status: string,
-    goals: {
-      home: number;
-      away: number;
+  public updateMatch(newMatch: Match) {
+    const matchChange: boolean = false;
+    if (
+      newMatch.date !== this.date ||
+      newMatch.goals !== this.goals ||
+      newMatch.status !== this.status
+    ) {
+      this.date = newMatch.date;
+      this.status = newMatch.status;
+      this.goals = newMatch.goals;
     }
-  ) {
-    this.date = date;
-    this.status = status;
-    this.goals = goals;
   }
 }
 
