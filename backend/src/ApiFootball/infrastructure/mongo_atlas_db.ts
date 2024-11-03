@@ -4,8 +4,8 @@ class MongoAtlasDatabase {
   private URI: string;
   private client: MongoClient;
 
-  constructor(uri: string) {
-    this.URI = uri;
+  constructor(url: string) {
+    this.URI = url;
     this.client = new MongoClient(this.URI);
   }
 
