@@ -7,6 +7,9 @@ import PlayerApp from "./Player/player.app.js";
 import PredictionApp from "./Prediction/prediction.app.js";
 import VoteApp from "./Vote/vote.app.js";
 import ApiFootball from "./ApiFootball/api.js";
+import LineUpApp from "./LineUp/lineup.app.js";
+import EventApp from "./Event/event.app.js";
+import MatchApp from "./Match/match.app.js";
 
 export default class App {
   server: Express;
@@ -18,8 +21,9 @@ export default class App {
   teamApp: TeamApp;
   public standingApp: StandingApp;
   playerApp: any;
-  matchApp: any;
-  eventApp: any;
+  matchApp: MatchApp;
+  eventApp: EventApp;
+  lineUpApp: LineUpApp;
   formationApp: any;
   voteApp: any;
   predictionApp: PredictionApp;
@@ -46,6 +50,18 @@ export default class App {
     this.predictionApp = new PredictionApp(this.server);
 
     this.voteApp = new VoteApp(this.server);
+
+    this.eventApp = new EventApp(this.apiFootball);
+
+    this.lineUpApp = new LineUpApp(this.apiFootball);
+
+    this.matchApp = new MatchApp(
+      this.eventApp,
+      this.lineUpApp,
+      this.competitionApp,
+      this.apiFootball,
+      this.server
+    );
   }
 
   public run(port: number) {

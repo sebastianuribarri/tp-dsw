@@ -5,7 +5,7 @@ import Match, { MatchDetail } from "../domain/match.entity.js";
 export default class MatchMongoRepository implements IMatchRepository {
   public async findAll(filters?: object): Promise<Match[] | null> {
     try {
-      const mongoMatches = await MatchModel.find({filters});
+      const mongoMatches = await MatchModel.find(filters);
 
       return mongoMatches.map((match) => new Match(match));
     } catch (error) {

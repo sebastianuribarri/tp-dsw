@@ -1,9 +1,8 @@
 import Timmer from "../../Shared/domain/timmer.js";
 
-
 // Singleton Pattern
 export default class LiveMatchesTimmer extends Timmer {
-  static timmerInMinutes = 2; // 10 days
+  static timmerInMinutes = 2; // 2 minutes
 
   protected static instance: LiveMatchesTimmer;
   public static async getInstance() {
@@ -12,13 +11,13 @@ export default class LiveMatchesTimmer extends Timmer {
     return LiveMatchesTimmer.instance;
   }
 
-  public liveMatchesUpdated() {
+  public static liveMatchesUpdated() {
     return LiveMatchesTimmer.instance.isUpdated(
       LiveMatchesTimmer.timmerInMinutes
     );
   }
 
-  public async updateTimmer() {
+  public static async updateTimmer() {
     LiveMatchesTimmer.instance.setUpdate();
   }
 }

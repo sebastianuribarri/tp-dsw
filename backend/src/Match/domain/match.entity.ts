@@ -66,17 +66,11 @@ export default class Match {
       ? new MatchLineUpTimmer(match.lineupsTimmer)
       : new MatchLineUpTimmer();
   }
-  public updateMatch(newMatch: Match) {
-    const matchChange: boolean = false;
-    if (
-      newMatch.date !== this.date ||
-      newMatch.goals !== this.goals ||
-      newMatch.status !== this.status
-    ) {
-      this.date = newMatch.date;
-      this.status = newMatch.status;
-      this.goals = newMatch.goals;
-    }
+
+  public isPlaying() {
+    const differenceInHrs =
+      Math.abs(this.date.getTime() - new Date().getTime()) / (1000 * 60 * 60);
+    return differenceInHrs > 2.15;
   }
 }
 

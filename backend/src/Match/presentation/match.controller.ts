@@ -1,20 +1,34 @@
 import CompetitionUseCases from "../../Competition/application/competition.use_cases.js";
-import {Response, Request} from "express";
+import { Response, Request } from "express";
 import MatchUseCases from "../application/match.use_cases.js";
 
 export default class MatchController {
   constructor(private readonly matchUseCases: MatchUseCases) {
     this.getAll = this.getAll.bind(this);
     this.getOne = this.getOne.bind(this);
+    this.getByTeam = this.getByTeam.bind(this);
     this.getLiveMatches = this.getLiveMatches.bind(this);
   }
 
   public async getAll(req: Request, res: Response) {
-  try {
-  const result = await this.matchUseCases.listMatches(req.params);
-  res.json(result); } catch (error) {
-        console.log(error);
-        res.status(404).send({message: "matches not founded"});
+    try {
+      console.log("params", req.params, req.body);
+      const result = await this.matchUseCases.listMatches(req.body);
+      res.json(result);
+    } catch (error) {
+      console.log(error);
+      res.status(404).send({ message: "matches not founded" });
+    }
+  }
+  public async getByTeam(req: Request, res: Response) {
+    try {
+      const result = await this.matchUseCases.listMatchesByTeam(
+        Number(req.params.id)
+      );
+      res.json(result);
+    } catch (error) {
+      console.log(error);
+      res.status(404).send({ message: "matches not founded" });
     }
   }
 
@@ -26,10 +40,10 @@ export default class MatchController {
   public async getLiveMatches(req: Request, res: Response) {
     try {
       const result = await this.matchUseCases.listLiveMatches();
-      res.json(result); 
+      res.json(result);
     } catch (error) {
       console.log(error);
-      res.status(404).send({message: "live matches not found"});
+      res.status(404).send({ message: "live matches not found" });
     }
   }
 }
