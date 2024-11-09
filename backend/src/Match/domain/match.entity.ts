@@ -25,6 +25,7 @@ export interface MatchInput {
   round: string;
   date: Date;
   status: string;
+  minute?: number;
   home: TeamInput;
   away: TeamInput;
   goals: {
@@ -41,6 +42,7 @@ export default class Match {
   round: string;
   date: Date;
   status: string;
+  minute?: number;
   home: { id: number; name: string; logo: string };
   away: { id: number; name: string; logo: string };
   goals: {
@@ -56,6 +58,7 @@ export default class Match {
     this.round = this.round;
     this.date = match.date;
     this.status = match.status;
+    this.minute = match.minute;
     this.home = match.home;
     this.away = match.away;
     this.goals = match.goals;

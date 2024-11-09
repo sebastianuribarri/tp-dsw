@@ -8,6 +8,7 @@ import { teamSchema } from "../../Team/infrastructure/team.schema.js";
 import eventSchema from "../../Event/infrastructure/event.schema.js";
 import lineUpSchema from "../../LineUp/infraestructure/LineUp.schema.js";
 import {
+  OptionalNumber,
   RequireNumber,
   RequireString,
 } from "../../Shared/infrastructure/schema_types.js";
@@ -37,6 +38,7 @@ export const matchSchema = new Schema({
   round: RequireString,
   date: { type: Date, require: true, default: undefined },
   status: { type: String, require: true, default: "" },
+  minute: OptionalNumber,
   home: {
     type: {
       id: { type: Number, require: true, default: 0 },
@@ -61,7 +63,7 @@ export const matchSchema = new Schema({
       away: { type: Number, require: true, default: 0 },
     },
     require: true,
-    default: { home: 0, awat: 0 },
+    default: { home: 0, away: 0 },
   },
   eventsTimmer: { type: timmerSchema, require: true, default: undefined },
   lineupsTimmer: { type: timmerSchema, require: true, default: undefined },

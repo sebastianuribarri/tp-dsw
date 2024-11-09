@@ -113,12 +113,15 @@ export default class MatchUseCases {
 
   public async getMatch(id: number) {
     let matchDetail = await this.matchDbRepository.findById(id);
-    let newMatchDetail: MatchDetail | null;
-    let newMatch: Match;
 
     let matchUpdated = await this.matchNeedUpdate(matchDetail);
+
     if (matchUpdated) {
-      newMatch = matchUpdated;
+      matchDetail = new MatchDetail(
+        matchUpdated,
+        matchDetail.events,
+        matchDetail.lineups
+      );
     }
     const newEvents = await this.eventUseCases.needUpdate(matchDetail);
     if (newEvents) {
@@ -129,7 +132,7 @@ export default class MatchUseCases {
     if (newLineUps) {
       matchDetail.lineups = newLineUps;
     }
-    if (newEvents || newLineUps || newMatch)
+    if (newEvents || newLineUps || matchUpdated)
       this.matchDbRepository.updateOne(matchDetail.id, matchDetail);
 
     return matchDetail;

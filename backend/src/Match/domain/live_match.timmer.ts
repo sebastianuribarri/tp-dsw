@@ -12,6 +12,7 @@ export default class LiveMatchesTimmer extends Timmer {
   }
 
   public static liveMatchesUpdated() {
+    this.getInstance();
     return LiveMatchesTimmer.instance.isUpdated(
       LiveMatchesTimmer.timmerInMinutes
     );

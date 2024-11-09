@@ -35,7 +35,6 @@ export const CompetitionInfo = styled.div`
 
 export const CompetitionName = styled.div`
   font-size: 1.15em; /* Larger font size for competition name */
-  font-weight: bold;
 `;
 
 export const CompetitionRound = styled.div`

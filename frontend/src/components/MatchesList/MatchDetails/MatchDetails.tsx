@@ -17,6 +17,7 @@ interface MatchDetailsProps {
 const NamesContainer = styled.div`
   display: flex;
   align-items: center;
+  font-weight: bold;
   width: 100%;
   justify-content: space-between;
 `;
@@ -27,22 +28,42 @@ const ScoreAndLogosContainer = styled.div`
   justify-content: space-between;
 `;
 const MatchDetails: React.FC<MatchDetailsProps> = ({ match }) => {
+  const formatDate = (date: Date): string => {
+    const optionsDate: Intl.DateTimeFormatOptions = {
+      day: "2-digit",
+      month: "2-digit",
+      year: "2-digit",
+    };
+    const optionsTime: Intl.DateTimeFormatOptions = {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    };
+
+    const formattedDate = date.toLocaleDateString("en-GB", optionsDate);
+    const formattedTime = date.toLocaleTimeString("en-GB", optionsTime);
+
+    return `${formattedDate} | ${formattedTime}`;
+  };
   return (
     <MatchDetailsLink to={`/match/${match.id}`}>
       <ScoreAndLogosContainer>
-        <TeamHomeLogo src={match.teams.home.logo} alt={match.teams.home.name} />
+        <TeamHomeLogo src={match.home.logo} alt={match.home.name} />
 
         <ScoreContainer>
+          {match.minute
+            ? String(match.minute) + "'"
+            : formatDate(new Date(match.date))}
           <Score>
-            {match.goals.home} : {match.goals.away}
+            {match.goals.home ?? 0} : {match.goals.away}
           </Score>
         </ScoreContainer>
 
-        <TeamAwayLogo src={match.teams.away.logo} alt={match.teams.away.name} />
+        <TeamAwayLogo src={match.away.logo} alt={match.away.name} />
       </ScoreAndLogosContainer>
       <NamesContainer>
-        <TeamName>{match.teams.home.name}</TeamName>
-        <TeamName>{match.teams.away.name}</TeamName>
+        <TeamName>{match.home.name}</TeamName>
+        <TeamName>{match.away.name}</TeamName>
       </NamesContainer>
     </MatchDetailsLink>
   );

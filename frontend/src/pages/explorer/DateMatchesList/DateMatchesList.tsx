@@ -1,19 +1,10 @@
 // MatchesList.tsx
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Section from "../../../ui-components/Section";
-
-const MatchCard = styled.div`
-  display: flex;
-  align-items: center;
-  padding: 5px 0;
-  border-bottom: 1px solid #454545;
-`;
-
-const MatchDetails = styled.p`
-  font-size: 14px;
-  margin: 0;
-`;
+import { getMatches } from "../../../api/match";
+import Match from "../../../types/Match";
+import MatchesList from "../../../components/MatchesList/MatchesList";
 
 const Pagination = styled.div`
   display: flex;
@@ -36,12 +27,15 @@ const PaginationButton = styled.button`
 
 const DateMatchesList: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [matches, setMatches] = useState<Match[]>([]);
   // Placeholder data
-  const matches = [
-    { id: 1, date: "2024-09-20", homeTeam: "Team A", awayTeam: "Team B" },
-    { id: 2, date: "2024-09-21", homeTeam: "Team C", awayTeam: "Team D" },
-    { id: 3, date: "2024-09-22", homeTeam: "Team E", awayTeam: "Team F" },
-  ];
+  useEffect(() => {
+    const fetchMatches = async (date: Date) => {
+      const response = await getMatches({ date: date });
+      setMatches(response.data);
+    };
+    fetchMatches(selectedDate);
+  }, [selectedDate]);
 
   const handlePreviousDay = () => {
     const previousDay = new Date(selectedDate);
@@ -55,10 +49,6 @@ const DateMatchesList: React.FC = () => {
     setSelectedDate(nextDay);
   };
 
-  const filteredMatches = matches.filter(
-    (match) => match.date === selectedDate.toISOString().split("T")[0]
-  );
-
   return (
     <Section title="Partidos">
       <Pagination>
@@ -68,17 +58,10 @@ const DateMatchesList: React.FC = () => {
         <span>{selectedDate.toDateString()}</span>
         <PaginationButton onClick={handleNextDay}>Next</PaginationButton>
       </Pagination>
-      {filteredMatches.length > 0 ? (
-        filteredMatches.map((match) => (
-          <MatchCard key={match.id}>
-            <MatchDetails>
-              {match.homeTeam} vs {match.awayTeam}
-            </MatchDetails>
-          </MatchCard>
-        ))
-      ) : (
-        <MatchDetails>No matches found for this date.</MatchDetails>
-      )}
+      <MatchesList
+        matches={matches}
+        message="No hay partidos para esta fecha"
+      />
     </Section>
   );
 };

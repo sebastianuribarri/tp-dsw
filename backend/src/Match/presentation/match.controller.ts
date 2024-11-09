@@ -12,8 +12,7 @@ export default class MatchController {
 
   public async getAll(req: Request, res: Response) {
     try {
-      console.log("params", req.params, req.body);
-      const result = await this.matchUseCases.listMatches(req.body);
+      const result = await this.matchUseCases.listMatches(req.query);
       res.json(result);
     } catch (error) {
       console.log(error);

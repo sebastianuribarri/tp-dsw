@@ -9,7 +9,7 @@ export default class EventUseCases {
     const eventUpdated = matchDetail.eventsTimmer.eventsUpdated(
       matchDetail.status
     );
-    if (!eventUpdated) return false;
+    if (eventUpdated) return false;
     // players unupdated -> get players updated
     const apiMatchPlayers = await this.eventApiRepository.findAll({
       fixture: matchDetail.id,

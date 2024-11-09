@@ -11,7 +11,7 @@ export default class LineUpUseCases {
     if (lineupsUpdated) return false;
     // lineups unupdated -> get updated lineups
     const apiMatchPlayers = await this.lineupApiRepository.findAll({
-      match: matchDetail.id,
+      fixture: matchDetail.id,
     });
     matchDetail.lineupsTimmer.updateTimmer();
 

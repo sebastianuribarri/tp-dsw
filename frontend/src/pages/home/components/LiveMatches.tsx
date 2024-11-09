@@ -2,19 +2,18 @@ import React, { useEffect, useState } from "react";
 import MatchesList from "../../../components/MatchesList/MatchesList";
 import Section from "../../../ui-components/Section";
 import IMatch from "../../../types/Match";
-import { getMatches } from "../../../api/match";
+import { getLiveMatches } from "../../../api/match";
 
 const LiveMatches: React.FC = () => {
   const [matches, setMatches] = useState<IMatch[]>([]);
 
   useEffect(() => {
     // Replace with your API endpoint
-
-    const fetchMatchesData = async () => {
-      const res = await getMatches();
-      setMatches(res);
+    const fetchMatches = async () => {
+      const response = await getLiveMatches();
+      setMatches(response.data);
     };
-    fetchMatchesData();
+    fetchMatches();
   }, []);
 
   return (

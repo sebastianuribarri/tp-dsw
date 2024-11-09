@@ -13,7 +13,7 @@ export default class MatchApiRepository implements IApiRepository<Match> {
       "fixtures",
       parameters
     );
-    if (!res) return [];
+    if (!res || !res.response) return [];
     const matches = res.response.map((apiMatch) => {
       let match = new Match({
         id: apiMatch.fixture.id,
@@ -27,11 +27,12 @@ export default class MatchApiRepository implements IApiRepository<Match> {
         round: apiMatch.league.round,
         date: apiMatch.fixture.date,
         status: apiMatch.fixture.status.short,
+        minute: apiMatch.fixture.status.elapsed,
         home: apiMatch.teams.home,
         away: apiMatch.teams.away,
         goals: {
           home: apiMatch.goals.home,
-          away: apiMatch.goals.amay,
+          away: apiMatch.goals.away,
         },
       });
       return match;

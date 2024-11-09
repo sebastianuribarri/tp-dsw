@@ -5,11 +5,11 @@ import Match, { MatchDetail } from "../domain/match.entity.js";
 export default class MatchMongoRepository implements IMatchRepository {
   public async findAll(filters?: object): Promise<Match[] | null> {
     try {
-      const mongoMatches = await MatchModel.find(filters);
+      const mongoMatches = await MatchModel.find(filters).sort({ date: -1 });
 
       return mongoMatches.map((match) => new Match(match));
     } catch (error) {
-      console.log("ocurrio un error en MongoReposi tory(findall)", error);
+      console.log("ocurrio un error en MongoRepository(findall)", error);
     }
   }
   public async findById(id: number): Promise<MatchDetail | null> {

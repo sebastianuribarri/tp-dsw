@@ -35,31 +35,25 @@ class ApiRequester {
       },
     };
 
-    try {
-      const response = await fetch(url.toString(), config);
+    const response = await fetch(url.toString(), config);
 
-      if (!response.ok) {
-        console.error("HTTP error:", response.status, response.statusText);
-        return null;
-      }
-
-      // Acceder a los headers devueltos
-      account.remainingRequests = Number(
-        response.headers.get("x-ratelimit-requests-remaining")
-      );
-      account.resetTimeInSeconds = Number(
-        response.headers.get("x-ratelimit-requests-reset")
-      );
-
-      const data = await response.json();
-
-      await this.apiAccountsUseCases.updateDayRequests(account);
-
-      return data;
-    } catch (error) {
-      console.error("Error detected:", error.message);
-      return null;
+    if (!response.ok) {
+      throw new Error("Api fetching error");
     }
+
+    // Acceder a los headers devueltos
+    account.remainingRequests = Number(
+      response.headers.get("x-ratelimit-requests-remaining")
+    );
+    account.resetTimeInSeconds = Number(
+      response.headers.get("x-ratelimit-requests-reset")
+    );
+
+    const data = await response.json();
+
+    await this.apiAccountsUseCases.updateDayRequests(account);
+
+    return data;
   }
 }
 export default ApiRequester;

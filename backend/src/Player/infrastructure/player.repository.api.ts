@@ -12,6 +12,7 @@ export default class PlayerApiRepository implements IApiRepository<Player> {
       "players/squads",
       parameters
     );
+    if (!res || !res.response) return [];
     const apiPlayers = res.response[0].players.map(
       (player) =>
         new Player({

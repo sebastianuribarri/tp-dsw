@@ -2,16 +2,24 @@ import React, { useEffect, useState } from "react";
 import Section from "../../../ui-components/Section";
 import MatchesList from "../../../components/MatchesList/MatchesList";
 import Match from "../../../types/Match";
-import { getMatches } from "../../../api/match";
+import { getMatchesByTeam } from "../../../api/match";
 
-const TeamMatches: React.FC = () => {
+interface TeamMatchesProps {
+  teamId?: number;
+}
+
+const TeamMatches: React.FC<TeamMatchesProps> = ({ teamId }) => {
   const [matches, setMatches] = useState<Match[]>([]);
   useEffect(() => {
-    const fetchMatchesData = async () => {
-      const res = await getMatches();
-      setMatches(res);
+    const fetchMatchesData = async (teamId?: number) => {
+      if (!teamId) setMatches([]);
+      else {
+        const res = await getMatchesByTeam(teamId);
+        console.log(res.data);
+        setMatches(res.data);
+      }
     };
-    fetchMatchesData();
+    fetchMatchesData(teamId);
   }, []);
   return (
     <Section title="Partidos" id="partidos">

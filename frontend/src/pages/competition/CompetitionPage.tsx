@@ -44,11 +44,11 @@ const CompetitionPage = () => {
           logo: data.logo,
           standings: data.standings,
         });
-        const fetchMatchesData = async () => {
-          const res = await getMatches();
-          setMatches(res);
+        const fetchMatchesData = async (competitionId: number) => {
+          const res = await getMatches({ "competition.id": competitionId });
+          setMatches(res.data);
         };
-        fetchMatchesData();
+        if (competitionDetail) fetchMatchesData(competitionDetail.id);
       } catch (error) {
         console.error("Error fetching competition data:", error);
       }

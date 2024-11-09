@@ -12,12 +12,13 @@ interface Match {
   };
   round: string;
   status: string;
+  minute?: number;
   timezone: string;
   date: string;
-  teams: {
-    home: Team;
-    away: Team;
-  };
+
+  home: Team;
+  away: Team;
+
   goals: {
     home: number | null;
     away: number | null;

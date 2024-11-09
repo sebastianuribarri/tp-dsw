@@ -57,7 +57,7 @@ const TeamPage = () => {
           <Page>
             <TeamContentContainer>
               <TeamSeason />
-              <TeamMatches />
+              <TeamMatches teamId={teamDetail.id} />
               <TeamPlayersList players={teamDetail.players} />
             </TeamContentContainer>
           </Page>
