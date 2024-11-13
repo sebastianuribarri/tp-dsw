@@ -5,10 +5,11 @@ import Match, { MatchDetail } from "../domain/match.entity.js";
 export default class MatchMongoRepository implements IMatchRepository {
   public async findAll(filters?: Record<string, any>): Promise<Match[] | null> {
     try {
-      console.log("f before", filters);
+      
       let params = filters;
+      console.log("f before", filters);
       if (params?.date) {
-        let start = new Date(filters.date);
+        let start = new Date(params.date);
         start.setHours(0, 0, 0, 0);
         let end = new Date(start);
         end.setDate(end.getDate() + 1);
