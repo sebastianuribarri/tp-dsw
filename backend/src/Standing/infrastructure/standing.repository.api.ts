@@ -9,17 +9,18 @@ export default class StandingApiRepository implements IApiRepository<Standing> {
     this.apiFootball = apiFootball;
   }
   public async findAll(parameters: any): Promise<Standing[] | null> {
-    const res = await this.apiFootball.getResponse("standings", parameters);
-    let apiStandings: Standing[] = [];
-    // if is empty
-    if (!res) return [];
-    if (!res.response[0]) return [];
-    const standingsGroups: Standing[][] = res.response[0].league.standings;
-    for (let standingsGroup of standingsGroups) {
-      for (let standing of standingsGroup) {
-        apiStandings.push(new Standing(standing));
+    try {
+      const res = await this.apiFootball.getResponse("standings", parameters);
+      let apiStandings: Standing[] = [];
+      const standingsGroups: Standing[][] = res.response[0].league.standings;
+      for (let standingsGroup of standingsGroups) {
+        for (let standing of standingsGroup) {
+          apiStandings.push(new Standing(standing));
+        }
       }
+      return apiStandings;
+    } catch (err) {
+      return null;
     }
-    return apiStandings;
   }
 }

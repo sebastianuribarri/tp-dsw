@@ -14,7 +14,7 @@ export default class PlayerUseCases {
       const apiTeamPlayers = await this.playerApiRepository.findAll({
         team: teamDetail.id,
       });
-
+      if (!apiTeamPlayers) return false;
       teamDetail.playersTimmer.updateTimmer();
 
       return apiTeamPlayers;

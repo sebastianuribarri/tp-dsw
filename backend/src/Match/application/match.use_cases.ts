@@ -40,6 +40,7 @@ export default class MatchUseCases {
         league: competition.id,
         season: competition.season,
       });
+      if (!apiCompetitionMatches) return false;
       // update timmer
       competition.matchesTimmer.updateTimmer();
       await this.competitionUseCases.updateCompetition(competition);
@@ -51,18 +52,20 @@ export default class MatchUseCases {
   }
 
   public async matchNeedUpdate(match: Match) {
+    console.log(
+      `Match ${match.id} (Competition ${match.competition.id})----------------------------------------------------------`
+    );
     const competition = await this.competitionUseCases.getCompetition(
       match.competition.id
     );
-    const matchUpdated = competition.matchesTimmer.matchUpdated(
-      competition.end
-    );
+    const matchUpdated = competition.matchesTimmer.matchUpdated(match.date);
     if (!matchUpdated) {
       // get matches from api
       const apiCompetitionMatches = await this.matchApiRepository.findAll({
         league: competition.id,
         season: competition.season,
       });
+      if (!apiCompetitionMatches) return false;
       // update timmer
       competition.matchesTimmer.updateTimmer();
       await this.competitionUseCases.updateCompetition(competition);
@@ -85,6 +88,7 @@ export default class MatchUseCases {
     if (LiveMatchesTimmer.liveMatchesUpdated()) return false;
 
     let apiLiveMatches = await this.matchApiRepository.findAll({ live: "all" });
+    if (!apiLiveMatches) return false;
     // HANDLE WITH COUNTRY PROP INSTEAD
     apiLiveMatches = apiLiveMatches.filter((match) =>
       REGIONS.includes(match.competition.country)
@@ -149,19 +153,21 @@ export default class MatchUseCases {
     // get matches from db repo
     let matchChange = false;
     let matches = await this.matchDbRepository.findAll(filters);
+
+    const uniqueCompetitionsMap: Map<number, MatchCompetition> = new Map();
+    matches.forEach((match) => {
+      const competition = match.competition;
+      if (!uniqueCompetitionsMap.has(competition.id)) {
+        uniqueCompetitionsMap.set(competition.id, competition);
+      }
+    });
+
+    const competitions = Array.from(uniqueCompetitionsMap.values());
     // ensure for each match competition that matches are updated
-    if (matches.length == 0 || filters == null) {
-      let competitions = await this.competitionUseCases.listAll();
-      for (let competition of competitions) {
-        // const competitionsMatchesUpdated =
-        //   await this.competitionMatchesNeedUpdate(competition);
-        // if (competitionsMatchesUpdated) matchChange = true;
-      }
-    } else {
-      for (let match of matches) {
-        // let matchUpdated = this.matchNeedUpdate(match);
-        // if (matchUpdated) matchChange = true;
-      }
+    for (let competition of competitions) {
+      const competitionsMatchesUpdated =
+        await this.competitionMatchesNeedUpdate(competition);
+      if (competitionsMatchesUpdated) matchChange = true;
     }
     if (matchChange) {
       return await this.matchDbRepository.findAll(filters);

@@ -9,9 +9,8 @@ import CompetitionMatches from "./CompetitionMatches/CompetitionMatches";
 import CompetitionStandings from "./CompetitionStadings/CompetitionStandings";
 import CompetitionAbout from "./CompetitionAbout/CompetitionAbout";
 import CompetitionTeamsList from "./CompetitionTeamsList/CompetitionTeamList";
-import Match from "../../types/Match";
+
 import styled from "styled-components";
-import { getMatches } from "../../api/match";
 
 const CompetitionContentContainer = styled.div`
   display: flex;
@@ -28,7 +27,7 @@ const CompetitionPage = () => {
   const { id } = useParams();
   const [competitionDetail, setCompetitionDetail] =
     useState<CompetitionDetail | null>(null);
-  const [matches, setMatches] = useState<Match[]>([]);
+
   useEffect(() => {
     // Fetch data from the API
     const fetchCompetitionData = async () => {
@@ -44,11 +43,6 @@ const CompetitionPage = () => {
           logo: data.logo,
           standings: data.standings,
         });
-        const fetchMatchesData = async (competitionId: number) => {
-          const res = await getMatches({ "competition.id": competitionId });
-          setMatches(res.data);
-        };
-        if (competitionDetail) fetchMatchesData(competitionDetail.id);
       } catch (error) {
         console.error("Error fetching competition data:", error);
       }
@@ -67,7 +61,7 @@ const CompetitionPage = () => {
           <Page>
             <CompetitionContentContainer>
               <CompetitionStandings standings={competitionDetail.standings} />
-              <CompetitionMatches matches={matches} />
+              <CompetitionMatches competitionId={competitionDetail.id} />
               <CompetitionTeamsList
                 teams={competitionDetail.standings.map((s) => s.team)}
                 message="Esta competencia no tiene equipos"

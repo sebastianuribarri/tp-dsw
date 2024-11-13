@@ -22,6 +22,7 @@ export default class StandingUseCases {
         league: competition.id,
         season: competition.season,
       });
+      if (!apiCompetitionStandings) return false;
 
       competition.standingsTimmer.updateTimmer();
 
@@ -53,7 +54,7 @@ export default class StandingUseCases {
         league: competition.id,
         season: competition.season,
       });
-
+      if (!apiCompetitionStandings) return false;
       competition.standingsTimmer.updateTimmer();
 
       //  - return the new data and set update with the actual date

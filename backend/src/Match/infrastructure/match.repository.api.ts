@@ -9,34 +9,32 @@ export default class MatchApiRepository implements IApiRepository<Match> {
     this.apiFootball = apiFootball;
   }
   public async findAll(parameters?: object): Promise<Match[] | []> {
-    const res: ApiResponse_OK<any> | null = await this.apiFootball.getResponse(
-      "fixtures",
-      parameters
-    );
-    if (!res || !res.response) return [];
-    const matches = res.response.map((apiMatch) => {
-      let match = new Match({
-        id: apiMatch.fixture.id,
-        competition: {
-          id: apiMatch.league.id,
-          name: apiMatch.league.name,
-          country: apiMatch.league.country,
-          season: apiMatch.league.season,
-          logo: apiMatch.league.logo,
-        },
-        round: apiMatch.league.round,
-        date: apiMatch.fixture.date,
-        status: apiMatch.fixture.status.short,
-        minute: apiMatch.fixture.status.elapsed,
-        home: apiMatch.teams.home,
-        away: apiMatch.teams.away,
-        goals: {
-          home: apiMatch.goals.home,
-          away: apiMatch.goals.away,
-        },
+    try {
+      const res: ApiResponse_OK<any> | null =
+        await this.apiFootball.getResponse("fixtures", parameters);
+      const matches = res.response.map((apiMatch) => {
+        let match = new Match({
+          id: apiMatch.fixture.id,
+          competition: {
+            id: apiMatch.league.id,
+            name: apiMatch.league.name,
+            country: apiMatch.league.country,
+            season: apiMatch.league.season,
+            logo: apiMatch.league.logo,
+          },
+          round: apiMatch.league.round,
+          date: apiMatch.fixture.date,
+          status: apiMatch.fixture.status.short,
+          minute: apiMatch.fixture.status.elapsed,
+          home: apiMatch.teams.home,
+          away: apiMatch.teams.away,
+          goals: apiMatch.goals,
+        });
+        return match;
       });
-      return match;
-    });
-    return matches;
+      return matches;
+    } catch (err) {
+      console.error("Fetching api error");
+    }
   }
 }

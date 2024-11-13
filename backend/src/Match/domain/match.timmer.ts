@@ -2,7 +2,7 @@ import Timmer, { TIMMER_MODE } from "../../Shared/domain/timmer.js";
 import LiveMatchesTimmer from "./live_match.timmer.js";
 
 export default class CompetitionMatchesTimmer extends Timmer {
-  private static readonly updateTimeInMinutes = 12 * 60; // 12 hrs
+  private static readonly updateTimeInMinutes = 6 * 60; // 12 hrs
 
   public matchesUpdated(competitionEnd: Date) {
     if (this.mode != TIMMER_MODE.NOT_UPDATE)

@@ -27,6 +27,8 @@ export default class CompetitionUseCases {
         current: true,
       });
     });
+    if (apiCompetitionsPromises.some((regionCompetions) => !regionCompetions))
+      return false;
     const competitionsResults = await Promise.all(apiCompetitionsPromises);
 
     const apiCompetitions = competitionsResults.flat();
@@ -46,7 +48,6 @@ export default class CompetitionUseCases {
   public async getCompetition(id: number) {
     await this.needUpdate();
     let competitionDetail = await this.competitionDbRepository.findById(id);
-
     const newStandings = await this.standingUseCases.needUpdate(
       competitionDetail
     );

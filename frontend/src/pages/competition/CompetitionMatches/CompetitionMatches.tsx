@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Match from "../../../types/Match";
 import Section from "../../../ui-components/Section";
 import styled from "styled-components";
 import MatchDetails from "../../../components/MatchesList/MatchDetails/MatchDetails";
+import { getMatches } from "../../../api/match";
 
 export const MatchesGrid = styled.div`
   display: grid;
@@ -40,14 +41,27 @@ export const NoMatchesMessage = styled.div`
 `;
 
 interface CompetitionMatchesProps {
-  matches: Match[];
+  competitionId: number | null;
 }
 
 const CompetitionMatchesListContainer = styled.div`
   min-width: 50%;
 `;
 
-const CompetitionMatches: React.FC<CompetitionMatchesProps> = ({ matches }) => {
+const CompetitionMatches: React.FC<CompetitionMatchesProps> = ({
+  competitionId,
+}) => {
+  const [matches, setMatches] = useState<Match[]>([]);
+  useEffect(() => {
+    const fetchMatches = async (competitionId: number | null) => {
+      if (!competitionId) setMatches([]);
+      else {
+        const response = await getMatches({ "competition.id": competitionId });
+        setMatches(response.data);
+      }
+    };
+    fetchMatches(competitionId);
+  }, [competitionId]);
   return (
     <CompetitionMatchesListContainer>
       <Section title="Partidos">

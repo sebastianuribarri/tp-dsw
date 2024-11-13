@@ -13,6 +13,7 @@ export default class LineUpUseCases {
     const apiMatchPlayers = await this.lineupApiRepository.findAll({
       fixture: matchDetail.id,
     });
+    if (!apiMatchPlayers) return false;
     matchDetail.lineupsTimmer.updateTimmer();
 
     return apiMatchPlayers;

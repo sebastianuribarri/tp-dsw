@@ -14,6 +14,7 @@ export default class EventUseCases {
     const apiMatchPlayers = await this.eventApiRepository.findAll({
       fixture: matchDetail.id,
     });
+    if (!apiMatchPlayers) return false;
     matchDetail.eventsTimmer.updateTimmer();
 
     return apiMatchPlayers;

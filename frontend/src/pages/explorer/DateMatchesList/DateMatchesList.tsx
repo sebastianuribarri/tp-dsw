@@ -31,6 +31,7 @@ const DateMatchesList: React.FC = () => {
   // Placeholder data
   useEffect(() => {
     const fetchMatches = async (date: Date) => {
+      console.log(date);
       const response = await getMatches({ date: date });
       setMatches(response.data);
     };

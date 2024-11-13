@@ -71,6 +71,6 @@ export const matchSchema = new Schema({
   lineUps: { type: [lineUpSchema], require: true, default: [] },
 });
 
-const MatchModel = model("models", matchSchema);
+const MatchModel = model("matches", matchSchema);
 
 export default MatchModel;

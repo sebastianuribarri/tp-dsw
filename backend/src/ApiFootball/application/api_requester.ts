@@ -17,7 +17,7 @@ class ApiRequester {
     const account = await this.apiAccountsUseCases.getAccount();
     if (!account) {
       console.error("API key not available.");
-      return null;
+      throw new Error("API key not available.");
     }
 
     const url = new URL(endpoint, this.apiUri);

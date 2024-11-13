@@ -52,7 +52,9 @@ const MatchDetails: React.FC<MatchDetailsProps> = ({ match }) => {
 
         <ScoreContainer>
           {match.minute
-            ? String(match.minute) + "'"
+            ? match.minute === 90
+              ? "Fin (" + formatDate(new Date(match.date)) + ")"
+              : String(match.minute) + "'"
             : formatDate(new Date(match.date))}
           <Score>
             {match.goals.home ?? 0} : {match.goals.away}
