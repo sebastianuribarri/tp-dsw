@@ -152,6 +152,7 @@ export default class MatchUseCases {
   public async listMatches(filters: Record<string, any>) {
     // get matches from db repo
     let matchChange = false;
+    const originalFilters = { ...filters };
     let matches = await this.matchDbRepository.findAll(filters);
 
     const uniqueCompetitionsMap: Map<number, MatchCompetition> = new Map();
@@ -170,11 +171,18 @@ export default class MatchUseCases {
       if (competitionsMatchesUpdated) matchChange = true;
     }
     if (matchChange) {
-      return await this.matchDbRepository.findAll(filters);
+      return await this.matchDbRepository.findAll(originalFilters);
     }
     return matches;
     // get matches updated from db repo
   }
+
+public async getBySearch(value: string) {
+  if (!value || value.length < 4) {
+    throw new Error("El termino de busqueda debe tener al menos 4 caracteres");
+  }
+  return await this.matchDbRepository.findAll({search: value});
+}
 
   public async listLiveMatches() {
     let matchesUpdated = await this.liveMatchesNeedUpdate();

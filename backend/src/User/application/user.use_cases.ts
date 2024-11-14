@@ -1,7 +1,8 @@
-import { error } from "console";
 import Competition from "../../Competition/domain/competition.entity.js";
 import User from "../domain/user.entity.js";
 import { IUserRepository } from "../domain/user.repository.js";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 
 export default class UserUseCases {
   private userDbRepository: IUserRepository;
@@ -10,49 +11,63 @@ export default class UserUseCases {
     this.userDbRepository = userDbRepository;
   }
 
-  public async getUser(mail: string) {
-    const user = await this.userDbRepository.findByMail(mail);
-    if (!user) throw new Error("user not found");
+  public async getUser(id: string) {
+    const user = await this.userDbRepository.findById(id);
+    if (!user) throw new Error("User not found");
     return user;
   }
-  public async updatePassword(mail: string, newPassword: string) {
-    return await this.userDbRepository.updateOne(mail, {
-      password: newPassword,
+
+  public async updatePassword(id: string, newPassword: string) {
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    return await this.userDbRepository.updateOne(id, {
+      password: hashedPassword,
     });
   }
-  public async updateSuscription(
-    mail: string,
-    actualSuscriptionStatus: boolean
+
+  public async updateSubscription(
+    id: string,
+    actualSubscriptionStatus: boolean
   ) {
-    const newSuscriptionStatus = !actualSuscriptionStatus;
-    return await this.userDbRepository.updateOne(mail, {
-      premium: newSuscriptionStatus,
+    const newSubscriptionStatus = !actualSubscriptionStatus;
+    return await this.userDbRepository.updateOne(id, {
+      premium: newSubscriptionStatus,
     });
   }
+
   public async register(user: User) {
+    user.password = await bcrypt.hash(user.password, 10);
     await this.userDbRepository.insertOne(user);
   }
-  public async deleteUser(mail: string) {
-    return await this.userDbRepository.deleteOne(mail);
+
+  public async deleteUser(id: string) {
+    return await this.userDbRepository.deleteOne(id);
   }
+
   public async login(mail: string, password: string) {
-    const userFound = await this.getUser(mail);
-    if (userFound.password != password)
-      throw new Error("usuario y/o contraseña incorrecto");
-    else return userFound;
+    const user = await this.userDbRepository.findByMail(mail);
+    if (!user) throw new Error("User not found");
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) throw new Error("Incorrect email or password");
+
+    // Generate JWT token
+    const token = jwt.sign({ id: user.id }, "your_secret_key", {
+      expiresIn: "1h",
+    });
+    return { user, token };
   }
-  public async followTeam(mail: string, idcompetition: number) {
-    let user = await this.userDbRepository.findByMail(mail);
-    user.teams.push(idcompetition);
-    await this.userDbRepository.updateOne(mail, { teams: user.teams });
-  }
-  public async unfollowTeam(mail: string, idcompetition: number) {
-    let user = await this.userDbRepository.findByMail(mail);
-    for (var i = 0; i < user.teams.length; i++) {
-      if (idcompetition == user.teams[i]) {
-        user.teams.splice(i, 1);
-      }
-      await this.userDbRepository.updateOne(mail, { teams: user.teams });
+
+  public async followTeam(id: string, competitionId: number) {
+    const user = await this.getUser(id);
+    if (!user.teams.includes(competitionId)) {
+      user.teams.push(competitionId);
+      await this.userDbRepository.updateOne(id, { teams: user.teams });
     }
+  }
+
+  public async unfollowTeam(id: string, competitionId: number) {
+    const user = await this.getUser(id);
+    user.teams = user.teams.filter((teamId) => teamId !== competitionId);
+    await this.userDbRepository.updateOne(id, { teams: user.teams });
   }
 }

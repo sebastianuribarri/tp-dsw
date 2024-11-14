@@ -12,6 +12,13 @@ export default class TeamUseCases {
     return await this.teamDbRepository.findAll();
   }
 
+  public async getBySearch(value: string) {
+  if (!value || value.length < 4) {
+    throw new Error("El termino de busqueda debe tener al menos 4 caracteres");
+  }
+    return await this.teamDbRepository.findAll({search: value});
+  }
+  
   public async getTeam(id: number) {
     let teamDetail = await this.teamDbRepository.findById(id);
     let newTeamPlayers = await this.playerUseCases.needUpdate(teamDetail);

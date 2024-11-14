@@ -5,17 +5,31 @@ import Player from "../../Player/domain/player.entity.js";
 import Timmer from "../../Shared/domain/timmer.js";
 
 export default class TeamMongoRepository implements ITeamRepository {
-  public async findAll(): Promise<Team[] | null> {
+
+  public async findAll(filters?: Record<string, any>): Promise<Team[] | null> {
     try {
-      const mongoTeams = await TeamModel.find().sort({ id: 1 });
+      if (filters && filters.search) {
+        const searchTerms = filters.search.toLowerCase().split(' ');
+        const regexPattern = searchTerms.map(term => `(?=.*${term})`).join('');
+        filters = { 
+          name: { 
+            $regex: regexPattern, 
+            $options: 'i' 
+          } 
+        };
+      }
+
+      const mongoTeams = await TeamModel.find(filters).sort({ id: 1 });
       const uniqueTeams = mongoTeams.filter((team, index, array) => {
         return index === 0 || team.id !== array[index - 1].id;
       });
+      
       return uniqueTeams.map((team) => {
         return new Team(team);
       });
     } catch (err) {
       console.log("ocurrio un error en MongoRepository(findAll):", err);
+      return null;
     }
   }
 

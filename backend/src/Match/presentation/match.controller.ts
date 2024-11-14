@@ -8,6 +8,7 @@ export default class MatchController {
     this.getOne = this.getOne.bind(this);
     this.getByTeam = this.getByTeam.bind(this);
     this.getLiveMatches = this.getLiveMatches.bind(this);
+    this.getBySearch = this.getBySearch.bind(this);
   }
 
   public async getAll(req: Request, res: Response) {
@@ -18,7 +19,7 @@ export default class MatchController {
       res.json(result);
     } catch (error) {
       console.log(error);
-      res.status(404).send({ message: "matches not founded" });
+      res.status(404).send({ message: "matches not found" });
     }
   }
   public async getByTeam(req: Request, res: Response) {
@@ -29,9 +30,30 @@ export default class MatchController {
       res.json(result);
     } catch (error) {
       console.log(error);
-      res.status(404).send({ message: "matches not founded" });
+      res.status(404).send({ message: "matches not found" });
     }
   }
+
+public async getBySearch(req: Request, res: Response) {
+  try {
+    const searchValue = req.query.search as string;
+    if (!searchValue) {
+      return res.status(400).json({ message: "Search parameter is required" });
+    }
+    
+    const result = await this.matchUseCases.getBySearch(searchValue);
+    if (!result) {
+      return res.status(404).json({ message: "No matches found" });
+    }
+    res.json(result);
+  } catch (error) {
+    if (error instanceof Error && error.message.includes("4 characters")) {
+      return res.status(400).json({ message: error.message });
+    }
+    console.error("Error in getBySearch:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
 
   public async getOne(req: Request, res: Response) {
     const result = await this.matchUseCases.getMatch(Number(req.params.id));
