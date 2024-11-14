@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
-import { getMatchById } from "../../api/match";  // Make sure to create this API function
+import { getMatch } from "../../api/match"; // Make sure to create this API function
 import { useParams } from "react-router-dom";
 import Page from "../../ui-components/Page";
 import PageMenu from "../../ui-components/PageMenu/PageMenu";
 import MatchHeader from "./MatchHeader/MatchHeader"; // You’ll need this component
 import MatchEvents from "./MatchEvents/MatchEvents"; // Placeholder for match events
-import MatchLineUps from "./MatchLineUps/MatchLineUps"; // Placeholder for match lineups
+import MatchLineups from "./MatchLineups/MatchLineups";
 import MatchVote from "./MatchVote/MatchVote"; // Placeholder for voting
-import MatchPrediction from "./MatchPrediction/MatchPrediction"; // Placeholder for predictions
+import MatchPrediction from "./MatchPredictions/MatchPredictions"; // Placeholder for predictions
 import MatchAbout from "./MatchAbout/MatchAbout"; // Details about competition, round, and date
 import styled from "styled-components";
 
@@ -31,8 +31,8 @@ const MatchPage = () => {
   useEffect(() => {
     const fetchMatchData = async () => {
       try {
-        const response = await getMatchById(Number(id));
-        const data = await response.json();
+        const response = await getMatch(Number(id));
+        const data = await response.data;
 
         setMatchDetail({
           ...data,
@@ -56,15 +56,14 @@ const MatchPage = () => {
           <Page>
             <MatchContentContainer>
               <MatchEvents events={matchDetail.events} />
-              <MatchLineUps lineups={matchDetail.lineups} />
-              <MatchVote matchId={matchDetail.id} />
+              <MatchLineups lineups={matchDetail.lineups} />
+              <MatchVote
+                matchId={matchDetail.id}
+                lineups={matchDetail.lineups}
+              />
               <MatchPrediction matchId={matchDetail.id} />
             </MatchContentContainer>
-            <MatchAbout
-              competition={matchDetail.competition}
-              round={matchDetail.round}
-              date={matchDetail.date}
-            />
+            <MatchAbout round={matchDetail.round} date={matchDetail.date} />
           </Page>
         </>
       ) : (

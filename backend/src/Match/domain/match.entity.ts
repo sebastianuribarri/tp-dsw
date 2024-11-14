@@ -55,7 +55,7 @@ export default class Match {
   constructor(match: MatchInput) {
     this.id = match.id;
     this.competition = match.competition;
-    this.round = this.round;
+    this.round = match.round;
     this.date = match.date;
     this.status = match.status;
     this.minute = match.minute;

@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { createVote } from "../../../api/vote";
-import { getTeamById } from "../../../api/team";
 import { Vote } from "../../../types/Vote";
 import Player from "../../../types/Player";
+import Lineup from "../../../types/Lineup";
 
 const VoteContainer = styled.div`
   display: flex;
@@ -51,85 +51,63 @@ const VoteButton = styled.button`
 
 interface MatchVoteProps {
   matchId: number;
-  homeTeamId: number;
-  awayTeamId: number;
-  userId: string;
+  lineups: Lineup[];
 }
 
-const MatchVote = ({ matchId, homeTeamId, awayTeamId, userId }: MatchVoteProps) => {
-  const [homePlayers, setHomePlayers] = useState<Player[]>([]);
-  const [awayPlayers, setAwayPlayers] = useState<Player[]>([]);
+const MatchVote = ({ matchId, lineups }: MatchVoteProps) => {
+  const [players, setPlayers] = useState<Player[]>([]);
   const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null);
   const [isVoting, setIsVoting] = useState(false);
 
   useEffect(() => {
     const fetchTeams = async () => {
       try {
-        const homeResponse = await getTeamById(homeTeamId);
-        const awayResponse = await getTeamById(awayTeamId);
-
-        setHomePlayers((await homeResponse.json()).players);
-        setAwayPlayers((await awayResponse.json()).players);
+        setPlayers(lineups[0].starters);
       } catch (error) {
         console.error("Error fetching team data:", error);
       }
     };
 
     fetchTeams();
-  }, [homeTeamId, awayTeamId]);
+  }, [lineups]);
 
   const handleVote = async () => {
-  // Verificar que se ha seleccionado un jugador
-  if (!selectedPlayer) {
-    alert("Seleccione un jugador para votar.");
-    return;
-  }
+    // Verificar que se ha seleccionado un jugador
+    if (!selectedPlayer) {
+      alert("Seleccione un jugador para votar.");
+      return;
+    }
 
-  // Crear el objeto de voto con el jugador completo
-  const voteData: Vote = {
-    match: matchId,
-    user: userId,
-    player: selectedPlayer, // Aquí pasas el objeto Player completo
+    // Crear el objeto de voto con el jugador completo
+    const voteData: Vote = {
+      match: matchId,
+      user: "",
+      player: selectedPlayer, // Aquí pasas el objeto Player completo
+    };
+
+    setIsVoting(true);
+
+    try {
+      // Llamar a la función para registrar el voto
+      await createVote(voteData);
+      alert(`Voto registrado para ${selectedPlayer.name}`);
+    } catch (error) {
+      console.error("Error al registrar voto:", error);
+    } finally {
+      setIsVoting(false);
+    }
   };
-
-  setIsVoting(true);
-
-  try {
-    // Llamar a la función para registrar el voto
-    await createVote(voteData);
-    alert(`Voto registrado para ${selectedPlayer.name}`);
-  } catch (error) {
-    console.error("Error al registrar voto:", error);
-  } finally {
-    setIsVoting(false);
-  }
-};
-
 
   return (
     <VoteContainer>
       <h3>Votar al Mejor Jugador</h3>
 
       <TeamContainer>
-        <h4>{`Jugadores de Local`}</h4>
-        <PlayerSelect onChange={(e) => setSelectedPlayer(homePlayers[+e.target.value])}>
+        <PlayerSelect
+          onChange={(e) => setSelectedPlayer(players[+e.target.value])}
+        >
           <option value="">Seleccione un jugador</option>
-          {homePlayers.map((player, index) => (
-            <option key={player.id} value={index}>
-              <PlayerOption>
-                <PlayerImage src={player.image} alt={player.name} />
-                {player.name} - #{player.number} ({player.position})
-              </PlayerOption>
-            </option>
-          ))}
-        </PlayerSelect>
-      </TeamContainer>
-
-      <TeamContainer>
-        <h4>{`Jugadores de Visitante`}</h4>
-        <PlayerSelect onChange={(e) => setSelectedPlayer(awayPlayers[+e.target.value])}>
-          <option value="">Seleccione un jugador</option>
-          {awayPlayers.map((player, index) => (
+          {players.map((player, index) => (
             <option key={player.id} value={index}>
               <PlayerOption>
                 <PlayerImage src={player.image} alt={player.name} />
@@ -148,4 +126,3 @@ const MatchVote = ({ matchId, homeTeamId, awayTeamId, userId }: MatchVoteProps) 
 };
 
 export default MatchVote;
-

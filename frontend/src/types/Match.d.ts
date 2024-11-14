@@ -22,15 +22,11 @@ interface Match {
     home: number | null;
     away: number | null;
   };
-
 }
 
 export interface MatchDetail extends Match {
   events: Event[];
-  lineups: {
-    home: Lineup;
-    away: Lineup;
-  };
+  lineups: LineUp[];
 }
 
 export default Match;
