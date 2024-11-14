@@ -31,7 +31,7 @@ export default class CompetitionController {
       }
       res.json(result);
     } catch (error) {
-      if (error instanceof Error && error.message.includes("5 characters")) {
+      if (error instanceof Error && error.message.includes("4 characters")) {
         return res.status(400).json({ message: error.message });
       }
       console.error("Error in getBySearch:", error);

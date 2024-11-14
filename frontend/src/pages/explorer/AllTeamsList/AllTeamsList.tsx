@@ -3,14 +3,24 @@ import React, { useEffect, useState } from "react";
 import Section from "../../../ui-components/Section";
 import TeamsList from "../../../components/TeamsList/TeamsList";
 import Team from "../../../types/Team";
-import { getAllTeams } from "../../../api/team";
+import { getAllTeams, getTeamsBySearch } from "../../../api/team";
 
-const AllTeamsList: React.FC = () => {
+interface AllTeamsListProps {
+  searchValue?: string;
+}
+
+const AllTeamsList: React.FC<AllTeamsListProps> = ({ searchValue }) => {
   const [teams, setTeamCompetitions] = useState<Team[]>([]);
+
   useEffect(() => {
     const fetchCompetitions = async () => {
       try {
-        const response = await getAllTeams();
+        let response;
+        if (searchValue && searchValue.length >= 5) {
+          response = await getTeamsBySearch(searchValue);
+        } else {
+          response = await getAllTeams();
+        }
         const data = await response.json();
         data.sort((a: Team, b: Team) => a.id - b.id);
         setTeamCompetitions(data);
@@ -20,7 +30,7 @@ const AllTeamsList: React.FC = () => {
     };
 
     fetchCompetitions();
-  }, []);
+  }, [searchValue]);
 
   return (
     <Section title="Equipos">

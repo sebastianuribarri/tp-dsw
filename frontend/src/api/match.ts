@@ -2,7 +2,7 @@ import axios from "axios";
 import API_URL from "./api_url";
 const url = API_URL + "matches/";
 
-export const getMatches = async (filters: Record<string, any>) =>
+export const getMatches = async (filters: object) =>
   await axios.get(url, { params: filters });
 
 export const getMatchesByTeam = async (teamId: number) =>
@@ -12,3 +12,7 @@ export const getLiveMatches = async () => await axios.get(url + "live/");
 
 export const getMatch = async (matchId: number) =>
   await axios.get(url + String(matchId));
+
+export const getMatchesBySearch = async (search: string) => {
+  return await fetch(`/api/matches/search?search=${search}`);
+};

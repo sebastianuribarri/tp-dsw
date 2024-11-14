@@ -3,16 +3,24 @@ import React, { useEffect, useState } from "react";
 import Section from "../../../ui-components/Section";
 import CompetitionsList from "../../../components/CompetitionsList/CompetitionsList";
 import Competition from "../../../types/Competition";
-import { getAllCompetitions } from "../../../api/competition";
+import { getAllCompetitions, getCompetitionsBySearch } from "../../../api/competition";
 
-const CurrentCompetitionsList: React.FC = () => {
-  const [currentCompetitions, setTeamCompetitions] = useState<Competition[]>(
-    []
-  );
+interface CurrentCompetitionsListProps {
+  searchValue?: string;
+}
+
+const CurrentCompetitionsList: React.FC<CurrentCompetitionsListProps> = ({ searchValue }) => {
+  const [currentCompetitions, setTeamCompetitions] = useState<Competition[]>([]);
+
   useEffect(() => {
     const fetchCompetitions = async () => {
       try {
-        const response = await getAllCompetitions();
+        let response;
+        if (searchValue && searchValue.length >= 5) {
+          response = await getCompetitionsBySearch(searchValue);
+        } else {
+          response = await getAllCompetitions();
+        }
         const data = await response.json();
         const sortedCompetitions = data.sort(
           (a: Competition, b: Competition) => a.id - b.id
@@ -24,10 +32,10 @@ const CurrentCompetitionsList: React.FC = () => {
     };
 
     fetchCompetitions();
-  }, []);
+  }, [searchValue]);
 
   return (
-    <Section title="Campeoneatos actuales">
+    <Section title="Campeonatos actuales">
       <CompetitionsList
         competitions={currentCompetitions}
         message="No hay campeonatos jugandose actualmente."

@@ -10,3 +10,7 @@ export const getCompetitionById = async (id: number) =>
 
 export const getAllCompetitions = async() => 
   await fetch (url);
+
+export const getCompetitionsBySearch = async (search: string) => {
+  return await fetch(`/api/competitions/search?search=${search}`);
+};
