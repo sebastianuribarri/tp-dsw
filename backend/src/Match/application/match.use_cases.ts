@@ -177,6 +177,13 @@ export default class MatchUseCases {
     // get matches updated from db repo
   }
 
+public async getBySearch(value: string) {
+  if (!value || value.length < 4) {
+    throw new Error("El termino de busqueda debe tener al menos 4 caracteres");
+  }
+  return await this.matchDbRepository.findAll({search: value});
+}
+
   public async listLiveMatches() {
     let matchesUpdated = await this.liveMatchesNeedUpdate();
     if (matchesUpdated) return matchesUpdated;

@@ -3,28 +3,42 @@ import MatchModel, { matchSchema } from "./match.schema.js";
 import Match, { MatchDetail } from "../domain/match.entity.js";
 
 export default class MatchMongoRepository implements IMatchRepository {
-  public async findAll(filters?: Record<string, any>): Promise<Match[] | null> {
-    try {
-      if (filters?.date) {
-        let start = new Date(filters.date);
-        start.setHours(0, 0, 0, 0);
-        let end = new Date(start);
-        end.setDate(end.getDate() + 1);
-        filters.date = {
-          $gte: start,
-          $lt: end,
-        };
-      }
-      // Query the database with the combined filters and sort by date
-      const mongoMatches = await MatchModel.find(filters).sort({ date: 1 });
 
-      // Map the results to Match instances
-      return mongoMatches.map((match) => new Match(match));
-    } catch (error) {
-      console.log("An error occurred in MongoRepository(findAll)", error);
-      return null;
+public async findAll(filters?: Record<string, any>): Promise<Match[] | null> {
+  try {
+    if (filters && filters.search) {
+      // Dividir los términos de búsqueda y crear un patrón que coincida con cualquiera
+      const searchTerms = filters.search.toLowerCase().split(' ');
+      const regexPattern = searchTerms.map(term => `(?=.*${term})`).join('');
+      const searchPattern = { $regex: regexPattern, $options: 'i' };
+      
+      filters = {
+        $or: [
+          { 'competition.name': searchPattern },
+          { 'home.name': searchPattern },
+          { 'away.name': searchPattern }
+        ]
+      };
     }
+
+    if (filters?.date) {
+      let start = new Date(filters.date);
+      start.setHours(0, 0, 0, 0);
+      let end = new Date(start);
+      end.setDate(end.getDate() + 1);
+      filters.date = {
+        $gte: start,
+        $lt: end,
+      };
+    }
+
+    const mongoMatches = await MatchModel.find(filters).sort({ date: 1 });
+    return mongoMatches.map((match) => new Match(match));
+  } catch (error) {
+    console.error("Error in findAll:", error);
+    return null;
   }
+}
 
   public async findByDate(
     date: Date,
