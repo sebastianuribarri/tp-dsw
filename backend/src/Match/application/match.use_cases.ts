@@ -152,7 +152,7 @@ export default class MatchUseCases {
   public async listMatches(filters: Record<string, any>) {
     // get matches from db repo
     let matchChange = false;
-    const params = filters
+    const originalFilters = { ...filters };
     let matches = await this.matchDbRepository.findAll(filters);
 
     const uniqueCompetitionsMap: Map<number, MatchCompetition> = new Map();
@@ -171,7 +171,7 @@ export default class MatchUseCases {
       if (competitionsMatchesUpdated) matchChange = true;
     }
     if (matchChange) {
-      return await this.matchDbRepository.findAll(params);
+      return await this.matchDbRepository.findAll(originalFilters);
     }
     return matches;
     // get matches updated from db repo

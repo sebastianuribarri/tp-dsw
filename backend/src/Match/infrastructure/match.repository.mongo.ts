@@ -5,21 +5,18 @@ import Match, { MatchDetail } from "../domain/match.entity.js";
 export default class MatchMongoRepository implements IMatchRepository {
   public async findAll(filters?: Record<string, any>): Promise<Match[] | null> {
     try {
-      
-      let params = filters;
-      console.log("f before", filters);
-      if (params?.date) {
-        let start = new Date(params.date);
+      if (filters?.date) {
+        let start = new Date(filters.date);
         start.setHours(0, 0, 0, 0);
         let end = new Date(start);
         end.setDate(end.getDate() + 1);
-        params.date = {
+        filters.date = {
           $gte: start,
           $lt: end,
         };
       }
       // Query the database with the combined filters and sort by date
-      const mongoMatches = await MatchModel.find(params).sort({ date: 1 });
+      const mongoMatches = await MatchModel.find(filters).sort({ date: 1 });
 
       // Map the results to Match instances
       return mongoMatches.map((match) => new Match(match));
