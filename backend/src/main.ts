@@ -9,21 +9,26 @@ dotenv.config();
 
 const DB_URL = process.env.DB_URL;
 
-// database setup
+// Database setup
 const mongoDatabase = new MongoDatabase(DB_URL);
 await mongoDatabase.connect();
 
-// api setup
+// API setup
 const apiFootball = new ApiFootball(
   "https://api-football-v1.p.rapidapi.com/v3/"
 );
 await apiFootball.setup();
 
-// server variables
+// Server setup
 const express_server = express().use(express.json());
 express_server.use(cors());
 const server_port = 5000;
 
-// app setup
+// App setup
 const app = new App(express_server, apiFootball);
 app.run(server_port);
+
+// 404 handler
+express_server.use((req, res, next) => {
+  res.status(404).json({ error: "404 - Not Found" });
+});

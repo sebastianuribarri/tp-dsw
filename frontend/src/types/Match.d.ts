@@ -1,5 +1,4 @@
 import Team from "./Team";
-import Competition from "./Competition";
 import Event from "./Event";
 interface Match {
   id: number;
@@ -23,7 +22,7 @@ interface Match {
     home: number | null;
     away: number | null;
   };
-  venue: any;
+
 }
 
 export interface MatchDetail extends Match {
