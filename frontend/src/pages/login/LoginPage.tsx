@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom"; // Importa useNavigate
+import { useNavigate, Link } from "react-router-dom"; // Importa Link para navegación interna
 import { loginUser } from "../../api/user";
 
 const LoginPage: React.FC = () => {
@@ -20,11 +20,10 @@ const LoginPage: React.FC = () => {
       const data = response.data;
       console.log("token", data.token);
 
-      // Guardar token en sessionStorage
       sessionStorage.setItem("authToken", data.token);
+      sessionStorage.setItem("userId", String(data.user.id));
 
-      // Redirigir al usuario a la página principal
-      navigate("/"); // Suponiendo que la ruta home es /home
+      navigate("/");
     } catch (err: any) {
       console.error("Login failed:", err);
       setError(err.response?.data?.message || "Login failed");
@@ -61,6 +60,10 @@ const LoginPage: React.FC = () => {
             {loading ? "Logging in..." : "Login"}
           </Button>
         </Form>
+        <Footer>
+          <Question>¿No tienes cuenta aún?</Question>
+          <StyledLink to="/register">Regístrate</StyledLink>
+        </Footer>
       </FormWrapper>
     </Container>
   );
@@ -141,4 +144,24 @@ const ErrorMessage = styled.p`
   font-size: 0.9rem;
   text-align: center;
   margin-top: -0.5rem;
+`;
+
+const Footer = styled.div`
+  margin-top: 1.5rem;
+  text-align: center;
+`;
+
+const Question = styled.p`
+  margin: 0;
+  font-size: 0.9rem;
+  color: #555;
+`;
+
+const StyledLink = styled(Link)`
+  color: #007bff;
+  text-decoration: none;
+  font-weight: bold;
+  &:hover {
+    text-decoration: underline;
+  }
 `;

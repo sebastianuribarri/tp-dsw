@@ -1,11 +1,12 @@
-import AppLogo from "../AppLogo/AppLogo";
+import React from "react";
 import { MenuContainer } from "./Menu.styles";
 import Navbar from "./Navbar/Navbar";
 
-const Menu = () => {
+const Menu: React.FC = () => {
+  // Si el usuario no está logueado, no se renderiza el menú completo
+
   return (
     <MenuContainer>
-      <AppLogo />
       <Navbar />
     </MenuContainer>
   );
