@@ -7,9 +7,9 @@ import MatchPage from "./pages/match/MatchPage";
 import RegisterPage from "./pages/register/RegisterPage";
 import TeamPage from "./pages/team/TeamPage";
 import ProfilePage from "./pages/profile/ProfilePage";
-
 import ExplorerPage from "./pages/explorer/ExplorerPage";
 import Menu from "./ui-components/Menu/Menu";
+import ProtectedRoute from "./ProtectedRoute";
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -49,14 +49,56 @@ function App() {
           <Menu />
           <MainContent>
             <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/league/:id" element={<CompetitionPage />} />
+              <Route
+                path="/"
+                element={
+                  <ProtectedRoute>
+                    <HomePage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/league/:id"
+                element={
+                  <ProtectedRoute>
+                    <CompetitionPage />
+                  </ProtectedRoute>
+                }
+              />
               <Route path="/login" element={<LoginPage />} />
-              <Route path="/match/:id" element={<MatchPage />} />
+              <Route
+                path="/match/:id"
+                element={
+                  <ProtectedRoute>
+                    <MatchPage />
+                  </ProtectedRoute>
+                }
+              />
               <Route path="/register" element={<RegisterPage />} />
-              <Route path="/team/:id" element={<TeamPage />} />
-              <Route path="/profile" element={<ProfilePage />} />
-              <Route path="/explorer" element={<ExplorerPage />} />
+              <Route
+                path="/team/:id"
+                element={
+                  <ProtectedRoute>
+                    <TeamPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/profile"
+                element={
+                  <ProtectedRoute>
+                    <ProfilePage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/explorer"
+                element={
+                  <ProtectedRoute>
+                    <ExplorerPage />
+                  </ProtectedRoute>
+                }
+              />
             </Routes>
           </MainContent>
         </AppContainer>
