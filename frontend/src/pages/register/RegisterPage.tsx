@@ -24,18 +24,24 @@ const RegisterPage: React.FC = () => {
     }
 
     try {
-      const user = { username, mail, password };
-      const response = await registerUser(user);
-      const data = response.data;
-      console.log("User registered:", data);
+  const user = { username, mail, password };
+  const response = await registerUser(user);
+  const data = response.data;
+  console.log("User registered:", data);
 
-      navigate("/login"); // Redirige al login después del registro exitoso
-    } catch (err: unknown) {
-      console.error("Registration failed:", err);
-      setError(err.response?.data?.message || "Registration failed");
-    } finally {
-      setLoading(false);
-    }
+  navigate("/login"); // Redirige al login después del registro exitoso
+} catch (err: unknown) {
+  if (err instanceof Error) {
+    console.error("Registration failed:", err.message);
+    setError(err.message || "Registration failed");
+  } else {
+    console.error("Unknown error occurred:", err);
+    setError("Registration failed");
+  }
+} finally {
+  setLoading(false);
+}
+
   };
 
   return (
