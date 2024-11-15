@@ -30,6 +30,7 @@ const AppContainer = styled.div`
   }
 `;
 
+// Contenedor principal
 const MainContent = styled.div<{ isMenuVisible: boolean }>`
   flex: 1;
   overflow-y: auto;
@@ -37,16 +38,12 @@ const MainContent = styled.div<{ isMenuVisible: boolean }>`
   align-items: center;
   justify-content: center;
 
+  /* Cuando la pantalla es más grande, ajustamos la margen */
   @media (min-width: 768px) {
     ${({ isMenuVisible }) =>
       isMenuVisible
-        ? `
-      margin-left: 200px; /* Ajusta este valor al ancho del menú */
-    `
-        : `
-      margin-left: 0;
-      justify-content: center;
-    `}
+        ? `margin-left: 200px;` /* Reserva espacio para la navbar */
+        : `margin-left: 0; justify-content: center;`}
   }
 `;
 
@@ -58,6 +55,7 @@ function App() {
       <BrowserRouter>
         <AppContainer>
           <Menu />
+
           <MainContent isMenuVisible={isLoggedIn}>
             <Routes>
               <Route

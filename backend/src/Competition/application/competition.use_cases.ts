@@ -54,7 +54,8 @@ export default class CompetitionUseCases {
   public async getCompetition(id: number) {
     await this.needUpdate();
     let competitionDetail = await this.competitionDbRepository.findById(id);
-    competitionDetail.rounds = await this.getRoundsByCompetitionId(id);
+    competitionDetail.rounds =
+      (await this.getRoundsByCompetitionId(id)) ?? null;
     const newStandings = await this.standingUseCases.needUpdate(
       competitionDetail
     );
@@ -66,8 +67,12 @@ export default class CompetitionUseCases {
     return competitionDetail;
   }
 
-  private async getRoundsByCompetitionId(competitionId: number): Promise<string[] | null> {
-    return await this.matchDbRepository.findRoundsByCompetitionId(competitionId);
+  private async getRoundsByCompetitionId(
+    competitionId: number
+  ): Promise<string[] | null> {
+    return await this.matchDbRepository.findRoundsByCompetitionId(
+      competitionId
+    );
   }
 
   public async getCompetitionsByTeam(teamId: number) {
