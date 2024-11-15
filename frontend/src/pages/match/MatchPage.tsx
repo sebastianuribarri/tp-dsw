@@ -62,7 +62,11 @@ const MatchPage = () => {
               <MatchPrediction matchId={matchDetail.id} />
             </MatchContentContainer>
             <MatchContentContainer>
-              <MatchEvents events={matchDetail.events} />
+                 <MatchEvents 
+                events={matchDetail.events}
+                homeTeam={matchDetail.home}
+                awayTeam={matchDetail.away}
+              />
               <MatchLineups lineups={matchDetail.lineups} />
             </MatchContentContainer>
             <MatchAbout round={matchDetail.round} date={matchDetail.date} />
