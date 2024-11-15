@@ -6,14 +6,17 @@ import CompetitionApiRepository from "./infrastructure/competition.repository.ap
 import CompetitionMongoRepository from "./infrastructure/competition.repository.mongo.js";
 import CompetitionController from "./presentation/competition.controller.js";
 import CompetitionRoutes from "./presentation/competition.routes.js";
+import IMatchRepository from "../Match/domain/match.repository.js";
 import { Express } from "express";
 import StandingApp from "../Standing/standing.app.js";
 import StandingUseCases from "../Standing/application/standing.use_cases.js";
 import ApiFootball from "../ApiFootball/api.js";
+import MatchMongoRepository from "../Match/infrastructure/match.repository.mongo.js";
 
 export default class CompetitionApp {
   competitionApiRepository: IApiRepository<Competition>;
   competitionDbRepository: ICompetitionRepository;
+  matchDbRepository: IMatchRepository;
   competitionUseCases: CompetitionUseCases;
   competitionController: CompetitionController;
   competitionRoutes: CompetitionRoutes;
@@ -27,12 +30,14 @@ export default class CompetitionApp {
 
     this.competitionApiRepository = new CompetitionApiRepository(api);
     this.competitionDbRepository = new CompetitionMongoRepository();
+    this.matchDbRepository = new MatchMongoRepository();
 
     // ----------------- application layer -----------------
 
     this.competitionUseCases = new CompetitionUseCases(
       this.competitionApiRepository,
       this.competitionDbRepository,
+      this.matchDbRepository,
       standingApp.standingUseCases
     );
 
