@@ -7,7 +7,7 @@ export default class CompetitionsRoutes {
     server.use("/api/competitions", competitionsRouter);
 
     competitionsRouter.get("/", competitionsController.getAll);
-    competitionsRouter.get("/search/", competitionsController.getBySearch);
+    competitionsRouter.get("/search", competitionsController.getBySearch);
     competitionsRouter.get("/:id", competitionsController.getOne);
     competitionsRouter.get("/team/:teamId", competitionsController.getByTeam);
   }

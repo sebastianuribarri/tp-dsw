@@ -148,9 +148,22 @@ export default class MatchUseCases {
   // public async listMatchesByTeams(teamIds: number[]) {}
 
   public async listMatches(filters: Record<string, any>) {
+    
+    if (filters && filters.date) {
+      let start = new Date(filters.date);
+      start.setHours(0, 0, 0, 0);
+      let end = new Date(start);
+      end.setDate(end.getDate() + 1);
+      filters.date = {
+        $gte: start,
+        $lt: end,
+      };
+    }
+
     // get matches from db repo
     let matchChange = false;
     const originalFilters = { ...filters };
+    console.log("Filters before listMatches: ", filters);
     let matches = await this.matchDbRepository.findAll(filters);
 
     const uniqueCompetitionsMap: Map<number, MatchCompetition> = new Map();
@@ -170,6 +183,8 @@ export default class MatchUseCases {
     }
     // get matches updated from db repo
     if (matchChange) {
+          console.log("Filters after listMatches: ", originalFilters);
+
       return await this.matchDbRepository.findAll(originalFilters);
     }
     return matches;
@@ -181,6 +196,8 @@ export default class MatchUseCases {
         "El termino de busqueda debe tener al menos 4 caracteres"
       );
     }
+        console.log("Filters before getBySarch: ", { search: value });
+
     return await this.matchDbRepository.findAll({ search: value });
   }
 

@@ -7,7 +7,7 @@ export default class TeamsRoutes {
     server.use("/api/teams", teamsRouter);
 
     teamsRouter.get("/", teamsController.getAll);
-    teamsRouter.get("/search/", teamsController.getBySearch);
+    teamsRouter.get("/search", teamsController.getBySearch);
     teamsRouter.get("/:id", teamsController.getOne);
   }
 }

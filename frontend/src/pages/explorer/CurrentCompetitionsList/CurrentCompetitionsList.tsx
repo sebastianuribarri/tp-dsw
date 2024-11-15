@@ -18,6 +18,8 @@ const CurrentCompetitionsList: React.FC<CurrentCompetitionsListProps> = ({ searc
         let response;
         if (searchValue && searchValue.length >= 5) {
           response = await getCompetitionsBySearch(searchValue);
+          console.log ("Response:", response)
+
         } else {
           response = await getAllCompetitions();
         }

@@ -8,7 +8,7 @@ import DateMatchesList from "./DateMatchesList/DateMatchesList";
 import SearchedMatchesList from "./SearchedMatchesList/SearchedMatchesList";
 
 const Explorer: React.FC = () => {
-  const [submittedSearch, setSubmittedSearch] = useState<string>("");
+  const [submittedSearch, setSubmittedSearch] = useState<string|undefined>(undefined);
 
   return (
     <Page>

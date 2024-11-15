@@ -17,7 +17,8 @@ const SearchedMatchesList: React.FC<SearchedMatchesListProps> = ({ searchValue }
       try {
         if (searchValue && searchValue.length >= 5) {
           const response = await getMatchesBySearch(searchValue);
-          const data = await response.json();
+          const data = response.data;
+          console.log("Matches:", response);
           setMatches(data);
         }
       } catch (err) {

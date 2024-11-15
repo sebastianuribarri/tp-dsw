@@ -12,5 +12,5 @@ export const getAllCompetitions = async() =>
   await fetch (url);
 
 export const getCompetitionsBySearch = async (search: string) => {
-  return await fetch(`/api/competitions/search?search=${search}`);
+  return await fetch(`search?search=${search}`);
 };

@@ -21,16 +21,6 @@ public async findAll(filters?: Record<string, any>): Promise<Match[] | null> {
       };
     }
 
-    if (filters?.date) {
-      let start = new Date(filters.date);
-      start.setHours(0, 0, 0, 0);
-      let end = new Date(start);
-      end.setDate(end.getDate() + 1);
-      filters.date = {
-        $gte: start,
-        $lt: end,
-      };
-    }
 
     const mongoMatches = await MatchModel.find(filters).sort({ date: 1 });
     return mongoMatches.map((match) => new Match(match));
