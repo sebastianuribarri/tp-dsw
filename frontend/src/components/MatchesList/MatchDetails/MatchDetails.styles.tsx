@@ -3,12 +3,11 @@ import { Link } from "react-router-dom";
 
 export const MatchDetailsLink = styled(Link)`
   display: flex;
-  justify-content: space-between; /* Space out home and away teams */
+  justify-content: space-between;
   align-items: center;
   text-decoration: none;
   color: white;
-  padding: 10px; /* Reduced padding for smaller elements */
-  background-color: #2b2b2b;
+  padding: 10px;
   border-radius: 8px;
   transition: background-color 0.3s;
   width: 100%;

@@ -43,31 +43,31 @@ export default class UserUseCases {
     return await this.userDbRepository.deleteOne(id);
   }
 
-  public async login(mail: string, password: string) {
-    const user = await this.userDbRepository.findByMail(mail);
+  public async login(username: string, password: string) {
+    const user = await this.userDbRepository.findByUsername(username);
     if (!user) throw new Error("User not found");
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) throw new Error("Incorrect email or password");
 
     // Generate JWT token
-    const token = jwt.sign({ id: user.id }, "your_secret_key", {
+    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
       expiresIn: "1h",
     });
     return { user, token };
   }
 
-  public async followTeam(id: string, competitionId: number) {
+  public async followTeam(id: string, teamId: number) {
     const user = await this.getUser(id);
-    if (!user.teams.includes(competitionId)) {
-      user.teams.push(competitionId);
+    if (!user.teams.includes(teamId)) {
+      user.teams.push(teamId);
       await this.userDbRepository.updateOne(id, { teams: user.teams });
     }
   }
 
-  public async unfollowTeam(id: string, competitionId: number) {
+  public async unfollowTeam(id: string, teamId: number) {
     const user = await this.getUser(id);
-    user.teams = user.teams.filter((teamId) => teamId !== competitionId);
+    user.teams = user.teams.filter((teamId_) => teamId_ !== teamId);
     await this.userDbRepository.updateOne(id, { teams: user.teams });
   }
 }

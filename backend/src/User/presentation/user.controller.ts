@@ -39,8 +39,8 @@ export default class UserController {
 
   public async login(req: Request, res: Response) {
     try {
-      const { mail, password } = req.body;
-      const { user, token } = await this.userUseCases.login(mail, password);
+      const { username, password } = req.body;
+      const { user, token } = await this.userUseCases.login(username, password);
       res.json({ user, token });
     } catch (error) {
       res.status(401).json({ message: error.message });

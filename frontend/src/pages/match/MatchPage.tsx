@@ -3,7 +3,6 @@ import { getMatch } from "../../api/match"; // Make sure to create this API func
 import { useParams } from "react-router-dom";
 import Page from "../../ui-components/Page";
 import PageMenu from "../../ui-components/PageMenu/PageMenu";
-import MatchHeader from "./MatchHeader/MatchHeader"; // You’ll need this component
 import MatchEvents from "./MatchEvents/MatchEvents"; // Placeholder for match events
 import MatchLineups from "./MatchLineups/MatchLineups";
 import MatchVote from "./MatchVote/MatchVote"; // Placeholder for voting
@@ -12,6 +11,7 @@ import MatchAbout from "./MatchAbout/MatchAbout"; // Details about competition, 
 import styled from "styled-components";
 
 import { MatchDetail } from "../../types/Match";
+import MatchDetails from "../../components/MatchesList/MatchDetails/MatchDetails";
 
 const MatchContentContainer = styled.div`
   display: flex;
@@ -51,17 +51,19 @@ const MatchPage = () => {
       {matchDetail ? (
         <>
           <PageMenu>
-            <MatchHeader match={matchDetail} />
+            <MatchDetails match={matchDetail} />
           </PageMenu>
           <Page>
             <MatchContentContainer>
-              <MatchEvents events={matchDetail.events} />
-              <MatchLineups lineups={matchDetail.lineups} />
               <MatchVote
                 matchId={matchDetail.id}
                 lineups={matchDetail.lineups}
               />
               <MatchPrediction matchId={matchDetail.id} />
+            </MatchContentContainer>
+            <MatchContentContainer>
+              <MatchEvents events={matchDetail.events} />
+              <MatchLineups lineups={matchDetail.lineups} />
             </MatchContentContainer>
             <MatchAbout round={matchDetail.round} date={matchDetail.date} />
           </Page>

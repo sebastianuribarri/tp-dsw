@@ -52,14 +52,14 @@ export default class MatchUseCases {
   }
 
   public async matchNeedUpdate(match: Match) {
-    console.log(
-      `Match ${match.id} (Competition ${match.competition.id})----------------------------------------------------------`
-    );
     const competition = await this.competitionUseCases.getCompetition(
       match.competition.id
     );
     const matchUpdated = competition.matchesTimmer.matchUpdated(match.date);
-    if (!matchUpdated) {
+    const matchesUpdated = competition.matchesTimmer.matchesUpdated(
+      competition.end
+    );
+    if (!matchUpdated && !matchesUpdated) {
       // get matches from api
       const apiCompetitionMatches = await this.matchApiRepository.findAll({
         league: competition.id,
@@ -89,13 +89,11 @@ export default class MatchUseCases {
 
     let apiLiveMatches = await this.matchApiRepository.findAll({ live: "all" });
     if (!apiLiveMatches) return false;
-    // HANDLE WITH COUNTRY PROP INSTEAD
     apiLiveMatches = apiLiveMatches.filter((match) =>
       REGIONS.includes(match.competition.country)
     );
 
     for (let liveMatch of apiLiveMatches) {
-      // INCLUDE ALL THIS DIRECTLY ON THE UPDATE METHOD
       const dbMatch = await this.matchDbRepository.findById(liveMatch.id);
       if (!dbMatch) await this.createMatch(liveMatch);
       else {
@@ -170,19 +168,21 @@ export default class MatchUseCases {
         await this.competitionMatchesNeedUpdate(competition);
       if (competitionsMatchesUpdated) matchChange = true;
     }
+    // get matches updated from db repo
     if (matchChange) {
       return await this.matchDbRepository.findAll(originalFilters);
     }
     return matches;
-    // get matches updated from db repo
   }
 
-public async getBySearch(value: string) {
-  if (!value || value.length < 4) {
-    throw new Error("El termino de busqueda debe tener al menos 4 caracteres");
+  public async getBySearch(value: string) {
+    if (!value || value.length < 4) {
+      throw new Error(
+        "El termino de busqueda debe tener al menos 4 caracteres"
+      );
+    }
+    return await this.matchDbRepository.findAll({ search: value });
   }
-  return await this.matchDbRepository.findAll({search: value});
-}
 
   public async listLiveMatches() {
     let matchesUpdated = await this.liveMatchesNeedUpdate();

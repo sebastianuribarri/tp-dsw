@@ -1,9 +1,5 @@
 import { Schema, model } from "mongoose";
 import timmerSchema from "../../Shared/infrastructure/timmer.schema.js";
-import Competition from "../../Competition/domain/competition.entity.js";
-import Team from "../../Team/domain/team.entity.js";
-import { match } from "assert";
-import { competitionSchema } from "../../Competition/infrastructure/competition.schema.js";
 import { teamSchema } from "../../Team/infrastructure/team.schema.js";
 import eventSchema from "../../Event/infrastructure/event.schema.js";
 import lineUpSchema from "../../LineUp/infraestructure/LineUp.schema.js";

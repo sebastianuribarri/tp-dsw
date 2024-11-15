@@ -71,9 +71,9 @@ export default class Match {
   }
 
   public isPlaying() {
-    const differenceInHrs =
-      Math.abs(this.date.getTime() - new Date().getTime()) / (1000 * 60 * 60);
-    return differenceInHrs > 2.15;
+    const differenceInMinutes =
+      Math.abs(this.date.getTime() - new Date().getTime()) / (1000 * 60);
+    return differenceInMinutes > 150;
   }
 }
 

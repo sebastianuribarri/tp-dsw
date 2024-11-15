@@ -6,17 +6,17 @@ export default class EventUseCases {
   constructor(private readonly eventApiRepository: IApiRepository<Event>) {}
 
   public async needUpdate(matchDetail: MatchDetail) {
-    const eventUpdated = matchDetail.eventsTimmer.eventsUpdated(
-      matchDetail.status
+    console.log(
+      `Events (Match ${matchDetail.id}) ------------------------------------------------------------------------------`
     );
+    const eventUpdated = matchDetail.eventsTimmer.eventsUpdated();
     if (eventUpdated) return false;
-    // players unupdated -> get players updated
-    const apiMatchPlayers = await this.eventApiRepository.findAll({
+    const apiMatchEvents = await this.eventApiRepository.findAll({
       fixture: matchDetail.id,
     });
-    if (!apiMatchPlayers) return false;
-    matchDetail.eventsTimmer.updateTimmer();
+    if (!apiMatchEvents) return false;
+    matchDetail.eventsTimmer.updateTimmer(matchDetail.date);
 
-    return apiMatchPlayers;
+    return apiMatchEvents;
   }
 }
