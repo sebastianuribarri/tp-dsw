@@ -13,5 +13,5 @@ export const getLiveMatches = async () => await axios.get(url + "live/");
 export const getMatch = async (matchId: number) =>
   await axios.get(url + String(matchId));
 
-export const getMatchesBySearch = async (search: string) => 
-  await axios.get(`search?search=${search}`);
+export const getMatchesBySearch = async (search: string) =>
+  await axios.get(url + `search?search=${search}`);

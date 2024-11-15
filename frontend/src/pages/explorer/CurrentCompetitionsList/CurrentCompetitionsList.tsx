@@ -3,14 +3,21 @@ import React, { useEffect, useState } from "react";
 import Section from "../../../ui-components/Section";
 import CompetitionsList from "../../../components/CompetitionsList/CompetitionsList";
 import Competition from "../../../types/Competition";
-import { getAllCompetitions, getCompetitionsBySearch } from "../../../api/competition";
+import {
+  getAllCompetitions,
+  getCompetitionsBySearch,
+} from "../../../api/competition";
 
 interface CurrentCompetitionsListProps {
   searchValue?: string;
 }
 
-const CurrentCompetitionsList: React.FC<CurrentCompetitionsListProps> = ({ searchValue }) => {
-  const [currentCompetitions, setTeamCompetitions] = useState<Competition[]>([]);
+const CurrentCompetitionsList: React.FC<CurrentCompetitionsListProps> = ({
+  searchValue,
+}) => {
+  const [currentCompetitions, setTeamCompetitions] = useState<Competition[]>(
+    []
+  );
 
   useEffect(() => {
     const fetchCompetitions = async () => {
@@ -18,12 +25,11 @@ const CurrentCompetitionsList: React.FC<CurrentCompetitionsListProps> = ({ searc
         let response;
         if (searchValue && searchValue.length >= 5) {
           response = await getCompetitionsBySearch(searchValue);
-          console.log ("Response:", response)
-
+          console.log("Response competition:", response);
         } else {
           response = await getAllCompetitions();
         }
-        const data = await response.json();
+        const data = await response.data;
         const sortedCompetitions = data.sort(
           (a: Competition, b: Competition) => a.id - b.id
         );

@@ -6,25 +6,22 @@ export const CompetitionDetailsLink = styled(Link)`
   align-items: center;
   padding-bottom: 5px;
   margin-bottom: 5px;
-  border-bottom: 1px solid #444; /* Mobile bottom border */
+  border-bottom: 1px solid #444; /* Keep bottom border on all screen sizes */
   text-decoration: none;
   color: white;
 
-  @media (min-width: 768px) {
-    width: 250px;
-    min-width: 130px;
-    margin-bottom: 0;
-    margin-right: 15px;
-    border-bottom: none;
-    border-right: 1px solid #444;
-    padding-right: 15px;
-    padding-bottom: 0;
-  }
+  /* Remove media query, keeping the same layout across all screen sizes */
+  width: auto; /* Let the link adjust its width dynamically */
+  min-width: 130px;
+  margin-right: 15px;
+
+  padding-right: 15px;
+  padding-bottom: 5px;
 `;
 
 export const CompetitionLogo = styled.img`
-  width: 50px;
-  height: 50px;
+  width: 40px;
+  height: 40px;
   margin-right: 10px;
 `;
 

@@ -7,7 +7,7 @@ export const MatchDetailsLink = styled(Link)`
   align-items: center;
   text-decoration: none;
   color: white;
-  padding: 10px;
+  padding: 5px;
   border-radius: 8px;
   transition: background-color 0.3s;
   width: 100%;
@@ -24,13 +24,12 @@ export const TeamSection = styled.div`
 export const TeamHomeLogo = styled.img`
   width: 40px; /* Smaller logo */
   height: 40px;
-  margin-bottom: 5px;
   justify-content: flex-start;
 `;
 export const TeamAwayLogo = styled.img`
   width: 40px; /* Smaller logo */
   height: 40px;
-  margin-bottom: 5px;
+
   justify-content: flex-end;
 `;
 export const TeamName = styled.div`

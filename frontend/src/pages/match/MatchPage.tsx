@@ -49,29 +49,26 @@ const MatchPage = () => {
   return (
     <>
       {matchDetail ? (
-        <>
-          <Page>
-            <PageMenu>
-              <MatchHeader match={matchDetail} />
-            </PageMenu>
-            <PageContent>
-              <MatchContentContainer>
-                <MatchPrediction matchId={matchDetail.id} />
-                <MatchEvents
-                  events={matchDetail.events}
-                  homeTeam={matchDetail.home}
-                  awayTeam={matchDetail.away}
-                />
-                <MatchLineups lineups={matchDetail.lineups} />
-              </MatchContentContainer>
-              <MatchAbout
-                round={matchDetail.round}
-                date={matchDetail.date}
-                competition={matchDetail.competition}
+        <Page>
+          <PageMenu>
+            <MatchHeader match={matchDetail} />
+          </PageMenu>
+          <PageContent>
+            <MatchContentContainer>
+              <MatchEvents
+                events={matchDetail.events}
+                homeTeam={matchDetail.home}
+                awayTeam={matchDetail.away}
               />
-            </PageContent>
-          </Page>
-        </>
+              <MatchLineups lineups={matchDetail.lineups} />
+            </MatchContentContainer>
+            <MatchAbout
+              round={matchDetail.round}
+              date={matchDetail.date}
+              competition={matchDetail.competition}
+            />
+          </PageContent>
+        </Page>
       ) : (
         <p>El partido no existe</p>
       )}

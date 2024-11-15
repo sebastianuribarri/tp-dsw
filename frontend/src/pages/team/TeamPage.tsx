@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 
 import { getTeamById } from "../../api/team";
 import { useParams } from "react-router-dom";
-import Page from "../../ui-components/Page";
 import PageMenu from "../../ui-components/PageMenu/PageMenu";
 
 import TeamHeader from "./TeamHeader/TeamHeader";

@@ -7,5 +7,5 @@ export const getTeamById = async (id: number) =>
 
 export const getAllTeams = async () => await fetch(TEAM_API_URL);
 
-export const getTeamsBySearch = async (search: string) => 
-  await fetch(`search?search=${search}`);
+export const getTeamsBySearch = async (search: string) =>
+  await fetch(TEAM_API_URL + `search?search=${search}`);

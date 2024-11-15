@@ -1,5 +1,7 @@
 import { FC } from "react";
 import styled from "styled-components";
+import { Link } from "react-router-dom";
+import Section from "../../../ui-components/Section";
 
 interface MatchAboutProps {
   date: string;
@@ -10,38 +12,40 @@ interface MatchAboutProps {
 const CompetitionContainer = styled.div`
   display: flex;
   align-items: center;
-  margin-top: 10px;
 `;
 
-const CompetitionLink = styled.a`
+const CompetitionLink = styled(Link)`
   display: flex;
   align-items: center;
   text-decoration: none;
+  background-color: #333;
+  border-radius: 5px;
+  padding-right: 10px;
+  margin-left: 10px;
 `;
 
 const CompetitionLogo = styled.img`
-  width: 50px;
-  height: 50px;
+  width: 30px;
+  height: 30px;
   margin-right: 10px;
 `;
 
 const CompetitionName = styled.p`
   font-size: 16px;
-  color: #333;
 `;
 
 const MatchAbout: FC<MatchAboutProps> = ({ date, round, competition }) => (
-  <div>
-    <h3>Información del Partido</h3>
+  <Section title="Acerca de">
     <p>Fecha: {new Date(date).toLocaleDateString()}</p>
     <p>Jornada: {round}</p>
     <CompetitionContainer>
-      <CompetitionLink href={`/league/${competition.id}`}>
+      <p>Competencia:</p>
+      <CompetitionLink to={`/league/${competition.id}`}>
         <CompetitionLogo src={competition.logo} alt={competition.name} />
+        <CompetitionName>{competition.name}</CompetitionName>
       </CompetitionLink>
-      <CompetitionName>Competencia: {competition.name}</CompetitionName>
     </CompetitionContainer>
-  </div>
+  </Section>
 );
 
 export default MatchAbout;

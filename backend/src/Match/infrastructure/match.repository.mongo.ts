@@ -3,38 +3,42 @@ import MatchModel, { matchSchema } from "./match.schema.js";
 import Match, { MatchDetail } from "../domain/match.entity.js";
 
 export default class MatchMongoRepository implements IMatchRepository {
+  public async findAll(filters?: Record<string, any>): Promise<Match[] | null> {
+    try {
+      if (filters && filters.search) {
+        // Dividir los términos de búsqueda y crear un patrón que coincida con cualquiera
+        const searchTerms = filters.search.toLowerCase().split(" ");
+        const regexPattern = searchTerms
+          .map((term) => `(?=.*${term})`)
+          .join("");
+        const searchPattern = { $regex: regexPattern, $options: "i" };
 
-public async findAll(filters?: Record<string, any>): Promise<Match[] | null> {
-  try {
-    if (filters && filters.search) {
-      // Dividir los términos de búsqueda y crear un patrón que coincida con cualquiera
-      const searchTerms = filters.search.toLowerCase().split(' ');
-      const regexPattern = searchTerms.map(term => `(?=.*${term})`).join('');
-      const searchPattern = { $regex: regexPattern, $options: 'i' };
-      
-      filters = {
-        $or: [
-          { 'competition.name': searchPattern },
-          { 'home.name': searchPattern },
-          { 'away.name': searchPattern }
-        ]
-      };
+        filters = {
+          $or: [
+            { "competition.name": searchPattern },
+            { "home.name": searchPattern },
+            { "away.name": searchPattern },
+          ],
+        };
+      }
+      const mongoMatches = await MatchModel.find(filters)
+        .limit(50)
+        .sort({ date: -1 });
+      return mongoMatches.map((match) => new Match(match));
+    } catch (error) {
+      console.error("Error in findAll:", error);
+      return null;
     }
-    const mongoMatches = await MatchModel.find(filters).sort({ date: 1 });
-    return mongoMatches.map((match) => new Match(match));
-  } catch (error) {
-    console.error("Error in findAll:", error);
-    return null;
   }
-}
 
-
-  public async findRoundsByCompetitionId(competitionId: number): Promise<string[] | null> {
+  public async findRoundsByCompetitionId(
+    competitionId: number
+  ): Promise<string[] | null> {
     try {
       const rounds = await MatchModel.aggregate([
         { $match: { "competition.id": competitionId } },
         { $group: { _id: "$round" } },
-        { $sort: { _id: 1 } }
+        { $sort: { _id: 1 } },
       ]);
 
       return rounds.map((round) => round._id);
@@ -52,7 +56,9 @@ public async findAll(filters?: Record<string, any>): Promise<Match[] | null> {
       filters = { ...filters, date: { $eq: date } };
 
       // Query the database with the filters and sort by date
-      const mongoMatches = await MatchModel.find(filters).sort({ date: 1 });
+      const mongoMatches = await MatchModel.find(filters)
+        .limit(50)
+        .sort({ date: -1 });
 
       return mongoMatches.map((match) => new Match(match));
     } catch (error) {

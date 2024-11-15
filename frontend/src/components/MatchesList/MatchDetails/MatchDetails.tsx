@@ -57,7 +57,7 @@ const MatchDetails: React.FC<MatchDetailsProps> = ({ match }) => {
               : String(match.minute) + "'"
             : formatDate(new Date(match.date))}
           <Score>
-            {match.goals.home ?? 0} : {match.goals.away}
+            {match.goals.home} : {match.goals.away}
           </Score>
         </ScoreContainer>
 

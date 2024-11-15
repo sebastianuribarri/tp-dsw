@@ -13,19 +13,14 @@ export const MatchesGrid = styled.div`
 
 export const MatchCard = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: column; /* Keep this as column layout for both mobile and desktop */
   background-color: #2b2b2b;
   border-radius: 5px;
   transition: transform 0.3s;
   cursor: pointer;
-  padding: 5px 10px;
+  padding: 10px; /* Same padding for all screen sizes */
   border-left-width: 5px;
   border-color: #008641;
-  @media (min-width: 768px) {
-    flex-direction: row;
-    align-items: center;
-    padding: 15px;
-  }
 `;
 
 export const NoMatchesMessage = styled.div`

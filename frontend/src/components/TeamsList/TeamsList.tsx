@@ -11,6 +11,7 @@ const TeamsGrid = styled.div`
   gap: 10px;
 `;
 
+// Set a max-width for each card and ensure they all fit side by side
 const TeamCard = styled(Link)`
   display: flex;
   flex-direction: column;
@@ -22,6 +23,9 @@ const TeamCard = styled(Link)`
   text-align: center;
   cursor: pointer;
   height: 100px;
+
+  width: 100%; /* Ensure they take up available space but do not exceed max width */
+
   &:hover {
     padding-bottom: 0;
     transform: scale(1.05);

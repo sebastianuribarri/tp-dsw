@@ -8,7 +8,6 @@ import { CompetitionDetail } from "../../types/Competition";
 import CompetitionMatches from "./CompetitionMatches/CompetitionMatches";
 import CompetitionStandings from "./CompetitionStadings/CompetitionStandings";
 import CompetitionAbout from "./CompetitionAbout/CompetitionAbout";
-import CompetitionTeamsList from "./CompetitionTeamsList/CompetitionTeamList";
 
 import styled from "styled-components";
 import PageContent from "../../ui-components/PageContent";
@@ -18,7 +17,7 @@ const CompetitionContentContainer = styled.div`
 
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: space-around;
 `;
 
 const CompetitionPage = () => {
@@ -63,11 +62,6 @@ const CompetitionPage = () => {
               <CompetitionMatches
                 competitionId={competitionDetail.id}
                 rounds={competitionDetail.rounds}
-              />
-
-              <CompetitionTeamsList
-                teams={competitionDetail.standings.map((s) => s.team)}
-                message="Esta competencia no tiene equipos"
               />
             </CompetitionContentContainer>
             <CompetitionAbout
