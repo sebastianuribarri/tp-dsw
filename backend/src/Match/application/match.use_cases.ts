@@ -199,7 +199,7 @@ export default class MatchUseCases {
         "El termino de busqueda debe tener al menos 4 caracteres"
       );
     }
-        console.log("Filters before getBySarch: ", { search: value });
+        console.log("Filters before getBySearch: ", { search: value });
 
     return await this.matchDbRepository.findAll({ search: value });
   }

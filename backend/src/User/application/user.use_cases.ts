@@ -40,10 +40,21 @@ export default class UserUseCases {
     });
   }
 
-  public async register(user: User) {
-    user.password = await bcrypt.hash(user.password, 10);
-    await this.userDbRepository.insertOne(user);
+public async register(user: User) {
+  // Chequea que el username no exista
+  const existingUser = await this.userDbRepository.findByUsername(user.username);
+  if (existingUser) {
+    throw new Error('Nombre de usuario ya registrado');
   }
+  const existingMail = await this.userDbRepository.findByMail(user.mail);
+  if (existingMail) {
+    throw new Error('Email ya registrado');
+  }
+
+  // Hash the password and proceed with registration
+  user.password = await bcrypt.hash(user.password, 10);
+  await this.userDbRepository.insertOne(user);
+}
 
   public async deleteUser(id: string) {
     return await this.userDbRepository.deleteOne(id);
@@ -51,10 +62,10 @@ export default class UserUseCases {
 
   public async login(username: string, password: string) {
     const user = await this.userDbRepository.findByUsername(username);
-    if (!user) throw new Error("User not found");
+    if (!user) throw new Error("Usuario no encontrado");
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
-    if (!isPasswordValid) throw new Error("Incorrect username or password");
+    if (!isPasswordValid) throw new Error("Usuario o contraseña incorrectos");
 
     // Generate JWT token
     const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
