@@ -57,7 +57,7 @@ function App() {
       <GlobalStyle />
       <BrowserRouter>
         <AppContainer>
-          {isLoggedIn ? <Menu /> : <></>}
+          <Menu />
           <MainContent isMenuVisible={isLoggedIn}>
             <Routes>
               <Route
