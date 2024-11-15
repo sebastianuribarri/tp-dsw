@@ -1,8 +1,15 @@
 import Competition from "../../Competition/domain/competition.entity.js";
+import { teamSchema } from "../../Team/infrastructure/team.schema.js";
 import User from "../domain/user.entity.js";
 import { IUserRepository } from "../domain/user.repository.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+
+const teamSchema = ({
+  id: { type: Number, required: true },
+  name: { type: String, required: true },
+  logo: { type: String, required: true },
+});
 
 export default class UserUseCases {
   private userDbRepository: IUserRepository;
@@ -57,10 +64,12 @@ export default class UserUseCases {
     return { user, token };
   }
 
-  public async followTeam(id: string, teamId: number) {
+  
+
+  public async followTeam(id: string, team: {id: number, name: string, logo: string}) {
     const user = await this.getUser(id);
-    if (!user.teams.includes(teamId)) {
-      user.teams.push(teamId);
+    if (!user.teams.includes(team)) {
+      user.teams.push();
       await this.userDbRepository.updateOne(id, { teams: user.teams });
     }
   }

@@ -5,6 +5,7 @@ import Competition, {
   CompetitionDetail,
 } from "../domain/competition.entity.js";
 import StandingUseCases from "../../Standing/application/standing.use_cases.js";
+import IMatchRepository from "../../Match/domain/match.repository.js";
 
 const REGIONS = ["Argentina", "World"];
 // const REGIONS = ["Argentina"];
@@ -12,6 +13,7 @@ export default class CompetitionUseCases {
   public constructor(
     private readonly competitionApiRepository: IApiRepository<Competition>,
     private readonly competitionDbRepository: ICompetitionRepository,
+    private readonly matchDbRepository: IMatchRepository,
     private readonly standingUseCases: StandingUseCases
   ) {}
 
@@ -52,6 +54,7 @@ export default class CompetitionUseCases {
   public async getCompetition(id: number) {
     await this.needUpdate();
     let competitionDetail = await this.competitionDbRepository.findById(id);
+    competitionDetail.rounds = await this.getRoundsByCompetitionId(id);
     const newStandings = await this.standingUseCases.needUpdate(
       competitionDetail
     );
@@ -61,6 +64,10 @@ export default class CompetitionUseCases {
     }
 
     return competitionDetail;
+  }
+
+  private async getRoundsByCompetitionId(competitionId: number): Promise<string[] | null> {
+    return await this.matchDbRepository.findRoundsByCompetitionId(competitionId);
   }
 
   public async getCompetitionsByTeam(teamId: number) {
@@ -101,7 +108,7 @@ export default class CompetitionUseCases {
         newCompetitionStandings
       );
     } else {
-      competitionDetail = new CompetitionDetail(competition, []);
+      competitionDetail = new CompetitionDetail(competition, [], []);
     }
     return await this.competitionDbRepository.insertOne(competitionDetail);
   }
