@@ -5,7 +5,7 @@ import { registerUser } from "../../api/user"; // Función para registrar usuari
 import { Link } from "react-router-dom";
 const RegisterPage: React.FC = () => {
   const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
+  const [mail, setMail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -24,7 +24,7 @@ const RegisterPage: React.FC = () => {
     }
 
     try {
-      const user = { username, email, password };
+      const user = { username, mail, password };
       const response = await registerUser(user);
       const data = response.data;
       console.log("User registered:", data);
@@ -56,8 +56,8 @@ const RegisterPage: React.FC = () => {
             <Label>Email</Label>
             <Input
               type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={mail}
+              onChange={(e) => setMail(e.target.value)}
               required
             />
           </InputWrapper>
