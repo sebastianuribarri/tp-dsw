@@ -30,7 +30,7 @@ const RegisterPage: React.FC = () => {
       console.log("User registered:", data);
 
       navigate("/login"); // Redirige al login después del registro exitoso
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Registration failed:", err);
       setError(err.response?.data?.message || "Registration failed");
     } finally {
