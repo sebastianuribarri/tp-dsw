@@ -1,5 +1,4 @@
 import Competition from "../../Competition/domain/competition.entity.js";
-import { teamSchema } from "../../Team/infrastructure/team.schema.js";
 import User from "../domain/user.entity.js";
 import { IUserRepository } from "../domain/user.repository.js";
 import bcrypt from "bcryptjs";
@@ -76,7 +75,7 @@ export default class UserUseCases {
 
   public async unfollowTeam(id: string, teamId: number) {
     const user = await this.getUser(id);
-    user.teams = user.teams.filter((teamId_) => teamId_ !== teamId);
+    user.teams = user.teams.filter((team) => team.id !== teamId);
     await this.userDbRepository.updateOne(id, { teams: user.teams });
   }
 }
