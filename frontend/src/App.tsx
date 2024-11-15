@@ -23,7 +23,6 @@ const GlobalStyle = createGlobalStyle`
 const AppContainer = styled.div`
   display: flex;
   flex-direction: column;
-  height: 100vh;
   overflow: hidden;
 
   @media (min-width: 768px) {
@@ -31,23 +30,35 @@ const AppContainer = styled.div`
   }
 `;
 
-const MainContent = styled.div`
+const MainContent = styled.div<{ isMenuVisible: boolean }>`
   flex: 1;
   overflow-y: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   @media (min-width: 768px) {
-    margin-top: 0;
-    margin-left: 200px; /* Adjust to match the HeaderNavbarContainer width */
+    ${({ isMenuVisible }) =>
+      isMenuVisible
+        ? `
+      margin-left: 200px; /* Ajusta este valor al ancho del menú */
+    `
+        : `
+      margin-left: 0;
+      justify-content: center;
+    `}
   }
 `;
 
 function App() {
+  const isLoggedIn = !!sessionStorage.getItem("authToken");
   return (
     <>
       <GlobalStyle />
       <BrowserRouter>
         <AppContainer>
-          <Menu />
-          <MainContent>
+          {isLoggedIn ? <Menu /> : <></>}
+          <MainContent isMenuVisible={isLoggedIn}>
             <Routes>
               <Route
                 path="/"

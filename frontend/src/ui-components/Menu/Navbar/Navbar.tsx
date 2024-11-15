@@ -1,23 +1,43 @@
-// background: linear-gradient(to top, #000, #00000015);
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { FaHome, FaSearch, FaUser } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { FaHome, FaSearch, FaUser, FaSignOutAlt } from "react-icons/fa";
+import { Link, useNavigate } from "react-router-dom";
+import AppLogo from "../../AppLogo/AppLogo";
+import { getUserById } from "../../../api/user";
+import { User } from "../../../types/User";
 
 const Nav = styled.nav`
   width: 100%;
   display: flex;
-  justify-content: space-around;
-  position: fixed;
-  bottom: 0;
-  background: linear-gradient(to top, #000, #00000015);
-  transition: background 0.3s;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: #333;
 
   @media (min-width: 768px) {
-    flex-direction: column;
-    position: static;
+    position: fixed;
+    top: 0;
+    height: 100%;
     width: 200px;
-    background: none; /* Remove gradient for desktop */
+  }
+
+  @media (max-width: 767px) {
+    position: fixed;
+    bottom: 0;
+    flex-direction: row;
+    justify-content: space-around;
+    height: 60px;
+    background: linear-gradient(to top, #000, #00000015);
+  }
+`;
+
+const LinksContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+
+  @media (max-width: 767px) {
+    flex-direction: row;
+    flex-grow: 0;
   }
 `;
 
@@ -25,65 +45,140 @@ const NavLink = styled(Link)`
   color: white;
   text-decoration: none;
   display: flex;
-  flex-direction: column; /* Stack icon and text vertically */
   align-items: center;
-  padding: 10px;
+  padding: 15px;
   font-size: 1em;
-  text-align: center;
-  font-weight: normal;
-  background-color: transparent; /* Default background color */
   transition: background-color 0.3s, transform 0.3s;
 
-  width: 33.33%;
   &:hover {
     font-weight: bold;
     background-color: #22222290;
     transform: scale(1.05);
   }
 
-  @media (min-width: 768px) {
-    width: 100%;
-    flex-direction: row; /* Align icon and text horizontally on desktop */
-    font-size: 0.9em; /* Adjust font size for desktop */
-    padding: 15px; /* Increase padding on desktop */
-    border-bottom: none; /* Remove bottom border for desktop */
+  @media (max-width: 767px) {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    font-size: 0.9em;
   }
 `;
 
 const Icon = styled.span`
-  margin-bottom: 5px; /* Space between icon and text */
-  font-size: 1.5em; /* Default icon size for mobile */
-  transition: font-size 0.3s; /* Smooth transition for icon size */
+  margin-right: 8px;
+  font-size: 1.2em;
 
-  @media (min-width: 768px) {
-    margin-right: 8px; /* Remove space between icon and text on desktop */
-    font-size: 1.2em; /* Adjust icon size for desktop */
+  @media (max-width: 767px) {
+    margin-right: 0;
+    margin-bottom: 5px;
+    font-size: 1.5em;
+  }
+`;
+
+const UserInfo = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px;
+  background-color: #444;
+  color: white;
+
+  @media (max-width: 767px) {
+    display: none;
+  }
+`;
+
+const LogoutButton = styled.button`
+  background-color: transparent;
+  border: none;
+  color: white;
+  font-size: 1em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: transform 0.3s;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+`;
+
+const AppLogoContainer = styled.div`
+  padding: 15px;
+  text-align: center;
+
+  @media (max-width: 767px) {
+    display: none;
   }
 `;
 
 const Navbar: React.FC = () => {
-  const path = window.location.pathname;
+  const navigate = useNavigate();
+  const [user, setUser] = useState<User | null>(null);
+
+  const userId = sessionStorage.getItem("userId");
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      if (userId) {
+        try {
+          const response = await getUserById(userId);
+          setUser(response.data);
+        } catch (error) {
+          console.error("Error fetching user:", error);
+        }
+      }
+    };
+
+    fetchUser();
+  }, [userId]);
+
+  const handleLogout = () => {
+    sessionStorage.removeItem("authToken");
+    sessionStorage.removeItem("userId");
+    navigate("/login");
+  };
 
   return (
     <Nav>
-      <NavLink to="/" className={path === "/" ? "active" : ""}>
-        <Icon>
-          <FaHome />
-        </Icon>
-        Inicio
-      </NavLink>
-      <NavLink to="/explorer" className={path === "/explorer" ? "active" : ""}>
-        <Icon>
-          <FaSearch />
-        </Icon>
-        Explorar
-      </NavLink>
-      <NavLink to="/profile" className={path === "/profile" ? "active" : ""}>
-        <Icon>
-          <FaUser />
-        </Icon>
-        Perfil
-      </NavLink>
+      <AppLogoContainer>
+        <AppLogo />
+      </AppLogoContainer>
+      {user ? (
+        <>
+          <LinksContainer>
+            <NavLink to="/">
+              <Icon>
+                <FaHome />
+              </Icon>
+              Inicio
+            </NavLink>
+            <NavLink to="/explorer">
+              <Icon>
+                <FaSearch />
+              </Icon>
+              Explorar
+            </NavLink>
+            <NavLink to="/profile">
+              <Icon>
+                <FaUser />
+              </Icon>
+              Perfil
+            </NavLink>
+          </LinksContainer>
+          <UserInfo>
+            <span>{user.username}</span>
+            <LogoutButton onClick={handleLogout}>
+              <FaSignOutAlt /> Salir
+            </LogoutButton>
+          </UserInfo>
+        </>
+      ) : (
+        <UserInfo>
+          <span>Invitado</span>
+        </UserInfo>
+      )}
     </Nav>
   );
 };

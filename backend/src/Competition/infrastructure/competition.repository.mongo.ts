@@ -38,12 +38,13 @@ public async findAll(filters?: Record<string,any>): Promise<Competition[] | null
 
     if (!competition) return null;
     let standings: Standing[];
+    let rounds: string[];
     if (competition.standings) {
       standings = competition.standings.map(
         (standing) => new Standing(standing)
       );
     } else standings = [];
-    return new CompetitionDetail(competition, standings);
+    return new CompetitionDetail(competition, standings, rounds);
   }
 
   public async insertOne(competition: CompetitionDetail): Promise<void> {

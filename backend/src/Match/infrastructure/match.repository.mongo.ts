@@ -20,8 +20,6 @@ public async findAll(filters?: Record<string, any>): Promise<Match[] | null> {
         ]
       };
     }
-
-
     const mongoMatches = await MatchModel.find(filters).sort({ date: 1 });
     return mongoMatches.map((match) => new Match(match));
   } catch (error) {
@@ -29,6 +27,22 @@ public async findAll(filters?: Record<string, any>): Promise<Match[] | null> {
     return null;
   }
 }
+
+
+  public async findRoundsByCompetitionId(competitionId: number): Promise<string[] | null> {
+    try {
+      const rounds = await MatchModel.aggregate([
+        { $match: { "competition.id": competitionId } },
+        { $group: { _id: "$round" } },
+        { $sort: { _id: 1 } }
+      ]);
+
+      return rounds.map((round) => round._id);
+    } catch (error) {
+      console.error("Error in findRoundsByCompetitionId:", error);
+      return null;
+    }
+  }
 
   public async findByDate(
     date: Date,
