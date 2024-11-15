@@ -15,7 +15,6 @@ const TeamMatches: React.FC<TeamMatchesProps> = ({ teamId }) => {
       if (!teamId) setMatches([]);
       else {
         const res = await getMatchesByTeam(teamId);
-        console.log(res.data);
         setMatches(res.data);
       }
     };

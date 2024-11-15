@@ -9,10 +9,21 @@ interface CompetitionHeaderProps {
 
 const HeaderContainer = styled.div`
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  align-items: center; /* Centra verticalmente */
+  justify-content: center; /* Centra horizontalmente */
   padding: 0 10px;
   width: 100%;
+  position: relative; /* Permite posicionar el botón de retroceso */
+`;
+
+const BackButtonContainer = styled.div`
+  position: absolute;
+  left: 10px; /* Ubica el botón de retroceso a la izquierda */
+`;
+
+const LogoAndNameContainer = styled.div`
+  display: flex;
+  align-items: center; /* Centra logo y nombre en línea */
 `;
 
 const Logo = styled.img`
@@ -21,16 +32,10 @@ const Logo = styled.img`
   object-fit: contain;
 `;
 
-const InfoContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  margin-left: 20px;
-`;
-
 const CompetitionName = styled.h1`
   font-size: 20px;
   font-weight: bold;
+  margin-left: 10px; /* Espacio entre logo y nombre */
 `;
 
 const CompetitionHeader: React.FC<CompetitionHeaderProps> = ({
@@ -38,11 +43,13 @@ const CompetitionHeader: React.FC<CompetitionHeaderProps> = ({
 }) => {
   return (
     <HeaderContainer>
-      <BackButton />
-      <Logo src={competition.logo} alt={`${competition.name} logo`} />
-      <InfoContainer>
+      <BackButtonContainer>
+        <BackButton />
+      </BackButtonContainer>
+      <LogoAndNameContainer>
+        <Logo src={competition.logo} alt={`${competition.name} logo`} />
         <CompetitionName>{competition.name}</CompetitionName>
-      </InfoContainer>
+      </LogoAndNameContainer>
     </HeaderContainer>
   );
 };

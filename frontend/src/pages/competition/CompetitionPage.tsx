@@ -11,6 +11,7 @@ import CompetitionAbout from "./CompetitionAbout/CompetitionAbout";
 import CompetitionTeamsList from "./CompetitionTeamsList/CompetitionTeamList";
 
 import styled from "styled-components";
+import PageContent from "../../ui-components/PageContent";
 
 const CompetitionContentContainer = styled.div`
   display: flex;
@@ -52,11 +53,11 @@ const CompetitionPage = () => {
   return (
     <>
       {competitionDetail ? (
-        <>
+        <Page>
           <PageMenu>
             <CompetitionHeader competition={competitionDetail} />
           </PageMenu>
-          <Page>
+          <PageContent>
             <CompetitionContentContainer>
               <CompetitionStandings standings={competitionDetail.standings} />
               <CompetitionMatches
@@ -73,10 +74,10 @@ const CompetitionPage = () => {
               start={competitionDetail.start}
               end={competitionDetail.end}
             />
-          </Page>
-        </>
+          </PageContent>
+        </Page>
       ) : (
-        <p>Competición No existe</p>
+        <p>Competicia No existe</p>
       )}
     </>
   );

@@ -11,6 +11,7 @@ interface PageProps {
 const PageContainer = styled.div`
   margin-bottom: 60px;
   flex: 1;
+  padding: 20px;
   overflow-y: auto;
 
   @media (min-width: 768px) {
@@ -18,8 +19,8 @@ const PageContainer = styled.div`
   }
 `;
 
-const Page: React.FC<PageProps> = ({ children }) => {
+const PageContent: React.FC<PageProps> = ({ children }) => {
   return <PageContainer>{children}</PageContainer>;
 };
 
-export default Page;
+export default PageContent;

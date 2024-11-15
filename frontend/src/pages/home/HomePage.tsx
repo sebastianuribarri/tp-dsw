@@ -2,16 +2,17 @@ import React from "react";
 import FollowedTeams from "./components/FollowedTeams";
 import LiveMatches from "./components/LiveMatches";
 import UpcomingMatches from "./components/UpcomingMathes";
-import Page from "../../ui-components/Page";
+
+import PageContent from "../../ui-components/PageContent";
 
 const Homepage: React.FC = () => {
   return (
     <>
-      <Page>
+      <PageContent>
         <FollowedTeams />
         <LiveMatches />
         <UpcomingMatches />
-      </Page>
+      </PageContent>
     </>
   );
 };

@@ -5,13 +5,13 @@ import Page from "../../ui-components/Page";
 import PageMenu from "../../ui-components/PageMenu/PageMenu";
 import MatchEvents from "./MatchEvents/MatchEvents"; // Placeholder for match events
 import MatchLineups from "./MatchLineups/MatchLineups";
-import MatchVote from "./MatchVote/MatchVote"; // Placeholder for voting
 import MatchPrediction from "./MatchPredictions/MatchPredictions"; // Placeholder for predictions
 import MatchAbout from "./MatchAbout/MatchAbout"; // Details about competition, round, and date
 import styled from "styled-components";
 
 import { MatchDetail } from "../../types/Match";
-import MatchDetails from "../../components/MatchesList/MatchDetails/MatchDetails";
+import MatchHeader from "./MatchHeader/MatchHeader";
+import PageContent from "../../ui-components/PageContent";
 
 const MatchContentContainer = styled.div`
   display: flex;
@@ -50,26 +50,26 @@ const MatchPage = () => {
     <>
       {matchDetail ? (
         <>
-          <PageMenu>
-            <MatchDetails match={matchDetail} />
-          </PageMenu>
           <Page>
-            <MatchContentContainer>
-              <MatchVote
-                matchId={matchDetail.id}
-                lineups={matchDetail.lineups}
+            <PageMenu>
+              <MatchHeader match={matchDetail} />
+            </PageMenu>
+            <PageContent>
+              <MatchContentContainer>
+                <MatchPrediction matchId={matchDetail.id} />
+                <MatchEvents
+                  events={matchDetail.events}
+                  homeTeam={matchDetail.home}
+                  awayTeam={matchDetail.away}
+                />
+                <MatchLineups lineups={matchDetail.lineups} />
+              </MatchContentContainer>
+              <MatchAbout
+                round={matchDetail.round}
+                date={matchDetail.date}
+                competition={matchDetail.competition}
               />
-              <MatchPrediction matchId={matchDetail.id} />
-            </MatchContentContainer>
-            <MatchContentContainer>
-                 <MatchEvents 
-                events={matchDetail.events}
-                homeTeam={matchDetail.home}
-                awayTeam={matchDetail.away}
-              />
-              <MatchLineups lineups={matchDetail.lineups} />
-            </MatchContentContainer>
-            <MatchAbout round={matchDetail.round} date={matchDetail.date} competition={matchDetail.competition}/>
+            </PageContent>
           </Page>
         </>
       ) : (

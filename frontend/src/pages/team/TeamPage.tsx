@@ -11,6 +11,7 @@ import TeamMatches from "./TeamMatches/TeamMatches";
 import TeamSeason from "./TeamSeason/TeamSeason";
 import TeamPlayersList from "./PlayersList/PlayersList";
 import styled from "styled-components";
+import PageContent from "../../ui-components/PageContent";
 
 const TeamContentContainer = styled.div`
   display: flex;
@@ -54,13 +55,13 @@ const TeamPage = () => {
           <PageMenu>
             <TeamHeader team={teamDetail} />
           </PageMenu>
-          <Page>
+          <PageContent>
             <TeamContentContainer>
               <TeamSeason />
               <TeamMatches teamId={teamDetail.id} />
               <TeamPlayersList players={teamDetail.players} />
             </TeamContentContainer>
-          </Page>
+          </PageContent>
         </>
       ) : (
         <p> Team No existe</p>

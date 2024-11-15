@@ -8,8 +8,8 @@ export default class MatchRoutes {
     server.use("/api/matches", matchesRouter);
     matchesRouter.get("/", matchesController.getAll);
     matchesRouter.get("/search", matchesController.getBySearch);
-    matchesRouter.get("/team", matchesController.getByTeam); 
-    matchesRouter.get("/teams", matchesController.getMatchesByTeams); 
+    matchesRouter.get("/team/:id", matchesController.getByTeam);
+    matchesRouter.get("/teams", matchesController.getMatchesByTeams);
     matchesRouter.get("/live", matchesController.getLiveMatches);
     matchesRouter.get("/:id", matchesController.getOne);
   }

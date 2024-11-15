@@ -8,7 +8,6 @@ interface ProtectedRouteProps {
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   // Verificar si el token está presente en sessionStorage
   const token = sessionStorage.getItem("authToken");
-  console.log(token);
   // Si no hay token, redirigir al login
   if (!token) {
     return <Navigate to="/login" />;

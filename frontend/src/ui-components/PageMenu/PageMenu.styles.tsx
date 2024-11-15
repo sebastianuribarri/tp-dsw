@@ -1,7 +1,7 @@
 import styled from "styled-components";
 // Header (PageMenu)
 export const PageMenuContainer = styled.header`
-  position: fixed; /* Fijado arriba */
+  position: sticky; /* Fijado arriba */
   top: 0;
   left: 0;
   width: 100%;
@@ -11,5 +11,4 @@ export const PageMenuContainer = styled.header`
   flex-direction: column;
   align-items: center;
   background-color: #292929;
-  height: 60px; /* Altura del header */
 `;

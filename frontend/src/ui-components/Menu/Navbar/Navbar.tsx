@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { FaHome, FaSearch, FaUser, FaSignOutAlt } from "react-icons/fa";
+import { FaHome, FaSearch, FaUser } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import AppLogo from "../../AppLogo/AppLogo";
 import { getUserById } from "../../../api/user";
@@ -18,8 +18,8 @@ const Nav = styled.nav`
     top: 0;
     height: 100%;
     width: 200px;
-    display: block; /* For desktop, keep it as a vertical menu */
-    z-index: 200; /* Ensure navbar is above content */
+    display: block;
+    z-index: 200;
   }
 
   @media (max-width: 767px) {
@@ -29,20 +29,18 @@ const Nav = styled.nav`
     justify-content: space-around;
     height: 60px;
     background: linear-gradient(to top, #000, #00000015);
-    display: block; /* Only show the bottom menu */
-    z-index: 200; /* Ensure navbar is above content */
+    z-index: 200;
   }
 `;
 
 const LinksContainer = styled.div`
   display: flex;
   flex-direction: column;
-  flex-grow: 1;
 
   @media (max-width: 767px) {
     flex-direction: row;
-    flex-grow: 0;
     width: 100%;
+    justify-content: space-around;
   }
 `;
 
@@ -63,12 +61,9 @@ const NavLink = styled(Link)`
   }
 
   @media (max-width: 767px) {
-    width: 33.33%;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 0;
     font-size: 0.9em;
+    flex-direction: column;
+    padding: 5px;
   }
 `;
 
@@ -78,7 +73,6 @@ const Icon = styled.span`
 
   @media (max-width: 767px) {
     margin-right: 0;
-    margin-bottom: 5px;
     font-size: 1.5em;
   }
 `;
@@ -120,31 +114,6 @@ const AppLogoContainer = styled.div`
   }
 `;
 
-const MenuContainer = styled.nav`
-  position: fixed;
-  top: 60px; /* Align under the header */
-  left: 0;
-  width: 200px;
-  height: 100%;
-  background-color: #333;
-  z-index: 200;
-
-  /* Hide vertical menu on mobile */
-  @media (max-width: 767px) {
-    display: none;
-  }
-`;
-
-const ContentWrapper = styled.div`
-  margin-bottom: 60px; /* Add space for the bottom navbar on mobile */
-  padding: 20px; /* Optional padding for content */
-
-  @media (max-width: 767px) {
-    margin-left: 0; /* Remove margin on mobile */
-    margin-bottom: 60px; /* Space for the bottom navbar */
-  }
-`;
-
 const Navbar: React.FC = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState<User | null>(null);
@@ -178,43 +147,37 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <>
-      <MenuContainer>
-        <Nav>
-          <AppLogoContainer>
-            <AppLogo />
-          </AppLogoContainer>
+    <Nav>
+      <AppLogoContainer>
+        <AppLogo />
+      </AppLogoContainer>
 
-          <LinksContainer>
-            <NavLink to="/">
-              <Icon>
-                <FaHome />
-              </Icon>
-              Inicio
-            </NavLink>
-            <NavLink to="/explorer">
-              <Icon>
-                <FaSearch />
-              </Icon>
-              Explorar
-            </NavLink>
-            <NavLink to="/profile">
-              <Icon>
-                <FaUser />
-              </Icon>
-              Perfil
-            </NavLink>
-          </LinksContainer>
-          <UserInfo>
-            <span>{user?.username}</span>
-            <LogoutButton onClick={handleLogout}>
-              <FaSignOutAlt /> Salir
-            </LogoutButton>
-          </UserInfo>
-        </Nav>
-      </MenuContainer>
-      <ContentWrapper>{/* Your main content goes here */}</ContentWrapper>
-    </>
+      <LinksContainer>
+        <NavLink to="/">
+          <Icon>
+            <FaHome />
+          </Icon>
+          Inicio
+        </NavLink>
+        <NavLink to="/explorer">
+          <Icon>
+            <FaSearch />
+          </Icon>
+          Explorar
+        </NavLink>
+        <NavLink to="/profile">
+          <Icon>
+            <FaUser />
+          </Icon>
+          Perfil
+        </NavLink>
+      </LinksContainer>
+
+      <UserInfo>
+        <span>{user?.username}</span>
+        <LogoutButton onClick={handleLogout}>Salir</LogoutButton>
+      </UserInfo>
+    </Nav>
   );
 };
 

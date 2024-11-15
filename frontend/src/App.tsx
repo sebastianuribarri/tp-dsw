@@ -8,8 +8,8 @@ import RegisterPage from "./pages/register/RegisterPage";
 import TeamPage from "./pages/team/TeamPage";
 import ProfilePage from "./pages/profile/ProfilePage";
 import ExplorerPage from "./pages/explorer/ExplorerPage";
-import Menu from "./ui-components/Menu/Menu";
 import ProtectedRoute from "./ProtectedRoute";
+import Navbar from "./ui-components/Menu/Navbar/Navbar";
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -20,43 +20,33 @@ const GlobalStyle = createGlobalStyle`
   }
 }`;
 
-const AppContainer = styled.div`
+export const AppContainer = styled.div`
   display: flex;
-  flex-direction: column;
-  overflow: hidden;
+  flex-direction: row; /* Layout horizontal por defecto */
 
-  @media (min-width: 768px) {
-    flex-direction: row;
+  @media (max-width: 767px) {
+    flex-direction: column; /* Cambia a columna en dispositivos móviles */
   }
 `;
 
-// Contenedor principal
-const MainContent = styled.div<{ isMenuVisible: boolean }>`
+export const MainContent = styled.main`
   flex: 1;
   overflow-y: auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  margin-left: 200px; /* Deja espacio para el Navbar en pantallas grandes */
 
-  /* Cuando la pantalla es más grande, ajustamos la margen */
-  @media (min-width: 768px) {
-    ${({ isMenuVisible }) =>
-      isMenuVisible
-        ? `margin-left: 200px;` /* Reserva espacio para la navbar */
-        : `margin-left: 0; justify-content: center;`}
+  @media (max-width: 767px) {
+    margin-left: 0; /* Sin margen en dispositivos móviles */
+    margin-bottom: 60px; /* Espacio para el Navbar inferior */
   }
 `;
-
 function App() {
-  const isLoggedIn = !!sessionStorage.getItem("authToken");
   return (
     <>
       <GlobalStyle />
       <BrowserRouter>
         <AppContainer>
-          <Menu />
-
-          <MainContent isMenuVisible={isLoggedIn}>
+          <Navbar />
+          <MainContent>
             <Routes>
               <Route
                 path="/"
