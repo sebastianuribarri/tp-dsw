@@ -15,6 +15,7 @@ export default class UserController {
 
   public async getOne(req: Request, res: Response) {
     try {
+      console.log("getOne");
       const user = await this.userUseCases.getUser(req.params.id);
       res.json(user);
     } catch (error) {
@@ -29,7 +30,6 @@ export default class UserController {
         password: req.body.password,
         username: req.body.username,
       });
-
       await this.userUseCases.register(user);
       res.status(201).json({ message: "User registered successfully" });
     } catch (error) {

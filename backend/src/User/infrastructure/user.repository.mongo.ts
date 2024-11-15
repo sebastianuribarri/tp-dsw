@@ -32,8 +32,22 @@ export default class UserMongoRepository implements IUserRepository {
       : null;
   }
 
-  public async findByUsername(username: string): Promise<User | null> {
-    const mongoUser = await UserModel.findOne({ username });
+public async findByUsername(username: string): Promise<User | null> {
+  const mongoUser = await UserModel.findOne({ username });
+  return mongoUser
+    ? new User({
+        mail: mongoUser.mail,
+        password: mongoUser.password,
+        premium: mongoUser.premium,
+        username: mongoUser.username,
+        id: mongoUser.id,
+        teams: mongoUser.teams,
+      })
+    : null;
+}
+
+  public async findByMail(mail: string): Promise<User | null> {
+    const mongoUser = await UserModel.findOne({ mail });
     return mongoUser
       ? new User({
           mail: mongoUser.mail,
