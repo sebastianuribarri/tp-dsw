@@ -69,7 +69,7 @@ const MatchPage = () => {
               />
               <MatchLineups lineups={matchDetail.lineups} />
             </MatchContentContainer>
-            <MatchAbout round={matchDetail.round} date={matchDetail.date} />
+            <MatchAbout round={matchDetail.round} date={matchDetail.date} competition={matchDetail.competition}/>
           </Page>
         </>
       ) : (
