@@ -12,6 +12,7 @@ interface Event {
   };
   type: string;
   detail: string;
+  time: number;
 }
 
 export default Event;

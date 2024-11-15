@@ -58,15 +58,17 @@ export default class Competition {
   }
 }
 
-
-
 export class CompetitionDetail extends Competition {
   standings: Standing[];
-  rounds: string[]|null;
+  rounds: string[] | null;
 
-  constructor(competition: CompetitionInput, standings: Standing[], rounds?: string[]) {
+  constructor(
+    competition: CompetitionInput,
+    standings: Standing[],
+    rounds?: string[]
+  ) {
     super(competition);
     this.standings = standings;
-    this.rounds = rounds??null;
+    this.rounds = rounds ?? null;
   }
 }

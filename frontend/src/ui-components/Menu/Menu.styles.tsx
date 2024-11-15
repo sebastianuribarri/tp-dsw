@@ -1,16 +1,14 @@
 import styled from "styled-components";
 
-export const MenuContainer = styled.div`
-  display: flex;
+// Navbar (Alineada a la izquierda)
+export const MenuContainer = styled.nav`
+  position: fixed; /* Fijado a la izquierda */
+  top: 60px; /* Alineado debajo del header */
+  left: 0;
+  width: 200px; /* Ajusta el tamaño de la navbar */
+  height: 100%;
+  background-color: #333;
+  z-index: 200; /* Z-index mayor para estar encima del header */
+  display: block;
   flex-direction: column;
-
-  @media (min-width: 768px) {
-    flex-direction: column;
-    width: 200px;
-    position: fixed;
-    height: 100%;
-    top: 0;
-    left: 0;
-    background-color: #333; /* Fondo oscuro para escritorio */
-  }
 `;

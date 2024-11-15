@@ -14,13 +14,10 @@ import styled from "styled-components";
 
 const CompetitionContentContainer = styled.div`
   display: flex;
-  flex-direction: column;
 
-  @media (min-width: 768px) {
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-between;
-  }
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
 `;
 
 const CompetitionPage = () => {
