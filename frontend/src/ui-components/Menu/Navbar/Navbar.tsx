@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import AppLogo from "../../AppLogo/AppLogo";
 import { getUserById } from "../../../api/user";
 import { User } from "../../../types/User";
+import { MenuContainer } from "../Menu.styles";
 
 const Nav = styled.nav`
   width: 100%;
@@ -38,6 +39,7 @@ const LinksContainer = styled.div`
   @media (max-width: 767px) {
     flex-direction: row;
     flex-grow: 0;
+    width: 100%;
   }
 `;
 
@@ -46,7 +48,8 @@ const NavLink = styled(Link)`
   text-decoration: none;
   display: flex;
   align-items: center;
-  padding: 15px;
+  justify-content: center;
+  padding: 10px 0;
   font-size: 1em;
   transition: background-color 0.3s, transform 0.3s;
 
@@ -57,6 +60,7 @@ const NavLink = styled(Link)`
   }
 
   @media (max-width: 767px) {
+    width: 33.33%; /* Asegura que cada link ocupe el 33% del ancho disponible en móvil */
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -116,8 +120,9 @@ const AppLogoContainer = styled.div`
 const Navbar: React.FC = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState<User | null>(null);
-
-  const userId = sessionStorage.getItem("userId");
+  const [userId, setUserId] = useState<string | null>(
+    sessionStorage.getItem("userId")
+  );
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -130,56 +135,60 @@ const Navbar: React.FC = () => {
         }
       }
     };
+    if (userId != sessionStorage.getItem("userId")) {
+      setUserId(sessionStorage.getItem("userId"));
 
-    fetchUser();
-  }, [userId]);
+      fetchUser();
+    }
+  }, [sessionStorage.getItem("userId")]);
 
   const handleLogout = () => {
     sessionStorage.removeItem("authToken");
     sessionStorage.removeItem("userId");
+    setUser(null);
+    setUserId(null);
     navigate("/login");
   };
 
   return (
-    <Nav>
-      <AppLogoContainer>
-        <AppLogo />
-      </AppLogoContainer>
-      {user ? (
-        <>
-          <LinksContainer>
-            <NavLink to="/">
-              <Icon>
-                <FaHome />
-              </Icon>
-              Inicio
-            </NavLink>
-            <NavLink to="/explorer">
-              <Icon>
-                <FaSearch />
-              </Icon>
-              Explorar
-            </NavLink>
-            <NavLink to="/profile">
-              <Icon>
-                <FaUser />
-              </Icon>
-              Perfil
-            </NavLink>
-          </LinksContainer>
-          <UserInfo>
-            <span>{user.username}</span>
-            <LogoutButton onClick={handleLogout}>
-              <FaSignOutAlt /> Salir
-            </LogoutButton>
-          </UserInfo>
-        </>
-      ) : (
-        <UserInfo>
-          <span>Invitado</span>
-        </UserInfo>
-      )}
-    </Nav>
+    <>
+      <MenuContainer>
+        <Nav>
+          <AppLogoContainer>
+            <AppLogo />
+          </AppLogoContainer>
+
+          <>
+            <LinksContainer>
+              <NavLink to="/">
+                <Icon>
+                  <FaHome />
+                </Icon>
+                Inicio
+              </NavLink>
+              <NavLink to="/explorer">
+                <Icon>
+                  <FaSearch />
+                </Icon>
+                Explorar
+              </NavLink>
+              <NavLink to="/profile">
+                <Icon>
+                  <FaUser />
+                </Icon>
+                Perfil
+              </NavLink>
+            </LinksContainer>
+            <UserInfo>
+              <span>{user?.username}</span>
+              <LogoutButton onClick={handleLogout}>
+                <FaSignOutAlt /> Salir
+              </LogoutButton>
+            </UserInfo>
+          </>
+        </Nav>
+      </MenuContainer>
+    </>
   );
 };
 
