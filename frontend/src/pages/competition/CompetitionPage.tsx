@@ -39,6 +39,7 @@ const CompetitionPage = () => {
           end: new Date(data.end),
           logo: data.logo,
           standings: data.standings,
+          rounds: data.rounds ?? [],
         });
       } catch (error) {
         console.error("Error fetching competition data:", error);
@@ -58,7 +59,11 @@ const CompetitionPage = () => {
           <Page>
             <CompetitionContentContainer>
               <CompetitionStandings standings={competitionDetail.standings} />
-              <CompetitionMatches competitionId={competitionDetail.id} />
+              <CompetitionMatches
+                competitionId={competitionDetail.id}
+                rounds={competitionDetail.rounds}
+              />
+
               <CompetitionTeamsList
                 teams={competitionDetail.standings.map((s) => s.team)}
                 message="Esta competencia no tiene equipos"

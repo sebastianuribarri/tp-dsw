@@ -40,31 +40,95 @@ export const NoMatchesMessage = styled.div`
   padding: 20px;
 `;
 
-interface CompetitionMatchesProps {
-  competitionId: number | null;
-}
-
 const CompetitionMatchesListContainer = styled.div`
   min-width: 50%;
 `;
 
+const SelectorContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 90%;
+  margin-bottom: 20px;
+`;
+
+const RoundSelector = styled.select`
+  background-color: #333;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 12px;
+  margin: 0 10px;
+  min-width: 120px;
+`;
+
+interface CompetitionMatchesProps {
+  competitionId: number | null;
+  rounds: string[];
+}
+
 const CompetitionMatches: React.FC<CompetitionMatchesProps> = ({
   competitionId,
+  rounds,
 }) => {
   const [matches, setMatches] = useState<Match[]>([]);
+  const [selectedRound, setSelectedRound] = useState<string | null>(null);
+
   useEffect(() => {
-    const fetchMatches = async (competitionId: number | null) => {
-      if (!competitionId) setMatches([]);
-      else {
-        const response = await getMatches({ "competition.id": competitionId });
+    if (rounds.length > 0 && selectedRound === null) {
+      setSelectedRound(rounds[0]); // Seleccionar el primer round por defecto si hay al menos uno
+    }
+  }, [rounds]);
+
+  useEffect(() => {
+    const fetchMatches = async (
+      competitionId: number | null,
+      round: string | null
+    ) => {
+      if (!competitionId) {
+        setMatches([]);
+        return;
+      }
+
+      const params: Record<string, any> = { "competition.id": competitionId };
+      if (round) {
+        params["round"] = round; // Agregar el round si está seleccionado
+      }
+
+      try {
+        const response = await getMatches(params);
         setMatches(response.data);
+      } catch (error) {
+        console.error("Error fetching matches:", error);
+        setMatches([]);
       }
     };
-    fetchMatches(competitionId);
-  }, [competitionId]);
+
+    fetchMatches(competitionId, selectedRound);
+  }, [competitionId, selectedRound]);
+
   return (
     <CompetitionMatchesListContainer>
       <Section title="Partidos">
+        <SelectorContainer>
+          <RoundSelector
+            value={selectedRound || ""}
+            onChange={(e) => setSelectedRound(e.target.value || null)}
+          >
+            {rounds.length === 0 ? (
+              <option value="" disabled>
+                No hay rondas disponibles
+              </option>
+            ) : (
+              rounds.map((round, index) => (
+                <option key={index} value={round}>
+                  {round}
+                </option>
+              ))
+            )}
+          </RoundSelector>
+        </SelectorContainer>
         {matches.length === 0 ? (
           <NoMatchesMessage>
             No hay partidos en esta competencia

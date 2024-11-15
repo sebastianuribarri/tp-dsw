@@ -146,12 +146,13 @@ export default class MatchUseCases {
   }
 
   public async getMatchesByTeams(teamIds: number[]) {
-    const filters = { $or: [{ "home.id": { $in: teamIds } }, { "away.id": { $in: teamIds } }] };
+    const filters = {
+      $or: [{ "home.id": { $in: teamIds } }, { "away.id": { $in: teamIds } }],
+    };
     return await this.listMatches(filters);
   }
 
   public async listMatches(filters: Record<string, any>) {
-
     if (filters && filters.date) {
       let start = new Date(filters.date);
       start.setHours(0, 0, 0, 0);
@@ -186,7 +187,7 @@ export default class MatchUseCases {
     }
     // get matches updated from db repo
     if (matchChange) {
-          console.log("Filters after listMatches: ", originalFilters);
+      console.log("Filters after listMatches: ", originalFilters);
 
       return await this.matchDbRepository.findAll(originalFilters);
     }
@@ -199,7 +200,7 @@ export default class MatchUseCases {
         "El termino de busqueda debe tener al menos 4 caracteres"
       );
     }
-        console.log("Filters before getBySearch: ", { search: value });
+    console.log("Filters before getBySearch: ", { search: value });
 
     return await this.matchDbRepository.findAll({ search: value });
   }
@@ -227,11 +228,11 @@ export default class MatchUseCases {
     if (
       newMatch.date !== match.date ||
       newMatch.goals !== match.goals ||
-      newMatch.status !== match.status
+      newMatch.status !== match.status ||
+      newMatch.round != match.round
     ) {
-      matchDataChange = true;
+      await this.matchDbRepository.updateOne(match.id, newMatch);
     }
-    await this.matchDbRepository.updateOne(match.id, match);
   }
 
   private async createMatch(match: Match) {

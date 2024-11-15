@@ -10,6 +10,7 @@ export default interface Competition {
 
 export interface CompetitionDetail extends Competition {
   standings: Standing[];
+  rounds: string[];
 }
 
 export default Competition;
