@@ -62,11 +62,11 @@ export default class Competition {
 
 export class CompetitionDetail extends Competition {
   standings: Standing[];
-  rounds?: string[];
+  rounds: string[]|null;
 
   constructor(competition: CompetitionInput, standings: Standing[], rounds?: string[]) {
     super(competition);
     this.standings = standings;
-    this.rounds = rounds;
+    this.rounds = rounds??null;
   }
 }
