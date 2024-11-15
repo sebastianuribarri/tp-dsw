@@ -9,8 +9,20 @@ export default class MatchController {
     this.getByTeam = this.getByTeam.bind(this);
     this.getLiveMatches = this.getLiveMatches.bind(this);
     this.getBySearch = this.getBySearch.bind(this);
+    this.getMatchesByTeams = this.getMatchesByTeams.bind(this);
   }
 
+public async getMatchesByTeams(req: Request, res: Response) {
+  try {
+    const teamIds = (req.query.teamIds as string).split(',').map(Number); // Convertir a arreglo de números
+    console.log("teamIds:", teamIds);
+    const result = await this.matchUseCases.getMatchesByTeams(teamIds);
+    res.json(result);
+  } catch (error) {
+    console.log(error);
+    res.status(404).send({ message: "matches not found" });
+  }
+}
   public async getAll(req: Request, res: Response) {
     try {
       console.log(req.query);

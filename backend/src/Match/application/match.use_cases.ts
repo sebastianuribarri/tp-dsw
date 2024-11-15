@@ -145,10 +145,13 @@ export default class MatchUseCases {
     return await this.listMatches(filters);
   }
 
-  // public async listMatchesByTeams(teamIds: number[]) {}
+  public async getMatchesByTeams(teamIds: number[]) {
+    const filters = { $or: [{ "home.id": { $in: teamIds } }, { "away.id": { $in: teamIds } }] };
+    return await this.listMatches(filters);
+  }
 
   public async listMatches(filters: Record<string, any>) {
-    
+
     if (filters && filters.date) {
       let start = new Date(filters.date);
       start.setHours(0, 0, 0, 0);
