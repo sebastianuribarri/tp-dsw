@@ -5,7 +5,7 @@ import { registerUser } from "../../api/user"; // Función para registrar usuari
 import { Link } from "react-router-dom";
 const RegisterPage: React.FC = () => {
   const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
+  const [mail, setMail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -24,18 +24,24 @@ const RegisterPage: React.FC = () => {
     }
 
     try {
-      const user = { username, email, password };
-      const response = await registerUser(user);
-      const data = response.data;
-      console.log("User registered:", data);
+  const user = { username, mail, password };
+  const response = await registerUser(user);
+  const data = response.data;
+  console.log("User registered:", data);
 
-      navigate("/login"); // Redirige al login después del registro exitoso
-    } catch (err: any) {
-      console.error("Registration failed:", err);
-      setError(err.response?.data?.message || "Registration failed");
-    } finally {
-      setLoading(false);
-    }
+  navigate("/login"); // Redirige al login después del registro exitoso
+} catch (err: unknown) {
+  if (err instanceof Error) {
+    console.error("Registration failed:", err.message);
+    setError(err.message || "Registration failed");
+  } else {
+    console.error("Unknown error occurred:", err);
+    setError("Registration failed");
+  }
+} finally {
+  setLoading(false);
+}
+
   };
 
   return (
@@ -56,8 +62,8 @@ const RegisterPage: React.FC = () => {
             <Label>Email</Label>
             <Input
               type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={mail}
+              onChange={(e) => setMail(e.target.value)}
               required
             />
           </InputWrapper>
