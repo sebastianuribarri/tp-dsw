@@ -3,6 +3,7 @@ import { Response, Request } from "express";
 import User from "../domain/user.entity.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import Team from "../../Team/domain/team.entity.js";
 
 export default class UserController {
   constructor(private userUseCases: UserUseCases) {
@@ -23,7 +24,6 @@ export default class UserController {
 
   public async register(req: Request, res: Response) {
     try {
-      //  const passwordHash = await bcrypt.hash(req.body.password, 10);
       const user = new User({
         mail: req.body.mail,
         password: req.body.password,
@@ -58,9 +58,10 @@ export default class UserController {
 
   public async followTeam(req: Request, res: Response) {
     try {
+      // Asegurarnos de pasar los parámetros correctamente
       await this.userUseCases.followTeam(
-        req.params.id,
-        Number(req.params.team)
+        req.body.id, // id del usuario
+        req.body.teamId // id del equipo
       );
       res.status(200).json({ message: "Team followed successfully" });
     } catch (error) {
@@ -70,9 +71,10 @@ export default class UserController {
 
   public async unfollowTeam(req: Request, res: Response) {
     try {
+      // Pasar los parámetros correctamente con req.query
       await this.userUseCases.unfollowTeam(
-        req.params.id,
-        Number(req.params.team)
+        req.query.id as string, // id del usuario
+        Number(req.query.teamId) // Convertir teamId de string a número
       );
       res.status(200).json({ message: "Team unfollowed successfully" });
     } catch (error) {
@@ -80,3 +82,4 @@ export default class UserController {
     }
   }
 }
+

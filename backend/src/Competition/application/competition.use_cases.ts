@@ -47,8 +47,8 @@ export default class CompetitionUseCases {
     return await this.competitionDbRepository.findAll();
   }
 
-  public async getBySearch(value: string){
-    return await this.competitionDbRepository.findAll({search: value});
+  public async getBySearch(value: string) {
+    return await this.competitionDbRepository.findAll({ search: value });
   }
 
   public async getCompetition(id: number) {

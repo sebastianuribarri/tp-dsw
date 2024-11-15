@@ -1,5 +1,8 @@
-import Team from "./Team";
+import { MatchStatus } from "./MatchStatus"; 
+
+import Team from "./Team"; 
 import Event from "./Event";
+
 interface Match {
   id: number;
   competition: {
@@ -10,7 +13,7 @@ interface Match {
     logo: string;
   };
   round: string;
-  status: string;
+  status: MatchStatus; 
   minute?: number;
   timezone: string;
   date: string;
@@ -25,8 +28,9 @@ interface Match {
 }
 
 export interface MatchDetail extends Match {
-  events: Event[];
-  lineups: LineUp[];
+  events: Event[];  
+  lineups: LineUp[]; 
 }
 
 export default Match;
+

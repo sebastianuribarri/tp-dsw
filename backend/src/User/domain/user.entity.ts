@@ -4,7 +4,7 @@ export default class User {
   mail: string;
   password: string;
   premium: boolean;
-  teams: number[];
+  teams: {id: number; name: string ; logo: string }[];
   username: string;
   id: string;
 
@@ -12,7 +12,7 @@ export default class User {
     mail: string;
     password: string;
     premium?: boolean;
-    teams?: number[];
+    teams?: {id: number; name: string ; logo: string }[];
     username: string;
     id?: string;
   }) {
