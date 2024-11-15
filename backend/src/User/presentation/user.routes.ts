@@ -6,11 +6,11 @@ export default class UsersRoutes {
     const userRouter = Router();
     server.use("/api/users", userRouter);
 
-    // Obtener usuario por ID
-    userRouter.get("/:id", userController.getOne);
-
     // Registrar usuario (ruta de registro)
     userRouter.post("/register", userController.register);
+
+    // Obtener usuario por ID
+    userRouter.get("/:id", userController.getOne);
 
     // Eliminar usuario por ID
     userRouter.delete("/:id", userController.deleteOne);

@@ -48,7 +48,7 @@ export default class UserUseCases {
     if (!user) throw new Error("User not found");
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
-    if (!isPasswordValid) throw new Error("Incorrect email or password");
+    if (!isPasswordValid) throw new Error("Incorrect username or password");
 
     // Generate JWT token
     const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {

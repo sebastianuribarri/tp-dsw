@@ -23,10 +23,10 @@ export default class UserController {
 
   public async register(req: Request, res: Response) {
     try {
-      const passwordHash = await bcrypt.hash(req.body.password, 10);
+      //  const passwordHash = await bcrypt.hash(req.body.password, 10);
       const user = new User({
         mail: req.body.mail,
-        password: passwordHash,
+        password: req.body.password,
         username: req.body.username,
       });
 
