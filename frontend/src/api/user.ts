@@ -1,7 +1,11 @@
 import axios from "axios";
 import { User } from "../types/User";
-import API_URL from "./api_url";
+//import API_URL from "./api_url";
 
+<<<<<<< HEAD
+=======
+const url = 'http://localhost:5000/api/users'; 
+>>>>>>> profilepage
 
 const url = `${API_URL}users`; // Ruta base actualizada
 
