@@ -1,8 +1,8 @@
 import axios from "axios";
 import { User } from "../types/User";
-import API_URL from "./api_url";
+//import API_URL from "./api_url";
 
-const url = 'http://localhost:5000/api/users'; // Asegúrate de que esta URL coincida con la del backend
+const url = 'http://localhost:5000/api/users'; 
 
 //const url = `${API_URL}users`; // Ruta base actualizada
 
