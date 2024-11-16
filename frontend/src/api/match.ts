@@ -8,6 +8,13 @@ export const getMatches = async (filters: object) =>
 export const getMatchesByTeam = async (teamId: number) =>
   await axios.get(url + "team/" + String(teamId));
 
+export const getMatchesByTeams = async (teamsIds: number[]) =>
+  await axios.get(url + "teams/", {
+    params: {
+      teamIds: teamsIds.join(","),
+    },
+  });
+
 export const getLiveMatches = async () => await axios.get(url + "live/");
 
 export const getMatch = async (matchId: number) =>

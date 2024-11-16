@@ -31,6 +31,7 @@ export default class MatchUseCases {
     const competition = await this.competitionUseCases.getCompetition(
       matchCompetition.id
     );
+    console.log("competitionMatches timmer", competition.matchesTimmer);
     const matchesUpdated = competition.matchesTimmer.matchesUpdated(
       competition.end
     );
@@ -187,8 +188,6 @@ export default class MatchUseCases {
     }
     // get matches updated from db repo
     if (matchChange) {
-      console.log("Filters after listMatches: ", originalFilters);
-
       return await this.matchDbRepository.findAll(originalFilters);
     }
     return matches;
@@ -222,21 +221,26 @@ export default class MatchUseCases {
   }
 
   private async updateMatch(match: Match, newMatch: Match) {
-    let matchDataChange: boolean = false;
-    if (newMatch instanceof MatchDetail) {
-    }
-    if (
-      newMatch.date !== match.date ||
-      newMatch.goals !== match.goals ||
-      newMatch.status !== match.status ||
-      newMatch.round != match.round
-    ) {
-      await this.matchDbRepository.updateOne(match.id, newMatch);
+    if (match && newMatch) {
+      const hasChanges =
+        match.date !== newMatch.date ||
+        match.minute !== newMatch.minute ||
+        JSON.stringify(match.goals) !== JSON.stringify(newMatch.goals) ||
+        match.status !== newMatch.status ||
+        match.round !== newMatch.round;
+      if (hasChanges) {
+        match.date = newMatch.date;
+        match.round = newMatch.round;
+        match.minute = newMatch.minute;
+        match.goals = newMatch.goals;
+        match.status = newMatch.status;
+        await this.matchDbRepository.updateOne(match.id, match);
+      }
     }
   }
 
   private async createMatch(match: Match) {
     const matchDetail = new MatchDetail(match, [], []);
-    let dbMatch = await this.matchDbRepository.insertOne(matchDetail);
+    await this.matchDbRepository.insertOne(matchDetail);
   }
 }

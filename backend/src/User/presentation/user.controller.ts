@@ -1,9 +1,6 @@
 import UserUseCases from "../application/user.use_cases.js";
 import { Response, Request } from "express";
 import User from "../domain/user.entity.js";
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
-import Team from "../../Team/domain/team.entity.js";
 
 export default class UserController {
   constructor(private userUseCases: UserUseCases) {
@@ -11,11 +8,12 @@ export default class UserController {
     this.deleteOne = this.deleteOne.bind(this);
     this.register = this.register.bind(this);
     this.login = this.login.bind(this);
+    this.followTeam = this.followTeam.bind(this);
+    this.unfollowTeam = this.unfollowTeam.bind(this);
   }
 
   public async getOne(req: Request, res: Response) {
     try {
-      console.log("getOne");
       const user = await this.userUseCases.getUser(req.params.id);
       res.json(user);
     } catch (error) {
@@ -58,11 +56,7 @@ export default class UserController {
 
   public async followTeam(req: Request, res: Response) {
     try {
-      // Asegurarnos de pasar los parámetros correctamente
-      await this.userUseCases.followTeam(
-        req.body.id, // id del usuario
-        req.body.teamId // id del equipo
-      );
+      await this.userUseCases.followTeam(req.body.id, req.body.teamId);
       res.status(200).json({ message: "Team followed successfully" });
     } catch (error) {
       res.status(500).json({ message: error.message });
@@ -73,8 +67,8 @@ export default class UserController {
     try {
       // Pasar los parámetros correctamente con req.query
       await this.userUseCases.unfollowTeam(
-        req.query.id as string, // id del usuario
-        Number(req.query.teamId) // Convertir teamId de string a número
+        req.body.id as string,
+        Number(req.body.teamId)
       );
       res.status(200).json({ message: "Team unfollowed successfully" });
     } catch (error) {
@@ -82,4 +76,3 @@ export default class UserController {
     }
   }
 }
-

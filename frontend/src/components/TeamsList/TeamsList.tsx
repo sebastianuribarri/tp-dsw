@@ -1,17 +1,16 @@
-import React from "react";
 import styled from "styled-components";
-import Team from "../../types/Team";
+import SeeMoreButton from "../../ui-components/SeeMoreButton";
 import { Link } from "react-router-dom";
 import useSeeMore from "../../hooks/useSeeMore";
-import SeeMoreButton from "../../ui-components/SeeMoreButton";
+import Team from "../../types/Team";
 
-const TeamsGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-  gap: 10px;
+const TeamsContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center; /* Align items to the left */
+  gap: 10px; /* Consistent spacing between cards */
 `;
 
-// Set a max-width for each card and ensure they all fit side by side
 const TeamCard = styled(Link)`
   display: flex;
   flex-direction: column;
@@ -23,8 +22,7 @@ const TeamCard = styled(Link)`
   text-align: center;
   cursor: pointer;
   height: 100px;
-
-  width: 100%; /* Ensure they take up available space but do not exceed max width */
+  width: 115px;
 
   &:hover {
     padding-bottom: 0;
@@ -34,6 +32,7 @@ const TeamCard = styled(Link)`
   }
 `;
 
+// Keep the rest of the styles as is
 const TeamLogo = styled.img`
   width: 3rem;
   height: 3rem;
@@ -71,7 +70,7 @@ const TeamsList: React.FC<TeamsListProps> = ({ teams, message }) => {
         <NoTeamsMessage>{message}</NoTeamsMessage>
       ) : (
         <>
-          <TeamsGrid>
+          <TeamsContainer>
             {teams.slice(0, visibleItems).map((team) => (
               <TeamCard to={`/team/${team.id}`} key={team.id}>
                 <TeamLogo
@@ -81,7 +80,7 @@ const TeamsList: React.FC<TeamsListProps> = ({ teams, message }) => {
                 <TeamName>{team.name}</TeamName>
               </TeamCard>
             ))}
-          </TeamsGrid>
+          </TeamsContainer>
           {visibleItems < teams.length && (
             <SeeMoreButton onClick={handleSeeMore} />
           )}
