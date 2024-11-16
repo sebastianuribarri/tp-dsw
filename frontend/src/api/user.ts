@@ -2,12 +2,9 @@ import axios from "axios";
 import { User } from "../types/User";
 //import API_URL from "./api_url";
 
-<<<<<<< HEAD
-=======
 const url = 'http://localhost:5000/api/users'; 
->>>>>>> profilepage
 
-const url = `${API_URL}users`; // Ruta base actualizada
+//const url = `${API_URL}users`; // Ruta base actualizada
 
 // Registrar usuario
 export const registerUser = async (user: Partial<User>) =>
