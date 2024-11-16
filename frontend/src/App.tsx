@@ -9,7 +9,6 @@ import TeamPage from "./pages/team/TeamPage";
 import ProfilePage from "./pages/profile/ProfilePage";
 import ExplorerPage from "./pages/explorer/ExplorerPage";
 import ProtectedRoute from "./ProtectedRoute";
-import Navbar from "./ui-components/Menu/Navbar/Navbar";
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -32,7 +31,6 @@ export const AppContainer = styled.div`
 export const MainContent = styled.main`
   flex: 1;
   overflow-y: auto;
-  margin-left: 200px; /* Deja espacio para el Navbar en pantallas grandes */
 
   @media (max-width: 767px) {
     margin-left: 0; /* Sin margen en dispositivos móviles */
@@ -45,7 +43,6 @@ function App() {
       <GlobalStyle />
       <BrowserRouter>
         <AppContainer>
-          <Navbar />
           <MainContent>
             <Routes>
               <Route

@@ -1,17 +1,23 @@
 import React, { useEffect, useState } from "react";
 
-import axios from "axios";
 import Section from "../../../ui-components/Section";
 import Team from "../../../types/Team";
 import TeamsList from "../../../components/TeamsList/TeamsList";
+import { getUserById } from "../../../api/user";
 
 const FollowedTeams: React.FC = () => {
   const [teams, setTeams] = useState<Team[]>([]);
 
   useEffect(() => {
-    axios.get("http://localhost:5000/api/teams").then((response) => {
-      setTeams(response.data.sort((a: Team, b: Team) => a.id - b.id));
-    });
+    const fetchUserTeams = async () => {
+      const userId = sessionStorage.getItem("userId");
+      if (userId) {
+        const response = await getUserById(userId);
+        const data = response.data;
+        setTeams(data.teams);
+      }
+    };
+    fetchUserTeams();
   }, []);
 
   return (

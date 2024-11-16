@@ -18,7 +18,7 @@ export const competitionSchema = new Schema({
   standings: { type: [standingSchema], default: [] },
   matchesTimmer: {
     type: timmerSchema,
-    default: undefined,
+    default: { lastUpdate: "", mode: "U" },
   },
   coverage: {
     type: {

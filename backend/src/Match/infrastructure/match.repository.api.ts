@@ -30,6 +30,7 @@ export default class MatchApiRepository implements IApiRepository<Match> {
           away: apiMatch.teams.away,
           goals: apiMatch.goals,
         });
+
         return match;
       });
       return matches;

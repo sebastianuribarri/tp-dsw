@@ -22,7 +22,7 @@ export default class MatchMongoRepository implements IMatchRepository {
         };
       }
       const mongoMatches = await MatchModel.find(filters)
-        .limit(50)
+        .limit(150)
         .sort({ date: -1 });
       return mongoMatches.map((match) => new Match(match));
     } catch (error) {
@@ -37,8 +37,8 @@ export default class MatchMongoRepository implements IMatchRepository {
     try {
       const rounds = await MatchModel.aggregate([
         { $match: { "competition.id": competitionId } },
+        { $sort: { date: 1 } },
         { $group: { _id: "$round" } },
-        { $sort: { _id: 1 } },
       ]);
 
       return rounds.map((round) => round._id);
@@ -57,7 +57,7 @@ export default class MatchMongoRepository implements IMatchRepository {
 
       // Query the database with the filters and sort by date
       const mongoMatches = await MatchModel.find(filters)
-        .limit(50)
+        .limit(150)
         .sort({ date: -1 });
 
       return mongoMatches.map((match) => new Match(match));
