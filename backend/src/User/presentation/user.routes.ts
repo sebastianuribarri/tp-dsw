@@ -23,5 +23,8 @@ export default class UsersRoutes {
 
     // Iniciar sesión (ruta de login)
     userRouter.post("/login", userController.login);
+
+    // Actualizar contraseña (ruta de actualización de contraseña)
+    userRouter.put("/:id/password", userController.updatePassword);
   }
 }
