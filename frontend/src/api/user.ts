@@ -1,8 +1,10 @@
 import axios from "axios";
 import { User } from "../types/User";
-import API_URL from "./api_url";
+//import API_URL from "./api_url";
 
-const url = `${API_URL}users`; // Ruta base actualizada
+const url = 'http://localhost:5000/api/users'; 
+
+//const url = `${API_URL}users`; // Ruta base actualizada
 
 // Registrar usuario
 export const registerUser = async (user: Partial<User>) =>
@@ -23,3 +25,6 @@ export const unfollowTeam = async (id: string, teamId: number) =>
 // Iniciar sesión
 export const loginUser = async (username: string, password: string) =>
   await axios.post(`${url}/login`, { username, password });
+// Actualizar contraseña
+export const updatePassword = async (id: string, password: string) =>
+  await axios.put(`${url}/${id}/password`, { password });

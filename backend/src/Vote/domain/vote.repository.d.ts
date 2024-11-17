@@ -4,4 +4,5 @@ import Vote from "./vote.entity.ts";
 export interface IVoteRepository {
   findByMatch(match: number): Promise<MatchBestPlayer[] | null>;
   insertOne(vote: Vote): Promise<void>;
+  getVoteByIds(matchId: number, userId: string): Promise<Vote | null>;
 }

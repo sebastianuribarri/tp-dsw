@@ -39,4 +39,14 @@ export default class PredictionMongoRepository
       console.log(err);
     }
   }
+
+  public async getPredictionByIds(matchId: number, userId: string): Promise<Prediction | null> {
+    try {
+      const prediction = await PredictionModel.findOne({ match: matchId, user: userId });
+      return prediction ? prediction.toObject() : null;
+    } catch (error) {
+      console.error("Error al obtener la predicción:", error);
+      return null;
+    }
+  }
 }

@@ -20,6 +20,7 @@ export default class VoteMongoRepository implements IVoteRepository {
           },
         },
       ]);
+      
 
       return result.map((elem) => {
         console.log(elem);
@@ -36,6 +37,16 @@ export default class VoteMongoRepository implements IVoteRepository {
       });
     } catch (err) {
       console.log("ocurrio un error en MongoRepository:", err);
+    }
+  }
+  
+    public async getVoteByIds(matchId: number, userId: string): Promise<Vote | null> {
+    try {
+      const vote = await VoteModel.findOne({ match: matchId, user: userId });
+      return vote ? vote.toObject() : null;
+    } catch (error) {
+      console.error("Error al obtener el voto:", error);
+      return null;
     }
   }
 

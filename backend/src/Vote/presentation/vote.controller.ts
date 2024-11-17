@@ -7,6 +7,7 @@ export default class VoteController {
   constructor(public voteUseCases: VoteUseCases) {
     this.getVotesByMatch = this.getVotesByMatch.bind(this);
     this.createVote = this.createVote.bind(this);
+    this.getVoteByIds = this.getVoteByIds.bind(this);
     this.voteUseCases = voteUseCases;
   }
   public async getVotesByMatch(req: Request, res: Response) {
@@ -33,6 +34,24 @@ export default class VoteController {
       res.json(vote);
     } catch (error) {
       console.log(error);
+    }
+  }
+
+    public async getVoteByIds(req: Request, res: Response) {
+    try {
+      const { matchId, userId } = req.params;
+      const vote = await this.voteUseCases.getVoteByIds(
+        Number(matchId),
+        userId
+      );
+      if (vote) {
+        return res.json(vote);
+      } else {
+        return res.status(404).json({ message: "Vote not found" });
+      }
+    } catch (error) {
+      console.log(error, "ERROR EN CONTROLLER");
+      return res.status(500).json({ message: error.message });
     }
   }
 }

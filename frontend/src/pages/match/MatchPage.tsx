@@ -5,6 +5,7 @@ import Page from "../../ui-components/Page";
 import PageMenu from "../../ui-components/PageMenu/PageMenu";
 import MatchEvents from "./MatchEvents/MatchEvents"; // Placeholder for match events
 import MatchLineups from "./MatchLineups/MatchLineups";
+//import MatchPrediction from "./MatchPredictions/MatchPredictions"; // Placeholder for predictions
 import MatchAbout from "./MatchAbout/MatchAbout"; // Details about competition, round, and date
 import styled from "styled-components";
 

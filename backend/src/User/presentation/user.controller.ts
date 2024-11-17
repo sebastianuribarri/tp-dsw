@@ -8,6 +8,7 @@ export default class UserController {
     this.deleteOne = this.deleteOne.bind(this);
     this.register = this.register.bind(this);
     this.login = this.login.bind(this);
+    this.updatePassword = this.updatePassword.bind(this);
     this.followTeam = this.followTeam.bind(this);
     this.unfollowTeam = this.unfollowTeam.bind(this);
   }
@@ -71,6 +72,17 @@ export default class UserController {
         Number(req.body.teamId)
       );
       res.status(200).json({ message: "Team unfollowed successfully" });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  }
+
+  public async updatePassword(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+      const { password } = req.body;
+      await this.userUseCases.updatePassword(id, password);
+      res.status(200).json({ message: "Password updated successfully" });
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
