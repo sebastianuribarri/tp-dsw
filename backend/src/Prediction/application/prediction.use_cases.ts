@@ -19,4 +19,9 @@ public async getValuesByMatch(matchId: number) {
   public async insertOne (prediction: Prediction) {
     const predictions = await this.predictionDbRepository.insertOne(prediction);
   }
+
+  public async getPredictionByIds(matchId: number, userId: string) {
+    const prediction = await this.predictionDbRepository.getPredictionByIds(matchId, userId);
+    return prediction;
+  }
 }

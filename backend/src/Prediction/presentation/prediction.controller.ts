@@ -6,7 +6,26 @@ export default class PredictionController {
   constructor(private predictionUseCases: PredictionUseCases) {
     this.getValuesByMatch = this.getValuesByMatch.bind(this);
     this.insertOne = this.insertOne.bind(this);
+    this.getPredictionByIds = this.getPredictionByIds.bind(this);
     this.predictionUseCases = predictionUseCases;
+  }
+
+  public async getPredictionByIds(req: Request, res: Response) {
+    try {
+      const { matchId, userId } = req.params;
+      const prediction = await this.predictionUseCases.getPredictionByIds(
+        Number(matchId),
+        userId
+      );
+      if (prediction) {
+        return res.json(prediction);
+      } else {
+        return res.status(404).json({ message: "Prediction not found" });
+      }
+    } catch (error) {
+      console.log(error, "ERROR EN CONTROLLER");
+      return res.status(500).json({ message: error.message });
+    }
   }
 
   public async getValuesByMatch(req: Request, res: Response) {

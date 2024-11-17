@@ -31,6 +31,13 @@ const Subtitle = styled.h3`
   font-weight: bold;
 `;
 
+const Title = styled.h2`
+  font-size: 1.5em;
+  margin: 10px 0 0 10px; 
+  color: white;
+  font-weight: bold;
+`;
+
 const Button = styled.button`
   padding: 5px 10px;
   margin-top: 10px;
@@ -83,6 +90,7 @@ const ProfilePage: React.FC = () => {
   const [newPassword, setNewPassword] = useState<string>("");
   const [showPasswordField, setShowPasswordField] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -108,20 +116,21 @@ const ProfilePage: React.FC = () => {
     if (user && newPassword) {
       try {
         await updatePassword(user.id.toString(), newPassword);
-        alert("Contraseña actualizada con éxito");
+        setSuccess("Contraseña actualizada con éxito");
         setShowPasswordField(false);
         setNewPassword("");
         setError(null);
       } catch (error: any) {
         console.error("Error updating password:", error);
         setError(error.response?.data?.message || "Failed to update password");
+        setSuccess(null);
       }
     }
   };
 
   return (
     <Page>
-      <Section title="Perfil del usuario">
+      <Section title={<Title>Perfil del usuario</Title>}>
         {user ? (
           <UserInfo>
             <Subtitle>Username</Subtitle>
@@ -157,6 +166,7 @@ const ProfilePage: React.FC = () => {
                 <Button onClick={handleConfirmPassword}>Confirm</Button>
               </>
             )}
+            {success && <p style={{ color: 'green' }}>{success}</p>}
             {error && <p style={{ color: 'red' }}>{error}</p>}
           </UserInfo>
         ) : (

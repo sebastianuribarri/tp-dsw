@@ -11,5 +11,7 @@ export default class PredictionRoutes {
 
     predictionRouter.get("/:matchId", predictionController.getValuesByMatch);
     predictionRouter.post("/", predictionController.insertOne);
+    predictionRouter.get("/:matchId/:userId", predictionController.getPredictionByIds);
+
   }
 }

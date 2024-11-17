@@ -7,5 +7,7 @@ export default class VotesRoutes {
     server.use("/api/votes", voteRouter);
     voteRouter.get("/:match", voteController.getVotesByMatch);
     voteRouter.post("/", voteController.createVote);
+    voteRouter.get("/:matchId/:userId", voteController.getVoteByIds);
+
   }
 }

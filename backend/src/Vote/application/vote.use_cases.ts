@@ -16,4 +16,9 @@ export default class VoteUseCases {
   public async createVote(vote: Vote) {
     return await this.voteDbRepository.insertOne(vote);
   }
+
+  public async getVoteByIds(matchId: number, userId: string) {
+  const prediction = await this.voteDbRepository.getVoteByIds(matchId, userId);
+  return prediction;
+  }
 }
