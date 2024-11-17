@@ -1,0 +1,29 @@
+/* Variables globales */
+:root {
+  /* Colores */
+  --primary-color: #167f45;
+  --secondary-color: #f4f4f4;
+  --accent-color: #ff6f61;
+  --text-color: #fff;
+  --text-light-color: #666666;
+  --background-color: #222;
+  --background-secondary-color: #333;
+
+  /* Tipografía */
+  --font-family: "Arial", sans-serif;
+  --font-size-base: 16px;
+  --font-weight-normal: 400;
+  --font-weight-bold: 700;
+
+  /* Espaciado */
+  --spacing-small: 8px;
+  --spacing-medium: 16px;
+  --spacing-large: 24px;
+
+  /* Bordes */
+  --border-radius: 4px;
+  --border-color: #dddddd;
+
+  /* Sombras */
+  --box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}

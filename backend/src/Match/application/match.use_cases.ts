@@ -150,7 +150,13 @@ export default class MatchUseCases {
     const filters = {
       $or: [{ "home.id": { $in: teamIds } }, { "away.id": { $in: teamIds } }],
     };
-    return await this.listMatches(filters);
+    return (await this.listMatches(filters))
+      .filter(
+        (match) =>
+          new Date(match.date) >= new Date(new Date().setHours(0, 0, 0, 0))
+      )
+
+      .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
   }
 
   public async listMatches(filters: Record<string, any>) {

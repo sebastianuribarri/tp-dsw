@@ -15,7 +15,8 @@ const UpcomingMatches: React.FC = () => {
         const user = getUserResponse.data;
         const teamIds = user.teams.map((team: { id: number }) => team.id);
         const getMatchesResponse = await getMatchesByTeams(teamIds);
-        setMatches(getMatchesResponse.data);
+        const upcomingMatches = getMatchesResponse.data as Match[];
+        setMatches(upcomingMatches);
       }
     };
     fetchMatchesData();

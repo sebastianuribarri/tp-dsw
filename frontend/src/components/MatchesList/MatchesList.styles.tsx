@@ -1,26 +1,26 @@
 import { styled } from "styled-components";
 
 export const MatchesGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(100%, 1fr));
-  grid-auto-rows: repeat(auto-fit, minmax(200px, 1fr));
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center; /* Centra los elementos horizontalmente */
   gap: 15px;
-
-  @media (min-width: 768px) {
-    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-  }
 `;
 
 export const MatchCard = styled.div`
+  width: 400px; /* Ancho fijo para todos los elementos */
   display: flex;
-  flex-direction: column; /* Keep this as column layout for both mobile and desktop */
+  flex-direction: column;
   background-color: #2b2b2b;
   border-radius: 5px;
   transition: transform 0.3s;
   cursor: pointer;
-  padding: 10px; /* Same padding for all screen sizes */
-  border-left-width: 5px;
-  border-color: #008641;
+  padding: 5px;
+  border-left: 5px solid #008641;
+
+  @media (max-width: 768px) {
+    width: 100%; /* Ocupa todo el ancho en pantallas pequeñas */
+  }
 `;
 
 export const NoMatchesMessage = styled.div`

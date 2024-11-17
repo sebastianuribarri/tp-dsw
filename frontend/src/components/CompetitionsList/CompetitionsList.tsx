@@ -26,7 +26,6 @@ const CompetitionCard = styled(Link)`
   cursor: pointer;
   height: 60px; /* Constant height */
   width: 100%;
-
   @media (min-width: 768px) {
     min-width: 180px;
     width: 300px;

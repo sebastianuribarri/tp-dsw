@@ -1,53 +1,38 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
+export const Container = styled.div`
+  width: 100%;
+  margin: 0 auto;
+`;
+
 export const MatchDetailsLink = styled(Link)`
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   align-items: center;
   text-decoration: none;
   color: white;
-  padding: 5px;
+  padding: 0 10px;
   border-radius: 8px;
   transition: background-color 0.3s;
-  width: 100%;
-  flex-direction: column;
-`;
-
-export const TeamSection = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  flex: 1;
+  &:hover {
+    background-color: #444;
+  }
 `;
 
 export const TeamHomeLogo = styled.img`
-  width: 40px; /* Smaller logo */
-  height: 40px;
-  justify-content: flex-start;
+  width: 50px;
+  height: 50px;
 `;
+
 export const TeamAwayLogo = styled.img`
-  width: 40px; /* Smaller logo */
-  height: 40px;
-
-  justify-content: flex-end;
+  width: 50px;
+  height: 50px;
 `;
+
 export const TeamName = styled.div`
-  font-size: 14px; /* Smaller font size for team names */
+  font-size: 14px;
   text-align: center;
-  white-space: nowrap;
-`;
-
-export const ScoreContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin: 0 10px; /* Margin for spacing between teams */
-`;
-
-export const Score = styled.div`
-  font-size: 1.8em; /* Smaller font size for score */
   font-weight: bold;
-  text-align: center;
   white-space: nowrap;
 `;

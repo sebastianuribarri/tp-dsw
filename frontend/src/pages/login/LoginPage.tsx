@@ -116,7 +116,7 @@ const Input = styled.input`
   font-size: 1rem;
   background-color: #333;
   &:focus {
-    border-color: #007bff;
+    border-color: #167f45;
     outline: none;
     box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
   }
@@ -124,14 +124,14 @@ const Input = styled.input`
 
 const Button = styled.button`
   padding: 0.75rem;
-  background-color: #007bff;
+  background-color: #167f45;
   color: white;
   font-size: 1rem;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   &:hover {
-    background-color: #0056b3;
+    background-color: #037d3e;
   }
   &:disabled {
     background-color: #ccc;
@@ -158,7 +158,7 @@ const Question = styled.p`
 `;
 
 const StyledLink = styled(Link)`
-  color: #007bff;
+  color: #167f45;
   text-decoration: none;
   font-weight: bold;
   &:hover {

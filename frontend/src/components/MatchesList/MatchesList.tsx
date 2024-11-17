@@ -5,6 +5,7 @@ import MatchDetails from "./MatchDetails/MatchDetails";
 import { MatchesGrid, NoMatchesMessage, MatchCard } from "./MatchesList.styles";
 import useSeeMore from "../../hooks/useSeeMore";
 import SeeMoreButton from "../../ui-components/SeeMoreButton";
+
 interface MatchesListProps {
   matches: Match[];
   message: string;
@@ -18,6 +19,7 @@ const MatchesList: React.FC<MatchesListProps> = ({ matches, message }) => {
     3,
     15
   );
+
   return (
     <>
       {matches.length === 0 ? (
