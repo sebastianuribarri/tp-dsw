@@ -5,7 +5,7 @@ import Page from "../../ui-components/Page";
 import PageMenu from "../../ui-components/PageMenu/PageMenu";
 import MatchEvents from "./MatchEvents/MatchEvents"; // Placeholder for match events
 import MatchLineups from "./MatchLineups/MatchLineups";
-//import MatchPrediction from "./MatchPredictions/MatchPredictions"; // Placeholder for predictions
+import MatchPrediction from "./MatchPredictions/MatchPredictions"; // Placeholder for predictions
 import MatchAbout from "./MatchAbout/MatchAbout"; // Details about competition, round, and date
 import styled from "styled-components";
 
@@ -27,6 +27,7 @@ const MatchContentContainer = styled.div`
 const MatchPage = () => {
   const { id } = useParams();
   const [matchDetail, setMatchDetail] = useState<MatchDetail | null>(null);
+  const userId_: string = sessionStorage.getItem("userId") || "";
 
   useEffect(() => {
     const fetchMatchData = async () => {
@@ -61,6 +62,12 @@ const MatchPage = () => {
                 awayTeam={matchDetail.away}
               />
               <MatchLineups lineups={matchDetail.lineups} />
+              <MatchPrediction
+                matchId={matchDetail.id}
+                homeTeam={matchDetail.home.name}
+                awayTeam={matchDetail.away.name}
+                userId={userId_}
+              />
             </MatchContentContainer>
             <MatchAbout
               round={matchDetail.round}

@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { createPrediction } from "../../../api/prediction";
+import { createPrediction, getPredictionByIds, getValuesByMatch } from "../../../api/prediction";
 
 const PredictionContainer = styled.div`
   display: flex;
@@ -9,72 +9,153 @@ const PredictionContainer = styled.div`
   align-items: center;
 `;
 
-const PredictionSelect = styled.select`
-  padding: 10px;
-  margin: 5px;
-  font-size: 1rem;
-  text-align: center;
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 5px; /* Space between buttons */
 `;
 
-const SubmitButton = styled.button`
+const PredictionButton = styled.button`
   padding: 10px 20px;
   font-size: 1rem;
   cursor: pointer;
   border: none;
-  background-color: #28a745;
+  background-color: #007bff;
   color: white;
   border-radius: 5px;
-  margin-top: 10px;
 
   &:hover {
-    background-color: #218838;
+    background-color: #0056b3;
   }
+`;
+
+const ResultBar = styled.div`
+  display: flex;
+  width: 100%;
+  height: 40px; /* Increased height */
+  margin-top: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  overflow: hidden;
+`;
+
+const ResultSegment = styled.div<{ width: number; color: string }>`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: ${(props) => props.width}%;
+  background-color: ${(props) => props.color};
+  color: white;
+  font-weight: bold;
+`;
+
+const Message = styled.p<{ color: string }>`
+  color: ${(props) => props.color};
+  font-weight: bold;
 `;
 
 interface MatchPredictionProps {
   matchId: number;
+  homeTeam: string;
+  awayTeam: string;
+  userId: string;
 }
 
-const MatchPrediction = ({ matchId }: MatchPredictionProps) => {
-  const [prediction, setPrediction] = useState<string>("");
+const MatchPrediction = ({ matchId, homeTeam, awayTeam, userId }: MatchPredictionProps) => {
+  const [prediction, setPrediction] = useState<string | null>(null);
+  const [results, setResults] = useState<{ win: number; draw: number; lose: number }>({
+    win: 0,
+    draw: 0,
+    lose: 0,
+  });
+  const [message, setMessage] = useState<string | null>(null);
+  const [messageColor, setMessageColor] = useState<string>("");
 
-  const handlePredictionSubmit = async () => {
-    if (!prediction) {
-      alert("Please select a prediction.");
+  useEffect(() => {
+    const fetchPrediction = async () => {
+      try {
+        const userPrediction = await getPredictionByIds(matchId, userId);
+        if (userPrediction) {
+          setPrediction(userPrediction.data.value);
+          const response = await getValuesByMatch(matchId);
+          const matchResults = await response.json();
+          setResults(matchResults);
+        }
+      } catch (error) {
+        console.error("Error fetching prediction:", error);
+      }
+    };
+
+    fetchPrediction();
+  }, [matchId, userId]);
+
+  const handlePredictionSubmit = async (value: string) => {
+    if (prediction) {
+      setMessage("You have already voted for this match.");
+      setMessageColor("red");
       return;
     }
 
     try {
-      // Create a prediction object that matches the API's expected structure
       const predictionData = {
         match: matchId,
-        user: "currentUserId", // Replace with actual user ID
-        value: prediction,
+        user: userId,
+        value,
       };
 
       await createPrediction(predictionData);
-      alert("Prediction submitted successfully.");
+      setMessage("Prediction submitted successfully.");
+      setMessageColor("green");
+      setPrediction(value);
+      const response = await getValuesByMatch(matchId);
+      const matchResults = await response.json();
+      setResults(matchResults);
     } catch (error) {
       console.error("Error submitting prediction:", error);
+      setMessage("Error submitting prediction.");
+      setMessageColor("red");
     }
+  };
+
+  const totalVotes = results.win + results.draw + results.lose;
+  const winPercentage = totalVotes ? Math.round((results.win / totalVotes) * 100) : 0;
+  const drawPercentage = totalVotes ? Math.round((results.draw / totalVotes) * 100) : 0;
+  const losePercentage = totalVotes ? Math.round((results.lose / totalVotes) * 100) : 0;
+
+  const getColor = (value: string) => {
+    if (prediction === value) return "green";
+    return "lightgray";
   };
 
   return (
     <PredictionContainer>
-      <h3>Predict the Outcome</h3>
-      <label>
-        Prediction:
-        <PredictionSelect
-          value={prediction}
-          onChange={(e) => setPrediction(e.target.value)}
-        >
-          <option value="">Select Result</option>
-          <option value="win">Win</option>
-          <option value="lose">Lose</option>
-          <option value="draw">Draw</option>
-        </PredictionSelect>
-      </label>
-      <SubmitButton onClick={handlePredictionSubmit}>Submit Prediction</SubmitButton>
+      <h3>PREDICCION</h3>
+      {message && <Message color={messageColor}>{message}</Message>}
+      {prediction ? (
+        <ResultBar>
+          {winPercentage > 0 && (
+            <ResultSegment width={winPercentage} color={getColor("win")}>
+              {winPercentage}% {homeTeam}
+            </ResultSegment>
+          )}
+          {drawPercentage > 0 && (
+            <ResultSegment width={drawPercentage} color={getColor("draw")}>
+              {drawPercentage}% Draw
+            </ResultSegment>
+          )}
+          {losePercentage > 0 && (
+            <ResultSegment width={losePercentage} color={getColor("lose")}>
+              {losePercentage}% {awayTeam}
+            </ResultSegment>
+          )}
+        </ResultBar>
+      ) : (
+        <ButtonContainer>
+          <PredictionButton onClick={() => handlePredictionSubmit("win")}>{homeTeam}</PredictionButton>
+          <PredictionButton onClick={() => handlePredictionSubmit("draw")}>Empate</PredictionButton>
+          <PredictionButton onClick={() => handlePredictionSubmit("lose")}>{awayTeam}</PredictionButton>
+        </ButtonContainer>
+      )}
     </PredictionContainer>
   );
 };
