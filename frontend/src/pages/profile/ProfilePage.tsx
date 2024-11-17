@@ -31,13 +31,6 @@ const Subtitle = styled.h3`
   font-weight: bold;
 `;
 
-const Title = styled.h2`
-  font-size: 1.5em;
-  margin: 10px 0 0 10px; 
-  color: white;
-  font-weight: bold;
-`;
-
 const Button = styled.button`
   padding: 5px 10px;
   margin-top: 10px;
@@ -130,7 +123,7 @@ const ProfilePage: React.FC = () => {
 
   return (
     <Page>
-      <Section title={<Title>Perfil del usuario</Title>}>
+      <Section title={"Perfil"}>
         {user ? (
           <UserInfo>
             <Subtitle>Username</Subtitle>
@@ -166,8 +159,8 @@ const ProfilePage: React.FC = () => {
                 <Button onClick={handleConfirmPassword}>Confirm</Button>
               </>
             )}
-            {success && <p style={{ color: 'green' }}>{success}</p>}
-            {error && <p style={{ color: 'red' }}>{error}</p>}
+            {success && <p style={{ color: "green" }}>{success}</p>}
+            {error && <p style={{ color: "red" }}>{error}</p>}
           </UserInfo>
         ) : (
           <p>Loading user information...</p>
