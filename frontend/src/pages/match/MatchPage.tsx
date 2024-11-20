@@ -4,9 +4,10 @@ import { useParams } from "react-router-dom";
 import Page from "../../ui-components/Page";
 import PageMenu from "../../ui-components/PageMenu/PageMenu";
 import MatchEvents from "./MatchEvents/MatchEvents"; // Placeholder for match events
-import MatchLineups from "./MatchLineups/MatchLineups";
+//import MatchLineups from "./MatchLineups/MatchLineups";
 import MatchPrediction from "./MatchPredictions/MatchPredictions"; // Placeholder for predictions
 import MatchAbout from "./MatchAbout/MatchAbout"; // Details about competition, round, and date
+import MatchVote from "./MatchVote/MatchVote"; // Placeholder for voting
 import styled from "styled-components";
 
 import { MatchDetail } from "../../types/Match";
@@ -61,7 +62,12 @@ const MatchPage = () => {
                 homeTeam={matchDetail.home}
                 awayTeam={matchDetail.away}
               />
-              <MatchLineups lineups={matchDetail.lineups} />
+
+              <MatchVote
+                matchId={matchDetail.id}
+                lineups={matchDetail.lineups}
+                userId={userId_}
+              />
               <MatchPrediction
                 matchId={matchDetail.id}
                 homeTeam={matchDetail.home.name}
