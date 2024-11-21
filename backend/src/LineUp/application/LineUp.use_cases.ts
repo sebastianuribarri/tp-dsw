@@ -8,14 +8,16 @@ export default class LineUpUseCases {
     console.log(
       `LineUps (Match ${matchDetail.id}) ------------------------------------------------------------------------------`
     );
-    const lineupsUpdated = matchDetail.lineupsTimmer.lineUpUpdated();
+    const lineupsUpdated = matchDetail.lineupsTimmer.lineUpUpdated(
+      matchDetail.date
+    );
     if (lineupsUpdated) return false;
     // lineups unupdated -> get updated lineups
     const apiMatchLineUps = await this.lineupApiRepository.findAll({
       fixture: matchDetail.id,
     });
     if (!apiMatchLineUps) return false;
-    matchDetail.lineupsTimmer.updateTimmer(matchDetail.date);
+    matchDetail.lineupsTimmer.updateTimmer();
 
     return apiMatchLineUps;
   }

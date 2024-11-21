@@ -1,13 +1,11 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { createPrediction, getPredictionByIds, getValuesByMatch } from "../../../api/prediction";
-
-const PredictionContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-top: 20px;
-  align-items: center;
-`;
+import {
+  createPrediction,
+  getPredictionByIds,
+  getValuesByMatch,
+} from "../../../api/prediction";
+import Section from "../../../ui-components/Section";
 
 const ButtonContainer = styled.div`
   display: flex;
@@ -61,9 +59,18 @@ interface MatchPredictionProps {
   userId: string;
 }
 
-const MatchPrediction = ({ matchId, homeTeam, awayTeam, userId }: MatchPredictionProps) => {
+const MatchPrediction = ({
+  matchId,
+  homeTeam,
+  awayTeam,
+  userId,
+}: MatchPredictionProps) => {
   const [prediction, setPrediction] = useState<string | null>(null);
-  const [results, setResults] = useState<{ win: number; draw: number; lose: number }>({
+  const [results, setResults] = useState<{
+    win: number;
+    draw: number;
+    lose: number;
+  }>({
     win: 0,
     draw: 0,
     lose: 0,
@@ -118,9 +125,15 @@ const MatchPrediction = ({ matchId, homeTeam, awayTeam, userId }: MatchPredictio
   };
 
   const totalVotes = results.win + results.draw + results.lose;
-  const winPercentage = totalVotes ? Math.round((results.win / totalVotes) * 100) : 0;
-  const drawPercentage = totalVotes ? Math.round((results.draw / totalVotes) * 100) : 0;
-  const losePercentage = totalVotes ? Math.round((results.lose / totalVotes) * 100) : 0;
+  const winPercentage = totalVotes
+    ? Math.round((results.win / totalVotes) * 100)
+    : 0;
+  const drawPercentage = totalVotes
+    ? Math.round((results.draw / totalVotes) * 100)
+    : 0;
+  const losePercentage = totalVotes
+    ? Math.round((results.lose / totalVotes) * 100)
+    : 0;
 
   const getColor = (value: string) => {
     if (prediction === value) return "green";
@@ -128,8 +141,7 @@ const MatchPrediction = ({ matchId, homeTeam, awayTeam, userId }: MatchPredictio
   };
 
   return (
-    <PredictionContainer>
-      <h3>PREDICCION</h3>
+    <Section title="Prediccion">
       {message && <Message color={messageColor}>{message}</Message>}
       {prediction ? (
         <ResultBar>
@@ -151,12 +163,18 @@ const MatchPrediction = ({ matchId, homeTeam, awayTeam, userId }: MatchPredictio
         </ResultBar>
       ) : (
         <ButtonContainer>
-          <PredictionButton onClick={() => handlePredictionSubmit("win")}>{homeTeam}</PredictionButton>
-          <PredictionButton onClick={() => handlePredictionSubmit("draw")}>Empate</PredictionButton>
-          <PredictionButton onClick={() => handlePredictionSubmit("lose")}>{awayTeam}</PredictionButton>
+          <PredictionButton onClick={() => handlePredictionSubmit("win")}>
+            {homeTeam}
+          </PredictionButton>
+          <PredictionButton onClick={() => handlePredictionSubmit("draw")}>
+            Empate
+          </PredictionButton>
+          <PredictionButton onClick={() => handlePredictionSubmit("lose")}>
+            {awayTeam}
+          </PredictionButton>
         </ButtonContainer>
       )}
-    </PredictionContainer>
+    </Section>
   );
 };
 

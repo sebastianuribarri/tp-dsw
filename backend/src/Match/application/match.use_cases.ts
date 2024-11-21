@@ -4,11 +4,11 @@ import Match, {
   MatchCompetition,
   MatchDetail,
 } from "../domain/match.entity.js";
-import Competition from "../../Competition/domain/competition.entity.js";
 import EventUseCases from "../../Event/application/event.use_cases.js";
 import CompetitionUseCases from "../../Competition/application/competition.use_cases.js";
 import LineUpUseCases from "../../LineUp/application/LineUp.use_cases.js";
 import LiveMatchesTimmer from "../domain/live_match.timmer.js";
+import CompetitionMatchesTimmer from "../domain/match.timmer.js";
 
 const REGIONS = ["Argentina", "World"];
 // const REGIONS = ["Argentina"];
@@ -25,16 +25,13 @@ export default class MatchUseCases {
   public async competitionMatchesNeedUpdate(
     matchCompetition: MatchCompetition
   ) {
-    console.log(
-      `Matches (Competition ${matchCompetition.id})----------------------------------------------------------`
-    );
     const competition = await this.competitionUseCases.getCompetition(
       matchCompetition.id
     );
-    console.log("competitionMatches timmer", competition.matchesTimmer);
-    const matchesUpdated = competition.matchesTimmer.matchesUpdated(
-      competition.end
+    console.log(
+      `Matches (Competition ${matchCompetition.id})----------------------------------------------------------`
     );
+    const matchesUpdated = competition.matchesTimmer.matchesUpdated();
     if (!matchesUpdated) {
       // get matches from api
       const apiCompetitionMatches = await this.matchApiRepository.findAll({
@@ -42,11 +39,13 @@ export default class MatchUseCases {
         season: competition.season,
       });
       if (!apiCompetitionMatches) return false;
-      // update timmer
-      competition.matchesTimmer.updateTimmer();
-      await this.competitionUseCases.updateCompetition(competition);
       // update matches
-      await this.updateCompetitionMatches(apiCompetitionMatches);
+      await this.updateCompetitionMatches(
+        apiCompetitionMatches,
+        competition.matchesTimmer
+      );
+      competition.matchesTimmer.updateTimmer(competition.end);
+      await this.competitionUseCases.updateCompetition(competition);
       return apiCompetitionMatches;
     }
     return false;
@@ -56,22 +55,28 @@ export default class MatchUseCases {
     const competition = await this.competitionUseCases.getCompetition(
       match.competition.id
     );
-    const matchUpdated = competition.matchesTimmer.matchUpdated(match.date);
-    const matchesUpdated = competition.matchesTimmer.matchesUpdated(
-      competition.end
+    console.log(
+      `Matches (Competition ${match.competition.id})----------------------------------------------------------`
     );
-    if (!matchUpdated && !matchesUpdated) {
+    const matchUpdated = competition.matchesTimmer.matchUpdated(match.date);
+
+    if (!matchUpdated) {
       // get matches from api
+
       const apiCompetitionMatches = await this.matchApiRepository.findAll({
         league: competition.id,
         season: competition.season,
       });
       if (!apiCompetitionMatches) return false;
-      // update timmer
-      competition.matchesTimmer.updateTimmer();
-      await this.competitionUseCases.updateCompetition(competition);
       // update matches
-      await this.updateCompetitionMatches(apiCompetitionMatches);
+      await this.updateCompetitionMatches(
+        apiCompetitionMatches,
+        competition.matchesTimmer
+      );
+      // update timmer
+      competition.matchesTimmer.updateTimmer(competition.end);
+      await this.competitionUseCases.updateCompetition(competition);
+
       return apiCompetitionMatches.find((match_) => match_.id === match.id);
     } else if (match.isPlaying()) {
       if (this.liveMatchesNeedUpdate()) {
@@ -104,12 +109,22 @@ export default class MatchUseCases {
     return apiLiveMatches;
   }
 
-  private async updateCompetitionMatches(matches: Match[]) {
+  private async updateCompetitionMatches(
+    matches: Match[],
+    matchesTimmer: CompetitionMatchesTimmer
+  ) {
+    const filters = {
+      date: {
+        $lt: new Date(),
+      },
+    };
+    const dbMatches = await this.matchDbRepository.findAll(filters);
     for (let match of matches) {
-      const dbMatch = await this.matchDbRepository.findById(match.id);
-      if (!dbMatch) await this.createMatch(match);
-      else {
-        await this.updateMatch(dbMatch, match);
+      if (!matchesTimmer.matchUpdated(match.date)) {
+        const dbMatch = dbMatches.find((dbmatch) => dbmatch.id === match.id);
+        if (dbMatch) {
+          await this.updateMatch(dbMatch, match);
+        }
       }
     }
   }
@@ -177,21 +192,15 @@ export default class MatchUseCases {
     console.log("Filters before listMatches: ", filters);
     let matches = await this.matchDbRepository.findAll(filters);
 
-    const uniqueCompetitionsMap: Map<number, MatchCompetition> = new Map();
-    matches.forEach((match) => {
-      const competition = match.competition;
-      if (!uniqueCompetitionsMap.has(competition.id)) {
-        uniqueCompetitionsMap.set(competition.id, competition);
+    let competitionsChecked = [];
+    matches.forEach(async (match) => {
+      if (!competitionsChecked.includes(match.competition.id)) {
+        const matchUpdated = await this.matchNeedUpdate(match);
+        competitionsChecked.push(match.competition.id);
+        if (matchUpdated) matchChange = true;
       }
     });
 
-    const competitions = Array.from(uniqueCompetitionsMap.values());
-    // ensure for each match competition that matches are updated
-    for (let competition of competitions) {
-      const competitionsMatchesUpdated =
-        await this.competitionMatchesNeedUpdate(competition);
-      if (competitionsMatchesUpdated) matchChange = true;
-    }
     // get matches updated from db repo
     if (matchChange) {
       return await this.matchDbRepository.findAll(originalFilters);

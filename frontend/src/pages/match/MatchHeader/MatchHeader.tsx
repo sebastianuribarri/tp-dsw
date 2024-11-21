@@ -1,6 +1,8 @@
 import React from "react";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom"; // Import useNavigate from React Router
 import Match from "../../../types/Match";
+import Score from "../../../components/MatchesList/Score";
 
 interface MatchHeaderProps {
   match: Match;
@@ -19,6 +21,7 @@ const TeamSection = styled.div`
   flex-direction: column;
   align-items: center;
   flex: 1;
+  cursor: pointer; /* Add cursor pointer to indicate clickability */
 `;
 
 const TeamLogo = styled.img`
@@ -33,54 +36,22 @@ const TeamName = styled.div`
   white-space: nowrap;
 `;
 
-const ScoreContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin: 0 10px;
-`;
-
-const Score = styled.div`
-  font-size: 1.8em;
-  font-weight: bold;
-  text-align: center;
-`;
-
 const MatchHeader: React.FC<MatchHeaderProps> = ({ match }) => {
-  const formatDate = (date: Date): string => {
-    const optionsDate: Intl.DateTimeFormatOptions = {
-      day: "2-digit",
-      month: "2-digit",
-      year: "2-digit",
-    };
-    const optionsTime: Intl.DateTimeFormatOptions = {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: false,
-    };
+  const navigate = useNavigate(); // Initialize useNavigate hook
 
-    const formattedDate = date.toLocaleDateString("en-GB", optionsDate);
-    const formattedTime = date.toLocaleTimeString("en-GB", optionsTime);
-
-    return `${formattedDate} | ${formattedTime}`;
+  const handleTeamClick = (teamId: number) => {
+    // Navigate to the team page
+    navigate(`/team/${teamId}`);
   };
+
   return (
     <MatchHeaderContainer>
-      <TeamSection>
+      <TeamSection onClick={() => handleTeamClick(match.home.id)}>
         <TeamLogo src={match.home.logo} alt={`${match.home.name} logo`} />
         <TeamName>{match.home.name}</TeamName>
       </TeamSection>
-      <ScoreContainer>
-        {match.minute
-          ? match.minute === 90
-            ? "Fin (" + formatDate(new Date(match.date)) + ")"
-            : String(match.minute) + "'"
-          : formatDate(new Date(match.date))}
-        <Score>
-          {match.goals.home} : {match.goals.away}
-        </Score>
-      </ScoreContainer>
-      <TeamSection>
+      <Score match={match} />
+      <TeamSection onClick={() => handleTeamClick(match.away.id)}>
         <TeamLogo src={match.away.logo} alt={`${match.away.name} logo`} />
         <TeamName>{match.away.name}</TeamName>
       </TeamSection>

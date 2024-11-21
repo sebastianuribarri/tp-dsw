@@ -41,6 +41,11 @@ export default abstract class Timmer {
       return false;
     }
 
+    if (TIMMER_MODE.POST_UPDATE && this.lastUpdate) {
+      console.log("DATA AVAILABLE AND DO NOT NEED UPDATE");
+      return true;
+    }
+
     let now: Date = new Date();
     let difference = (now.getTime() - this.lastUpdate.getTime()) / (1000 * 60); // tiempo transcurrido en minutos
 

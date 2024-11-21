@@ -1,4 +1,6 @@
-import Competition, { CompetitionInput } from "../../Competition/domain/competition.entity.js";
+import Competition, {
+  CompetitionInput,
+} from "../../Competition/domain/competition.entity.js";
 import Event, { EventInput } from "../../Event/domain/event.entity.js";
 import MatchEventsTimmer from "../../Event/domain/event.timmer.js";
 import LineUp, { LineUpInput } from "../../LineUp/domain/lineup.entity.js";
@@ -51,7 +53,7 @@ export default class Match {
     this.id = match.id;
     this.competition = match.competition;
     this.round = match.round;
-    this.date = match.date;
+    this.date = new Date(match.date);
     this.status = match.status;
     this.minute = match.minute;
     this.home = match.home;
@@ -73,35 +75,35 @@ export default class Match {
 
   public static getMatchStatusValue(): string[] {
     return [
-      "TBD",  // Time To Be Defined
-      "NS",   // Not Started
-      "1H",   // First Half, Kick Off
-      "HT",   // Halftime
-      "2H",   // Second Half, 2nd Half Started
-      "ET",   // Extra Time
-      "BT",   // Break Time
-      "P",    // Penalty In Progress
+      "TBD", // Time To Be Defined
+      "NS", // Not Started
+      "1H", // First Half, Kick Off
+      "HT", // Halftime
+      "2H", // Second Half, 2nd Half Started
+      "ET", // Extra Time
+      "BT", // Break Time
+      "P", // Penalty In Progress
       "SUSP", // Match Suspended
-      "INT",  // Match Interrupted
-      "FT",   // Match Finished
-      "AET",  // Match Finished after Extra Time
-      "PEN",  // Match Finished after Penalty Shootout
-      "PST",  // Match Postponed
+      "INT", // Match Interrupted
+      "FT", // Match Finished
+      "AET", // Match Finished after Extra Time
+      "PEN", // Match Finished after Penalty Shootout
+      "PST", // Match Postponed
       "CANC", // Match Cancelled
-      "ABD",  // Match Abandoned
+      "ABD", // Match Abandoned
     ];
   }
 
   public static getMatchInPlayStatusValue(): string[] {
     return [
-      "1H",   // First Half, Kick Off
-      "HT",   // Halftime
-      "2H",   // Second Half, 2nd Half Started
-      "ET",   // Extra Time
-      "BT",   // Break Time
-      "P",    // Penalty In Progress
+      "1H", // First Half, Kick Off
+      "HT", // Halftime
+      "2H", // Second Half, 2nd Half Started
+      "ET", // Extra Time
+      "BT", // Break Time
+      "P", // Penalty In Progress
       "SUSP", // Match Suspended
-      "INT",  // Match Interrupted
+      "INT", // Match Interrupted
     ];
   }
 }
@@ -116,5 +118,3 @@ export class MatchDetail extends Match {
     this.lineups = lineups.map((lineup) => new LineUp(lineup));
   }
 }
-
-

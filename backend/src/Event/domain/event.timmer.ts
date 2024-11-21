@@ -20,9 +20,13 @@ export default class MatchEventsTimmer extends Timmer {
   public checkActiveness(matchDate: Date) {
     if (!this.lastUpdate) return;
     if (!matchDate) return;
+    if (new Date(matchDate) < new Date()) this.mode = TIMMER_MODE.PRE_UPDATE;
     const differenceInMinutes =
-      matchDate.getTime() - this.lastUpdate.getTime() / (1000 * 60);
-    if (differenceInMinutes > 10) {
+      new Date(matchDate).setTime(
+        new Date(matchDate).getTime() + 2.3 * 60 * 60 * 1000
+      ) -
+      this.lastUpdate.getTime() / (1000 * 60);
+    if (differenceInMinutes > 0) {
       this.mode = TIMMER_MODE.POST_UPDATE;
     }
   }

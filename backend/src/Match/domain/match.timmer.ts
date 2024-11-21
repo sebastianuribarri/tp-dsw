@@ -4,9 +4,7 @@ import LiveMatchesTimmer from "./live_match.timmer.js";
 export default class CompetitionMatchesTimmer extends Timmer {
   private static readonly updateTimeInMinutes = 6 * 60; // 12 hrs
 
-  public matchesUpdated(competitionEnd: Date) {
-    if (this.mode != TIMMER_MODE.NOT_UPDATE)
-      this.checkActiveness(competitionEnd);
+  public matchesUpdated() {
     return this.isUpdated(CompetitionMatchesTimmer.updateTimeInMinutes);
   }
 
@@ -15,10 +13,23 @@ export default class CompetitionMatchesTimmer extends Timmer {
     if (!matchDate) return true;
     const differenceInMinutes =
       matchDate.getTime() - this.lastUpdate.getTime() / (1000 * 60);
-    if (differenceInMinutes > 10) {
-      return false;
+    if (differenceInMinutes > 0) {
+      // la ultima actualizacion fue antes que arranque el partido
+      const dateMinusNow = matchDate.getTime() - new Date().getTime();
+      if (dateMinusNow < 0) {
+        // el partido ya arranco
+        return false;
+      } else {
+        // el partido no arranco
+        return true;
+      }
+    } else if (differenceInMinutes < -130) {
+      // la ultima actualizacion fue despues de que termine el partido
+      return true;
+    } else {
+      // la ultima actualizacion fue durante el partido
+      this.matchesUpdated();
     }
-    return true;
   }
 
   public matchesCreated() {
@@ -29,8 +40,10 @@ export default class CompetitionMatchesTimmer extends Timmer {
     if (!coverage) this.changeMode(TIMMER_MODE.NOT_UPDATE);
   }
 
-  public updateTimmer() {
+  public updateTimmer(competitionEnd: Date) {
     this.setUpdate();
+    if (this.mode != TIMMER_MODE.NOT_UPDATE)
+      this.checkActiveness(competitionEnd);
   }
 
   public checkActiveness(competitionEnd: Date) {
