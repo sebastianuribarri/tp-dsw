@@ -63,7 +63,7 @@ const EventInfo = styled.span`
 `;
 
 const MatchEvents: FC<MatchEventsProps> = ({ events, homeTeam, awayTeam }) => {
-  const sortedEvents = events.sort((a, b) => a.time - b.time);
+  const sortedEvents = events.sort((a, b) => b.time - a.time);
 
   return (
     <Section title="Eventos">

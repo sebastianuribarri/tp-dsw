@@ -27,24 +27,56 @@ const PredictionButton = styled.button`
   }
 `;
 
+const ResultBarContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 20px;
+`;
+
 const ResultBar = styled.div`
   display: flex;
-  width: 100%;
-  height: 40px; /* Increased height */
-  margin-top: 20px;
+  width: 95%; /* Further increased width */
+  max-width: 1400px; /* Set a maximum width */
+  height: 40px;
   border: 1px solid #ccc;
   border-radius: 5px;
   overflow: hidden;
 `;
 
 const ResultSegment = styled.div<{ width: number; color: string }>`
-  display: flex;
-  align-items: center;
-  justify-content: center;
   width: ${(props) => props.width}%;
   background-color: ${(props) => props.color};
-  color: white;
+  height: 100%;
+  border-right: 3px solid white; /* Increased division */
+  &:last-child {
+    border-right: none; /* Remove border from the last segment */
+  }
+`;
+
+const Percentage = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-top: 5px;
   font-weight: bold;
+  gap: 10px; /* Add space between percentages */
+`;
+
+const TeamName = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-top: 5px;
+  gap: 10px; /* Add space between team names */
+`;
+
+const TeamNameItem = styled.div<{ width: number }>`
+  width: ${(props) => props.width}%;
+  text-align: center;
+`;
+
+const PercentageItem = styled.div<{ width: number }>`
+  width: ${(props) => props.width}%;
+  text-align: center;
 `;
 
 const Message = styled.p<{ color: string }>`
@@ -98,7 +130,7 @@ const MatchPrediction = ({
 
   const handlePredictionSubmit = async (value: string) => {
     if (prediction) {
-      setMessage("You have already voted for this match.");
+      setMessage("Ya votaste en este partido");
       setMessageColor("red");
       return;
     }
@@ -111,7 +143,7 @@ const MatchPrediction = ({
       };
 
       await createPrediction(predictionData);
-      setMessage("Prediction submitted successfully.");
+      setMessage("Prediccion realizada.");
       setMessageColor("green");
       setPrediction(value);
       const response = await getValuesByMatch(matchId);
@@ -119,7 +151,7 @@ const MatchPrediction = ({
       setResults(matchResults);
     } catch (error) {
       console.error("Error submitting prediction:", error);
-      setMessage("Error submitting prediction.");
+      setMessage("Error realizando la prediccion.");
       setMessageColor("red");
     }
   };
@@ -144,23 +176,31 @@ const MatchPrediction = ({
     <Section title="Prediccion">
       {message && <Message color={messageColor}>{message}</Message>}
       {prediction ? (
-        <ResultBar>
-          {winPercentage > 0 && (
-            <ResultSegment width={winPercentage} color={getColor("win")}>
-              {winPercentage}% {homeTeam}
-            </ResultSegment>
-          )}
-          {drawPercentage > 0 && (
-            <ResultSegment width={drawPercentage} color={getColor("draw")}>
-              {drawPercentage}% Draw
-            </ResultSegment>
-          )}
-          {losePercentage > 0 && (
-            <ResultSegment width={losePercentage} color={getColor("lose")}>
-              {losePercentage}% {awayTeam}
-            </ResultSegment>
-          )}
-        </ResultBar>
+        <>
+          <ResultBarContainer>
+            <ResultBar>
+              {winPercentage > 0 && (
+                <ResultSegment width={winPercentage} color={getColor("win")} />
+              )}
+              {drawPercentage > 0 && (
+                <ResultSegment width={drawPercentage} color={getColor("draw")} />
+              )}
+              {losePercentage > 0 && (
+                <ResultSegment width={losePercentage} color={getColor("lose")} />
+              )}
+            </ResultBar>
+          </ResultBarContainer>
+          <TeamName>
+            <TeamNameItem width={winPercentage}>{homeTeam}</TeamNameItem>
+            <TeamNameItem width={drawPercentage}>Empate</TeamNameItem>
+            <TeamNameItem width={losePercentage}>{awayTeam}</TeamNameItem>
+          </TeamName>
+          <Percentage>
+            <PercentageItem width={winPercentage}>{winPercentage}%</PercentageItem>
+            <PercentageItem width={drawPercentage}>{drawPercentage}%</PercentageItem>
+            <PercentageItem width={losePercentage}>{losePercentage}%</PercentageItem>
+          </Percentage>
+        </>
       ) : (
         <ButtonContainer>
           <PredictionButton onClick={() => handlePredictionSubmit("win")}>

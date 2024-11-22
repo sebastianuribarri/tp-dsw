@@ -3,6 +3,7 @@ import styled from "styled-components";
 import Player from "../../../types/Player";
 import { createVote, getVoteByIds, getVotesByMatch } from "../../../api/vote";
 import { Vote } from "../../../types/Vote";
+import Section from "../../../ui-components/Section";
 
 const VoteContainer = styled.div`
   display: flex;
@@ -54,7 +55,7 @@ const VoteButton = styled.button`
   }
 `;
 
-const VotePercentage = styled.span`
+const VoteCount = styled.span`
   margin-left: 10px;
   font-weight: bold;
 `;
@@ -77,7 +78,7 @@ const MatchVote = ({ matchId, lineups, userId }: MatchVoteProps) => {
   //const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null);
   const [isVoting, setIsVoting] = useState(false);
   const [hasVoted, setHasVoted] = useState(false);
-  const [votes, setVotes] = useState<{ name: string; count: number }[]>([]);
+  const [votes, setVotes] = useState<{ player: Player; amount: number }[]>([]);
   const [message, setMessage] = useState<string>("");
 
   useEffect(() => {
@@ -93,6 +94,7 @@ const MatchVote = ({ matchId, lineups, userId }: MatchVoteProps) => {
 
         const votesResponse = await getVotesByMatch(matchId);
         const votesData = votesResponse.data;
+        console.log(votesData);
         setVotes(votesData);
       } catch (error) {
         console.error("Error fetching team data:", error);
@@ -132,57 +134,66 @@ const MatchVote = ({ matchId, lineups, userId }: MatchVoteProps) => {
     }
   };
 
-  const totalVotes = votes.reduce((acc, vote) => acc + vote.count, 0);
+  const sortedHomePlayers = [...homePlayers].sort((a, b) => {
+    const aVotes = votes.find((vote) => vote.player.id === a.id)?.amount || 0;
+    const bVotes = votes.find((vote) => vote.player.id === b.id)?.amount || 0;
+    return bVotes - aVotes;
+  });
+
+  const sortedAwayPlayers = [...awayPlayers].sort((a, b) => {
+    const aVotes = votes.find((vote) => vote.player.id === a.id)?.amount || 0;
+    const bVotes = votes.find((vote) => vote.player.id === b.id)?.amount || 0;
+    return bVotes - aVotes;
+  });
 
   return (
-    <VoteContainer>
-      <h3>Votar al Mejor Jugador</h3>
-      <TeamContainer>
-        <PlayerList>
-          {homePlayers.map((player) => {
-            const playerVotes = votes.find((vote) => vote.name === player.name)?.count || 0;
-            const votePercentage = totalVotes ? ((playerVotes / totalVotes) * 100).toFixed(1) : "0";
+    <Section title="Alineaciones">
+      <VoteContainer>
+        <TeamContainer>
+          <PlayerList>
+            {sortedHomePlayers.map((player) => {
+              const playerVotes = votes.find((vote) => vote.player.id === player.id)?.amount || 0;
 
-            return (
-              <PlayerItem key={player.id}>
-                <div>
-                  <PlayerImage src={player.image} alt={player.name} />
-                  {player.name} - #{player.number} ({player.position})
-                  {hasVoted && <VotePercentage>{votePercentage}%</VotePercentage>}
-                </div>
-                {!hasVoted && (
-                  <VoteButton onClick={() => handleVote(player)} disabled={isVoting}>
-                    Votar
-                  </VoteButton>
-                )}
-              </PlayerItem>
-            );
-          })}
-        </PlayerList>
-        <PlayerList>
-          {awayPlayers.map((player) => {
-            const playerVotes = votes.find((vote) => vote.name === player.name)?.count || 0;
-            const votePercentage = totalVotes ? ((playerVotes / totalVotes) * 100).toFixed(1) : "0";
+              return (
+                <PlayerItem key={player.id}>
+                  <div>
+                    <PlayerImage src={player.image} alt={player.name} />
+                    {player.name} - #{player.number} ({player.position})
+                    {hasVoted && <VoteCount>{playerVotes} votos</VoteCount>}
+                  </div>
+                  {!hasVoted && (
+                    <VoteButton onClick={() => handleVote(player)} disabled={isVoting}>
+                      Votar
+                    </VoteButton>
+                  )}
+                </PlayerItem>
+              );
+            })}
+          </PlayerList>
+          <PlayerList>
+            {sortedAwayPlayers.map((player) => {
+              const playerVotes = votes.find((vote) => vote.player.id === player.id)?.amount || 0;
 
-            return (
-              <PlayerItem key={player.id}>
-                <div>
-                  <PlayerImage src={player.image} alt={player.name} />
-                  {player.name} - #{player.number} ({player.position})
-                  {hasVoted && <VotePercentage>{votePercentage}%</VotePercentage>}
-                </div>
-                {!hasVoted && (
-                  <VoteButton onClick={() => handleVote(player)} disabled={isVoting}>
-                    Votar
-                  </VoteButton>
-                )}
-              </PlayerItem>
-            );
-          })}
-        </PlayerList>
-      </TeamContainer>
-      {message && <Message>{message}</Message>}
-    </VoteContainer>
+              return (
+                <PlayerItem key={player.id}>
+                  <div>
+                    <PlayerImage src={player.image} alt={player.name} />
+                    {player.name} - #{player.number} ({player.position})
+                    {hasVoted && <VoteCount>{playerVotes} votos</VoteCount>}
+                  </div>
+                  {!hasVoted && (
+                    <VoteButton onClick={() => handleVote(player)} disabled={isVoting}>
+                      Votar
+                    </VoteButton>
+                  )}
+                </PlayerItem>
+              );
+            })}
+          </PlayerList>
+        </TeamContainer>
+        {message && <Message>{message}</Message>}
+      </VoteContainer>
+    </Section>
   );
 };
 
