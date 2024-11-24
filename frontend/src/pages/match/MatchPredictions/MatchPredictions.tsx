@@ -89,7 +89,6 @@ interface MatchPredictionProps {
   homeTeam: string;
   awayTeam: string;
   userId: string;
-  matchEnded: boolean; // Add a prop to indicate if the match has ended
 }
 
 const MatchPrediction = ({
@@ -97,7 +96,6 @@ const MatchPrediction = ({
   homeTeam,
   awayTeam,
   userId,
-  matchEnded,
 }: MatchPredictionProps) => {
   const [prediction, setPrediction] = useState<string | null>(null);
   const [results, setResults] = useState<{
@@ -177,7 +175,7 @@ const MatchPrediction = ({
   return (
     <Section title="Prediccion">
       {message && <Message color={messageColor}>{message}</Message>}
-      {prediction || matchEnded ? (
+      {prediction ? (
         <>
           <ResultBarContainer>
             <ResultBar>
