@@ -89,6 +89,7 @@ interface MatchPredictionProps {
   homeTeam: string;
   awayTeam: string;
   userId: string;
+  matchEnded: boolean; // Add a prop to indicate if the match has ended
 }
 
 const MatchPrediction = ({
@@ -96,6 +97,7 @@ const MatchPrediction = ({
   homeTeam,
   awayTeam,
   userId,
+  matchEnded,
 }: MatchPredictionProps) => {
   const [prediction, setPrediction] = useState<string | null>(null);
   const [results, setResults] = useState<{
@@ -175,7 +177,7 @@ const MatchPrediction = ({
   return (
     <Section title="Prediccion">
       {message && <Message color={messageColor}>{message}</Message>}
-      {prediction ? (
+      {prediction || matchEnded ? (
         <>
           <ResultBarContainer>
             <ResultBar>
@@ -191,14 +193,26 @@ const MatchPrediction = ({
             </ResultBar>
           </ResultBarContainer>
           <TeamName>
-            <TeamNameItem width={winPercentage}>{homeTeam}</TeamNameItem>
-            <TeamNameItem width={drawPercentage}>Empate</TeamNameItem>
-            <TeamNameItem width={losePercentage}>{awayTeam}</TeamNameItem>
+            {winPercentage > 0 && (
+              <TeamNameItem width={winPercentage}>{homeTeam}</TeamNameItem>
+            )}
+            {drawPercentage > 0 && (
+              <TeamNameItem width={drawPercentage}>Empate</TeamNameItem>
+            )}
+            {losePercentage > 0 && (
+              <TeamNameItem width={losePercentage}>{awayTeam}</TeamNameItem>
+            )}
           </TeamName>
           <Percentage>
-            <PercentageItem width={winPercentage}>{winPercentage}%</PercentageItem>
-            <PercentageItem width={drawPercentage}>{drawPercentage}%</PercentageItem>
-            <PercentageItem width={losePercentage}>{losePercentage}%</PercentageItem>
+            {winPercentage > 0 && (
+              <PercentageItem width={winPercentage}>{winPercentage}%</PercentageItem>
+            )}
+            {drawPercentage > 0 && (
+              <PercentageItem width={drawPercentage}>{drawPercentage}%</PercentageItem>
+            )}
+            {losePercentage > 0 && (
+              <PercentageItem width={losePercentage}>{losePercentage}%</PercentageItem>
+            )}
           </Percentage>
         </>
       ) : (

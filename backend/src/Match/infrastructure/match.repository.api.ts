@@ -22,7 +22,7 @@ export default class MatchApiRepository implements IApiRepository<Match> {
             season: apiMatch.league.season,
             logo: apiMatch.league.logo,
           },
-          round: apiMatch.league.round,
+          round: apiMatch.league.round ?? "",
           date: apiMatch.fixture.date,
           status: apiMatch.fixture.status.short,
           minute: apiMatch.fixture.status.elapsed,
