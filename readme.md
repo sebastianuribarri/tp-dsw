@@ -4,6 +4,10 @@
 
 Este proyecto consiste en una aplicación web para el seguimiento de partidos de futbol. Incluye un backend desarrollado con [Express.js](https://expressjs.com/en/5x/api.html), un frontend desarrollado con [React](https://es.react.dev/) y la utilizacion de [Api Football](https://www.api-football.com/documentation-v3) para el seguimiento en vivo de los partidos.
 
+## Demo
+
+https://youtu.be/6gY5eaat6Fc
+
 ## Instalación y Ejecución
 
 ### Backend (API Express)
@@ -56,6 +60,6 @@ La aplicación estará disponible en `http://localhost:5173/`.
 
 ## Contributors
 
-- BUTHET, Francisco [@franbth](https://github.com/franbth)
-- KOMOROVSKI, Luciano [@LucianoKomorovski](https://github.com/LucianoKomorovski)
-- URIBARRI, Sebastian [@sebastianuribarri](https://github.com/sebastianuribarri)
+- BUTHET, Francisco [@franbth](https://github.com/franbth) - Com. 303
+- KOMOROVSKI, Luciano [@LucianoKomorovski](https://github.com/LucianoKomorovski) - Com. 302
+- URIBARRI, Sebastian [@sebastianuribarri](https://github.com/sebastianuribarri) - Com. 302
