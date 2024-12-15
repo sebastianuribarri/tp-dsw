@@ -1,4 +1,5 @@
 /// <reference types="cypress" />
+
 // ***********************************************
 // This example commands.ts shows you how to
 // create various custom commands and overwrite
@@ -35,3 +36,6 @@
 //     }
 //   }
 // }
+
+// Make this file a module by adding an empty export statement
+export {};
