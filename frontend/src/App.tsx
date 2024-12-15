@@ -12,7 +12,7 @@ import ProtectedRoute from "./ProtectedRoute";
 
 const GlobalStyle = createGlobalStyle`
   body {
-    font-family sans-serif;
+    font-family: sans-serif;
     background-color: #1e1e1e;
     color: white;
     margin: 0;

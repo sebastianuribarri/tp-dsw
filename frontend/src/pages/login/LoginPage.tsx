@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { useNavigate, Link } from "react-router-dom"; // Importa Link para navegación interna
 import { loginUser } from "../../api/user";
+import { User } from "../../types/User";
 
 const LoginPage: React.FC = () => {
   const [username, setUsername] = useState("");
@@ -15,9 +16,10 @@ const LoginPage: React.FC = () => {
     setError(null);
     setLoading(true);
 
+    console.log("Rendering LoginPage");
     try {
       const response = await loginUser(username, password);
-      const data = response.data;
+      const data = response.data as { token: string; user: User };
       console.log("token", data.token);
 
       sessionStorage.setItem("authToken", data.token);
@@ -40,7 +42,9 @@ const LoginPage: React.FC = () => {
           <InputWrapper>
             <Label>Username</Label>
             <Input
+              data-testid="username-input"
               type="text"
+              name="username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               required
@@ -49,14 +53,18 @@ const LoginPage: React.FC = () => {
           <InputWrapper>
             <Label>Password</Label>
             <Input
+              data-testid="password-input"
               type="password"
+              name="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
             />
           </InputWrapper>
-          {error && <ErrorMessage>{error}</ErrorMessage>}
-          <Button type="submit" disabled={loading}>
+          {error && (
+            <ErrorMessage data-testid="error-message">{error}</ErrorMessage>
+          )}
+          <Button data-testid="login-button" type="submit" disabled={loading}>
             {loading ? "Logging in..." : "Login"}
           </Button>
         </Form>

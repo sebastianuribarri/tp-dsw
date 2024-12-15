@@ -10,7 +10,7 @@ const RegisterPage: React.FC = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate(); // Hook para la redirección
+  const navigate = useNavigate();
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -24,24 +24,23 @@ const RegisterPage: React.FC = () => {
     }
 
     try {
-  const user = { username, mail, password };
-  const response = await registerUser(user);
-  const data = response.data;
-  console.log("User registered:", data);
+      const user = { username, mail, password };
+      const response = await registerUser(user);
+      const data = response.data;
+      console.log("User registered:", data);
 
-  navigate("/login"); // Redirige al login después del registro exitoso
-} catch (err: unknown) {
-  if (err instanceof Error) {
-    console.error("Registration failed:", err.message);
-    setError(err.message || "Registration failed");
-  } else {
-    console.error("Unknown error occurred:", err);
-    setError("Registration failed");
-  }
-} finally {
-  setLoading(false);
-}
-
+      navigate("/login");
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        console.error("Registration failed:", err.message);
+        setError(err.message || "Registration failed");
+      } else {
+        console.error("Unknown error occurred:", err);
+        setError("Registration failed");
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -50,8 +49,10 @@ const RegisterPage: React.FC = () => {
         <Title>Register</Title>
         <Form onSubmit={handleRegister}>
           <InputWrapper>
-            <Label>Username</Label>
+            <Label htmlFor="username">Username</Label>
             <Input
+              id="username"
+              data-testid="username"
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
@@ -59,8 +60,10 @@ const RegisterPage: React.FC = () => {
             />
           </InputWrapper>
           <InputWrapper>
-            <Label>Email</Label>
+            <Label htmlFor="email">Email</Label>
             <Input
+              id="email"
+              data-testid="email"
               type="email"
               value={mail}
               onChange={(e) => setMail(e.target.value)}
@@ -68,8 +71,10 @@ const RegisterPage: React.FC = () => {
             />
           </InputWrapper>
           <InputWrapper>
-            <Label>Password</Label>
+            <Label htmlFor="password">Password</Label>
             <Input
+              id="password"
+              data-testid="password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -77,8 +82,10 @@ const RegisterPage: React.FC = () => {
             />
           </InputWrapper>
           <InputWrapper>
-            <Label>Confirm Password</Label>
+            <Label htmlFor="confirmPassword">Confirm Password</Label>
             <Input
+              id="confirmPassword"
+              data-testid="confirmPassword"
               type="password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
@@ -86,7 +93,7 @@ const RegisterPage: React.FC = () => {
             />
           </InputWrapper>
           {error && <ErrorMessage>{error}</ErrorMessage>}
-          <Button type="submit" disabled={loading}>
+          <Button type="submit" data-testid="register-btn" disabled={loading}>
             {loading ? "Registering..." : "Register"}
           </Button>
         </Form>
