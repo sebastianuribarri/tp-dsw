@@ -10,6 +10,21 @@
     "start": "node dist/main.js ",
     "dev": "npx tsc && node dist/main.js "
   },
+  "jest": {
+  "transform": {
+    "^.+\\.m?[tj]sx?$": "ts-jest"
+  },
+  "extensionsToTreatAsEsm": [".ts", ".tsx"],
+  "globals": {
+    "ts-jest": {
+      "useESM": true
+    }
+  },
+  "testEnvironment": "node",
+  "moduleNameMapper": {
+    "^(\\.{1,2}/.*)\\.js$": "$1"
+  }
+},
   "keywords": [],
   "author": "",
   "license": "ISC",
