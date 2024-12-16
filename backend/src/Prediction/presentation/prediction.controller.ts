@@ -36,19 +36,33 @@ export default class PredictionController {
       );
       return res.json(predictions);
     } catch (error) {
-      console.log(error, "ERROR EN CONTROLLER");
+      console.log(error);
       return res.status(500).json({ message: error.message });
     }
   }
 
   public async insertOne(req: Request, res: Response) {
-    const prediction = new Prediction(
-      Number(req.body.match),
-      req.body.user,
-      req.body.value as Result
-    );
-    console.log("prectiction on controller", prediction);
-    await this.predictionUseCases.insertOne(prediction);
-    res.status(200).json();
+    try {
+      console.log(req.body);
+      const { match, user, value } = req.body;
+
+      if (
+        typeof match !== "number" ||
+        typeof user !== "string" ||
+        !value ||
+        !Object.values(["win", "draw", "lose"]).includes(value)
+      ) {
+        return res.status(400).json({ message: "Invalid input data" });
+      }
+
+      const prediction = new Prediction(Number(match), user, value as Result);
+
+      await this.predictionUseCases.insertOne(prediction);
+
+      res.status(200).json();
+    } catch (error) {
+      console.error("Error inserting prediction:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
   }
 }
