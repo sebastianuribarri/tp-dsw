@@ -19,25 +19,31 @@ export default class VoteController {
 
   public async createVote(req: Request, res: Response) {
     try {
+      const { player, user, match } = req.body;
+      if (!player || !user || !match) {
+        return res.status(400).json({ message: "Missing required fields" });
+      }
+
       const vote = new Vote({
         player: new Player({
-          id: Number(req.body.player.id),
-          name: String(req.body.player.name),
-          image: String(req.body.player.image),
-          number: Number(req.body.player.number),
-          position: String(req.body.player.position),
+          id: Number(player.id),
+          name: String(player.name),
+          image: String(player.image),
+          number: Number(player.number),
+          position: String(player.position),
         }),
-        user: String(req.body.user),
-        match: Number(req.body.match),
+        user: String(user),
+        match: Number(match),
       });
       await this.voteUseCases.createVote(vote);
       res.json(vote);
     } catch (error) {
       console.log(error);
+      return res.status(500).json({ message: "Internal server error" });
     }
   }
 
-    public async getVoteByIds(req: Request, res: Response) {
+  public async getVoteByIds(req: Request, res: Response) {
     try {
       const { matchId, userId } = req.params;
       const vote = await this.voteUseCases.getVoteByIds(
