@@ -38,7 +38,7 @@ class ApiRequester {
     const response = await fetch(url.toString(), config);
 
     if (!response.ok) {
-      throw new Error("Api fetching error");
+      throw new Error("Api fetching error:" + response);
     }
 
     // Acceder a los headers devueltos

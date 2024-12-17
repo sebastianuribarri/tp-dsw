@@ -1,5 +1,5 @@
 import axios from "axios";
-import API_URL from "./api_url";
+import API_URL from ".";
 const url = API_URL + "matches/";
 
 export const getMatches = async (filters: object) =>

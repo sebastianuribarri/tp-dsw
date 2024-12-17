@@ -11,10 +11,10 @@ import CompetitionAbout from "./CompetitionAbout/CompetitionAbout";
 
 import styled from "styled-components";
 import PageContent from "../../ui-components/PageContent";
+import useApi from "../../hooks/useApi"; // Importa el custom hook
 
 const CompetitionContentContainer = styled.div`
   display: flex;
-
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-around;
@@ -25,13 +25,13 @@ const CompetitionPage = () => {
   const [competitionDetail, setCompetitionDetail] =
     useState<CompetitionDetail | null>(null);
 
-  useEffect(() => {
-    // Fetch data from the API
-    const fetchCompetitionData = async () => {
-      try {
-        const response = await getCompetitionById(Number(id));
-        const data = await response.json();
+  const { request, loading, error } = useApi();
 
+  useEffect(() => {
+    const fetchCompetitionData = async () => {
+      const response = await request(() => getCompetitionById(Number(id)));
+      const data = response.data as CompetitionDetail;
+      if (data) {
         setCompetitionDetail({
           id: data.id,
           name: data.name,
@@ -41,13 +41,19 @@ const CompetitionPage = () => {
           standings: data.standings,
           rounds: data.rounds ?? [],
         });
-      } catch (error) {
-        console.error("Error fetching competition data:", error);
       }
     };
 
     fetchCompetitionData();
-  }, []);
+  }, [id]);
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return <p>Error: {error}</p>;
+  }
 
   return (
     <>
@@ -71,7 +77,7 @@ const CompetitionPage = () => {
           </PageContent>
         </Page>
       ) : (
-        <p>Competicia No existe</p>
+        <p>Competencia No existe</p>
       )}
     </>
   );

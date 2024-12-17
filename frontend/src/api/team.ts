@@ -1,4 +1,4 @@
-import API_URL from "./api_url";
+import API_URL from ".";
 
 const TEAM_API_URL = API_URL + "teams/";
 

@@ -1,15 +1,29 @@
 import axios from "axios";
-import API_URL from "./api_url";
+import API_URL, { getAuthHeaders } from ".";
 const url = API_URL + "competitions/";
 
-export const getCompetitionsByTeam = async (teamId: number) =>
-  await fetch(url + "team/" + String(teamId));
+export const getCompetitionsByTeam = async (teamId: number) => {
+  const headers = getAuthHeaders();
+  return await fetch(url + "team/" + String(teamId), {
+    method: "GET",
+    headers,
+  });
+};
 
-export const getCompetitionById = async (id: number) =>
-  await fetch(url + String(id));
+export const getCompetitionById = async (id: number) => {
+  const headers = getAuthHeaders();
+  return await fetch(url + String(id), {
+    method: "GET",
+    headers,
+  });
+};
 
-export const getAllCompetitions = async () => await axios.get(url);
+export const getAllCompetitions = async () => {
+  const headers = getAuthHeaders();
+  return await axios.get(url, { headers });
+};
 
 export const getCompetitionsBySearch = async (search: string) => {
-  return await axios.get(url + `search?search=${search}`);
+  const headers = getAuthHeaders();
+  return await axios.get(url + `search?search=${search}`, { headers });
 };
