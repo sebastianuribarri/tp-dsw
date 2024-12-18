@@ -1,32 +1,45 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { changePlan } from "../api/user";
+import { User } from "../types/User";
 
-const Button = styled.button`
+const Button = styled.button<{ isPremium: boolean }>`
   padding: 10px 20px;
   font-size: 1rem;
   cursor: pointer;
   border: none;
-  background-color: yellow;
-  color: black;
   border-radius: 5px;
-
+  background-color: ${({ isPremium }) => (isPremium ? "#222" : "yellow")};
+  color: ${({ isPremium }) => (isPremium ? "white" : "black")};
+  transition: background-color 0.3s ease, color 0.3s ease;
 `;
 
+const Wrapper = styled.div`
+  display: flex;
+  justify-content: center;
+`;
 
-const ChangePlanButton: React.FC = () => {
+const ChangePlanButton: React.FC<{ user: User | null }> = ({ user }) => {
+  const [userPremium, setUserPremium] = useState(user?.premium || false);
+
   const handleChangePlan = async () => {
     try {
-      const userId=sessionStorage.getItem("userId");
-      if (userId) {
-        await changePlan(userId);
+      if (user?.id) {
+        await changePlan(user.id);
+        setUserPremium(!userPremium);
       }
     } catch (error) {
       console.error("Error actualizando el plan:", error);
     }
   };
 
-  return <Button onClick={handleChangePlan}>Cambiar Plan</Button>;
+  return (
+    <Wrapper>
+      <Button isPremium={userPremium} onClick={handleChangePlan}>
+        {userPremium ? "Cambiar a Basic" : "Cambiar a Premium"}
+      </Button>
+    </Wrapper>
+  );
 };
 
 export default ChangePlanButton;

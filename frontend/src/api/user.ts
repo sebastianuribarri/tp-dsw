@@ -9,7 +9,7 @@ const url = "http://localhost:5000/api/users";
 // Registrar usuario (sin headers)
 export const registerUser = async (user: Partial<User>) => {
   const headers = getAuthHeaders();
-  await axios.post(`${url}/register`, user, { headers: headers });
+  return await axios.post(`${url}/register`, user, { headers });
 };
 
 // Obtener usuario por ID (con headers)
@@ -43,10 +43,15 @@ export const loginUser = async (username: string, password: string) =>
 // Actualizar contraseña (con headers)
 export const updatePassword = async (id: string, password: string) => {
   const headers = getAuthHeaders();
-  return await axios.put(`${url}/${id}/password`, { password }, { headers });
+  return await axios.put(
+    `${url}/${id}/password`,
+    { password },
+    { headers: headers }
+  );
 };
 
 export const changePlan = async (id: string) => {
   const headers = getAuthHeaders();
-  return await axios.put(`${url}/${id}/change-plan`, { headers });
+  console.log("headers", headers);
+  return await axios.put(`${url}/${id}/change-plan`, {}, { headers });
 };

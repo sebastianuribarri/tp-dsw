@@ -16,6 +16,7 @@ export const authenticateUser = (
   options: AuthenticateUserOptions = { premium: false }
 ) => {
   const token = req.headers.authorization?.split(" ")[1].trim();
+  console.log("token recibido", token, "headers", req.headers);
   if (!token) {
     return res
       .status(401)

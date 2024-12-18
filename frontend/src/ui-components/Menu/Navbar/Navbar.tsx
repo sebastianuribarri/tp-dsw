@@ -135,9 +135,9 @@ const Navbar: React.FC = () => {
     };
     if (userId !== sessionStorage.getItem("userId")) {
       setUserId(sessionStorage.getItem("userId"));
-      fetchUser();
     }
-  }, [sessionStorage.getItem("userId")]);
+    fetchUser();
+  }, []);
 
   const handleLogout = () => {
     sessionStorage.removeItem("authToken");
@@ -173,7 +173,7 @@ const Navbar: React.FC = () => {
           Perfil
         </NavLink>
       </LinksContainer>
-      <ChangePlanButton />
+      <ChangePlanButton user={user} />
       <UserInfo>
         <span>{user?.username}</span>
         <LogoutButton onClick={handleLogout}>Salir</LogoutButton>

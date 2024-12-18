@@ -4,9 +4,9 @@ export default API_URL;
 
 export const getAuthHeaders = () => {
   const token = sessionStorage.getItem("authToken"); // Obtener token del localStorage
-  console;
+  console.log("token enviado", token);
   return {
-    Authorization: `Bearer ${token}`,
+    authorization: `Bearer ${token}`,
     "Content-Type": "application/json",
   };
 };

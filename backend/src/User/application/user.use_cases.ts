@@ -35,9 +35,9 @@ export default class UserUseCases {
     });
   }
 
-  public async updateSubscription(
-    id: string  ) {
+  public async updateSubscription(id: string) {
     const user = await this.getUser(id);
+    console.log("suscription actual", user.premium);
     const newSubscriptionStatus = !user.premium;
     return await this.userDbRepository.updateOne(id, {
       premium: newSubscriptionStatus,
