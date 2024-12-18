@@ -1,14 +1,20 @@
 import axios from "axios";
-import API_URL from ".";
+import API_URL, { getAuthHeaders } from ".";
 import { Prediction } from "../types/Prediction";
 
 const url = API_URL + "predictions/";
 
-export const getValuesByMatch = async (matchId: number) =>
-  await fetch(url + String(matchId));
+export const getValuesByMatch = async (matchId: number) => {
+  const headers = getAuthHeaders();
+  await fetch(url + String(matchId), { headers });
+};
 
-export const createPrediction = async (prediction: Prediction) =>
-  await axios.post(url, prediction);
+export const createPrediction = async (prediction: Prediction) => {
+  const headers = getAuthHeaders();
+  await axios.post(url, prediction, { headers });
+};
 
-export const getPredictionByIds = async (matchId: number, userId: string) =>
-  await axios.get(url + `${matchId}/${userId}`);
+export const getPredictionByIds = async (matchId: number, userId: string) => {
+  const headers = getAuthHeaders();
+  await axios.get(url + `${matchId}/${userId}`, { headers });
+};

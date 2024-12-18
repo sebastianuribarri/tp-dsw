@@ -1,17 +1,20 @@
 import axios from "axios";
-import API_URL from ".";
+import API_URL, { getAuthHeaders } from ".";
 import { Vote } from "../types/Vote";
 
 const url = API_URL + "votes/";
 
 export const getVotesByMatch = async (match: number) => {
-  return await axios.get(`${url}${match}`);
+  const headers = getAuthHeaders();
+  return await axios.get(`${url}${match}`, { headers });
 };
 
 export const createVote = async (vote: Vote) => {
-  return await axios.post(url, vote);
+  const headers = getAuthHeaders();
+  return await axios.post(url, vote, { headers });
 };
 
 export const getVoteByIds = async (matchId: number, userId: string) => {
-  return await axios.get(`${url}${matchId}/${userId}`);
+  const headers = getAuthHeaders();
+  return await axios.get(`${url}${matchId}/${userId}`, { headers });
 };
