@@ -23,7 +23,8 @@ export const getMatchesByTeams = async (teamsIds: number[]) => {
 };
 
 export const getLiveMatches = async () => {
-  return await axios.get(url + "live/");
+  const headers = getAuthHeaders();
+  return await axios.get(url + "live/", { headers });
 };
 
 export const getMatch = async (matchId: number) => {
