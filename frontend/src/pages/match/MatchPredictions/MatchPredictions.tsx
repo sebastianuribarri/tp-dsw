@@ -6,6 +6,7 @@ import {
   getValuesByMatch,
 } from "../../../api/prediction";
 import Section from "../../../ui-components/Section";
+import NeedPremiumMessage from "../../NeedPremiumMessage";
 
 const ButtonContainer = styled.div`
   display: flex;
@@ -174,6 +175,7 @@ const MatchPrediction = ({
 
   return (
     <Section title="Prediccion">
+      <NeedPremiumMessage message="Necesitas una cuenta premium para realizar predicciones" />
       {message && <Message color={messageColor}>{message}</Message>}
       {prediction ? (
         <>
@@ -183,10 +185,16 @@ const MatchPrediction = ({
                 <ResultSegment width={winPercentage} color={getColor("win")} />
               )}
               {drawPercentage > 0 && (
-                <ResultSegment width={drawPercentage} color={getColor("draw")} />
+                <ResultSegment
+                  width={drawPercentage}
+                  color={getColor("draw")}
+                />
               )}
               {losePercentage > 0 && (
-                <ResultSegment width={losePercentage} color={getColor("lose")} />
+                <ResultSegment
+                  width={losePercentage}
+                  color={getColor("lose")}
+                />
               )}
             </ResultBar>
           </ResultBarContainer>
@@ -203,13 +211,19 @@ const MatchPrediction = ({
           </TeamName>
           <Percentage>
             {winPercentage > 0 && (
-              <PercentageItem width={winPercentage}>{winPercentage}%</PercentageItem>
+              <PercentageItem width={winPercentage}>
+                {winPercentage}%
+              </PercentageItem>
             )}
             {drawPercentage > 0 && (
-              <PercentageItem width={drawPercentage}>{drawPercentage}%</PercentageItem>
+              <PercentageItem width={drawPercentage}>
+                {drawPercentage}%
+              </PercentageItem>
             )}
             {losePercentage > 0 && (
-              <PercentageItem width={losePercentage}>{losePercentage}%</PercentageItem>
+              <PercentageItem width={losePercentage}>
+                {losePercentage}%
+              </PercentageItem>
             )}
           </Percentage>
         </>

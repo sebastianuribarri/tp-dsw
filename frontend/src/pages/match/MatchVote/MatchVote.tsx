@@ -4,6 +4,7 @@ import Player from "../../../types/Player";
 import { createVote, getVoteByIds, getVotesByMatch } from "../../../api/vote";
 import { Vote } from "../../../types/Vote";
 import Section from "../../../ui-components/Section";
+import NeedPremiumMessage from "../../NeedPremiumMessage";
 
 const VoteContainer = styled.div`
   display: flex;
@@ -66,6 +67,13 @@ const Message = styled.div`
   font-weight: bold;
 `;
 
+const NoLineupsMessage = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #999;
+`;
+
 interface MatchVoteProps {
   matchId: number;
   lineups: { starters: Player[] }[];
@@ -75,7 +83,6 @@ interface MatchVoteProps {
 const MatchVote = ({ matchId, lineups, userId }: MatchVoteProps) => {
   const [homePlayers, setHomePlayers] = useState<Player[]>([]);
   const [awayPlayers, setAwayPlayers] = useState<Player[]>([]);
-  //const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null);
   const [isVoting, setIsVoting] = useState(false);
   const [hasVoted, setHasVoted] = useState(false);
   const [votes, setVotes] = useState<{ player: Player; amount: number }[]>([]);
@@ -84,8 +91,8 @@ const MatchVote = ({ matchId, lineups, userId }: MatchVoteProps) => {
   useEffect(() => {
     const fetchTeams = async () => {
       try {
-        setHomePlayers(lineups[0].starters);
-        setAwayPlayers(lineups[1].starters);
+        setHomePlayers(lineups[0]?.starters || []);
+        setAwayPlayers(lineups[1]?.starters || []);
 
         const vote = await getVoteByIds(matchId, userId);
         if (vote.data) {
@@ -94,7 +101,6 @@ const MatchVote = ({ matchId, lineups, userId }: MatchVoteProps) => {
 
         const votesResponse = await getVotesByMatch(matchId);
         const votesData = votesResponse.data;
-        console.log(votesData);
         setVotes(votesData);
       } catch (error) {
         console.error("Error fetching team data:", error);
@@ -146,53 +152,74 @@ const MatchVote = ({ matchId, lineups, userId }: MatchVoteProps) => {
     return bVotes - aVotes;
   });
 
+  const isLineupEmpty =
+    sortedHomePlayers.length === 0 && sortedAwayPlayers.length === 0;
+
   return (
     <Section title="Alineaciones">
-      <VoteContainer>
-        <TeamContainer>
-          <PlayerList>
-            {sortedHomePlayers.map((player) => {
-              const playerVotes = votes.find((vote) => vote.player.id === player.id)?.amount || 0;
+      <NeedPremiumMessage message="Necesitas una cuenta premium para votar" />
+      {isLineupEmpty ? (
+        <NoLineupsMessage>
+          Alineaciones no disponibles para este partido.
+        </NoLineupsMessage>
+      ) : (
+        <VoteContainer>
+          <NeedPremiumMessage message="Necesitas una cuenta premium para votar" />
+          <TeamContainer>
+            <PlayerList>
+              {sortedHomePlayers.map((player) => {
+                const playerVotes =
+                  votes.find((vote) => vote.player.id === player.id)?.amount ||
+                  0;
 
-              return (
-                <PlayerItem key={player.id}>
-                  <div>
-                    <PlayerImage src={player.image} alt={player.name} />
-                    {player.name} - #{player.number} ({player.position})
-                    {hasVoted && <VoteCount>{playerVotes} votos</VoteCount>}
-                  </div>
-                  {!hasVoted && (
-                    <VoteButton onClick={() => handleVote(player)} disabled={isVoting}>
-                      Votar
-                    </VoteButton>
-                  )}
-                </PlayerItem>
-              );
-            })}
-          </PlayerList>
-          <PlayerList>
-            {sortedAwayPlayers.map((player) => {
-              const playerVotes = votes.find((vote) => vote.player.id === player.id)?.amount || 0;
+                return (
+                  <PlayerItem key={player.id}>
+                    <div>
+                      <PlayerImage src={player.image} alt={player.name} />
+                      {player.name} - #{player.number} ({player.position})
+                      {hasVoted && <VoteCount>{playerVotes} votos</VoteCount>}
+                    </div>
+                    {!hasVoted && (
+                      <VoteButton
+                        onClick={() => handleVote(player)}
+                        disabled={isVoting}
+                      >
+                        Votar
+                      </VoteButton>
+                    )}
+                  </PlayerItem>
+                );
+              })}
+            </PlayerList>
+            <PlayerList>
+              {sortedAwayPlayers.map((player) => {
+                const playerVotes =
+                  votes.find((vote) => vote.player.id === player.id)?.amount ||
+                  0;
 
-              return (
-                <PlayerItem key={player.id}>
-                  <div>
-                    <PlayerImage src={player.image} alt={player.name} />
-                    {player.name} - #{player.number} ({player.position})
-                    {hasVoted && <VoteCount>{playerVotes} votos</VoteCount>}
-                  </div>
-                  {!hasVoted && (
-                    <VoteButton onClick={() => handleVote(player)} disabled={isVoting}>
-                      Votar
-                    </VoteButton>
-                  )}
-                </PlayerItem>
-              );
-            })}
-          </PlayerList>
-        </TeamContainer>
-        {message && <Message>{message}</Message>}
-      </VoteContainer>
+                return (
+                  <PlayerItem key={player.id}>
+                    <div>
+                      <PlayerImage src={player.image} alt={player.name} />
+                      {player.name} - #{player.number} ({player.position})
+                      {hasVoted && <VoteCount>{playerVotes} votos</VoteCount>}
+                    </div>
+                    {!hasVoted && (
+                      <VoteButton
+                        onClick={() => handleVote(player)}
+                        disabled={isVoting}
+                      >
+                        Votar
+                      </VoteButton>
+                    )}
+                  </PlayerItem>
+                );
+              })}
+            </PlayerList>
+          </TeamContainer>
+          {message && <Message>{message}</Message>}
+        </VoteContainer>
+      )}
     </Section>
   );
 };
