@@ -1,11 +1,27 @@
-import API_URL from ".";
+import API_URL, { getAuthHeaders } from ".";
 
 const TEAM_API_URL = API_URL + "teams/";
 
-export const getTeamById = async (id: number) =>
-  await fetch(TEAM_API_URL + String(id));
+export const getTeamById = async (id: number) => {
+  const headers = getAuthHeaders();
+  return await fetch(TEAM_API_URL + String(id), {
+    method: "GET",
+    headers,
+  });
+};
 
-export const getAllTeams = async () => await fetch(TEAM_API_URL);
+export const getAllTeams = async () => {
+  const headers = getAuthHeaders();
+  return await fetch(TEAM_API_URL, {
+    method: "GET",
+    headers,
+  });
+};
 
-export const getTeamsBySearch = async (search: string) =>
-  await fetch(TEAM_API_URL + `search?search=${search}`);
+export const getTeamsBySearch = async (search: string) => {
+  const headers = getAuthHeaders();
+  return await fetch(TEAM_API_URL + `search?search=${search}`, {
+    method: "GET",
+    headers,
+  });
+};
