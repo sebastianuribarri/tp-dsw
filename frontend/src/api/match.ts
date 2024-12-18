@@ -23,21 +23,12 @@ export const getMatchesByTeams = async (teamsIds: number[]) => {
 };
 
 export const getLiveMatches = async () => {
-<<<<<<< HEAD
   return await axios.get(url + "live/");
-};
-
-export const getMatch = async (matchId: number) => {
-  await axios.get(url + String(matchId));
-=======
-  const headers = getAuthHeaders();
-  return await axios.get(url + "live/", { headers });
 };
 
 export const getMatch = async (matchId: number) => {
   const headers = getAuthHeaders();
   return await axios.get(url + String(matchId), { headers });
->>>>>>> b37c2e854284f933839e8120dd74c1bb7d90bef2
 };
 
 export const getMatchesBySearch = async (search: string) => {
