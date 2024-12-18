@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { updateSubscription } from "../api/user";
+import { changePlan } from "../api/user";
 
 const Button = styled.button`
   padding: 10px 20px;
@@ -13,16 +13,13 @@ const Button = styled.button`
 
 `;
 
-interface ChangePlanButtonProps {
-  plan: string;
-}
 
-const ChangePlanButton: React.FC<ChangePlanButtonProps> = ({plan }) => {
+const ChangePlanButton: React.FC = () => {
   const handleChangePlan = async () => {
     try {
       const userId=sessionStorage.getItem("userId");
       if (userId) {
-        await updateSubscription(userId, plan);
+        await changePlan(userId);
       }
     } catch (error) {
       console.error("Error actualizando el plan:", error);

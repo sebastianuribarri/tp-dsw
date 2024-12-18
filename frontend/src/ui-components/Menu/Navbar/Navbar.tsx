@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import AppLogo from "../../AppLogo/AppLogo";
 import { getUserById } from "../../../api/user";
 import { User } from "../../../types/User";
+import ChangePlanButton from "../../changePlanButton.js";
 
 const Nav = styled.nav`
   width: 100%;
@@ -172,7 +173,7 @@ const Navbar: React.FC = () => {
           Perfil
         </NavLink>
       </LinksContainer>
-
+      <ChangePlanButton />
       <UserInfo>
         <span>{user?.username}</span>
         <LogoutButton onClick={handleLogout}>Salir</LogoutButton>

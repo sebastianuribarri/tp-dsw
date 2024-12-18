@@ -62,18 +62,25 @@ const MatchPage = () => {
                 homeTeam={matchDetail.home}
                 awayTeam={matchDetail.away}
               />
+{
+  new Date(matchDetail.date) <= new Date() && (              
+  <MatchVote
+    matchId={matchDetail.id}
+    lineups={matchDetail.lineups}
+    userId={userId_}
+  />)
+}
+{
+  new Date(matchDetail.date) >= new Date() && (
+    <MatchPrediction
+    matchId={matchDetail.id}
+    homeTeam={matchDetail.home.name}
+    awayTeam={matchDetail.away.name}
+    userId={userId_}
+    />
+  )
+}
 
-              <MatchVote
-                matchId={matchDetail.id}
-                lineups={matchDetail.lineups}
-                userId={userId_}
-              />
-              <MatchPrediction
-                matchId={matchDetail.id}
-                homeTeam={matchDetail.home.name}
-                awayTeam={matchDetail.away.name}
-                userId={userId_}
-              />
             </MatchContentContainer>
             <MatchAbout
               round={matchDetail.round}

@@ -81,8 +81,7 @@ export default class UserController {
   updateSubscription(req: Request, res: Response) {
     try {
       const { id } = req.params;
-      const { plan } = req.body;
-      this.userUseCases.updateSubscription(id, plan);
+      this.userUseCases.updateSubscription(id);
       res.status(200).json({ message: "Subscription updated successfully" });
     } catch (error) {
       res.status(500).json({ message: error.message });

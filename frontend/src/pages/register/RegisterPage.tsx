@@ -25,9 +25,7 @@ const RegisterPage: React.FC = () => {
 
     try {
       const user = { username, mail, password };
-      const response = await registerUser(user);
-      const data = response.data;
-      console.log("User registered:", data);
+      await registerUser(user);
 
       navigate("/login");
     } catch (err: unknown) {
