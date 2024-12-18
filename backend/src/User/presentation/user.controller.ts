@@ -11,6 +11,7 @@ export default class UserController {
     this.updatePassword = this.updatePassword.bind(this);
     this.followTeam = this.followTeam.bind(this);
     this.unfollowTeam = this.unfollowTeam.bind(this);
+    this.updateSubscription = this.updateSubscription.bind(this);
   }
 
   public async getOne(req: Request, res: Response) {
@@ -77,6 +78,17 @@ export default class UserController {
     }
   }
 
+  updateSubscription(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+      const { plan } = req.body;
+      this.userUseCases.updateSubscription(id, plan);
+      res.status(200).json({ message: "Subscription updated successfully" });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  }
+  
   public async updatePassword(req: Request, res: Response) {
     try {
       const { id } = req.params;

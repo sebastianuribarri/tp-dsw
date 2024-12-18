@@ -45,6 +45,10 @@ export const updatePassword = async (id: string, password: string) => {
   const headers = getAuthHeaders();
   return await axios.put(`${url}/${id}/password`, { password }, { headers });
 };
+export const updateSubscription = async (id: string, plan: string) => {
+  const headers = getAuthHeaders();
+  return await axios.put(`${url}/${id}/change-plan`, { plan }, { headers });
+}
 
 export const changePlan = async (id: string) => {
   const headers = getAuthHeaders();

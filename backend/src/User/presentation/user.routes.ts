@@ -20,5 +20,6 @@ export default class UsersRoutes {
     userRouter.put("/follow", userController.followTeam);
     userRouter.put("/unfollow", userController.unfollowTeam);
     userRouter.put("/:id/password", userController.updatePassword);
+    userRouter.put("/:id/change-plan", userController.updateSubscription);
   }
 }
