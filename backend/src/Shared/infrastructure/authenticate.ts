@@ -5,10 +5,15 @@ interface AuthRequest extends Request {
   user?: any;
 }
 
+interface AuthenticateUserOptions {
+  premium?: boolean;
+}
+
 export const authenticateUser = (
   req: AuthRequest,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
+  options: AuthenticateUserOptions = { premium: false }
 ) => {
   const token = req.headers.authorization?.split(" ")[1].trim();
   if (!token) {
@@ -20,6 +25,12 @@ export const authenticateUser = (
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.user = decoded;
+
+    // Verificar si se requiere que el usuario sea premium
+    if (options.premium && !req.user.premium) {
+      return res.status(403).json({ error: "Requiere usuario premium." });
+    }
+
     console.log("user authenticated", decoded);
     next();
   } catch (error) {

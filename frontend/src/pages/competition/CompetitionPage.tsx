@@ -11,7 +11,6 @@ import CompetitionAbout from "./CompetitionAbout/CompetitionAbout";
 
 import styled from "styled-components";
 import PageContent from "../../ui-components/PageContent";
-import useApi from "../../hooks/useApi"; // Importa el custom hook
 
 const CompetitionContentContainer = styled.div`
   display: flex;
@@ -25,12 +24,10 @@ const CompetitionPage = () => {
   const [competitionDetail, setCompetitionDetail] =
     useState<CompetitionDetail | null>(null);
 
-  const { request, loading, error } = useApi();
-
   useEffect(() => {
     const fetchCompetitionData = async () => {
-      const response = await request(() => getCompetitionById(Number(id)));
-      const data = response.data as CompetitionDetail;
+      const response = await getCompetitionById(Number(id));
+      const data = (await response.json()) as CompetitionDetail;
       if (data) {
         setCompetitionDetail({
           id: data.id,
@@ -46,14 +43,6 @@ const CompetitionPage = () => {
 
     fetchCompetitionData();
   }, [id]);
-
-  if (loading) {
-    return <p>Loading...</p>;
-  }
-
-  if (error) {
-    return <p>Error: {error}</p>;
-  }
 
   return (
     <>

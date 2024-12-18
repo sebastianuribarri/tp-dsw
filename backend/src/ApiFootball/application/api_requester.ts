@@ -19,6 +19,7 @@ class ApiRequester {
       console.error("API key not available.");
       throw new Error("API key not available.");
     }
+    console.log("account:", account.mail);
 
     const url = new URL(endpoint, this.apiUri);
     if (parameters) {
@@ -38,9 +39,10 @@ class ApiRequester {
     const response = await fetch(url.toString(), config);
 
     if (!response.ok) {
-      throw new Error("Api fetching error:" + response);
+      console.error(response.status);
+      throw new Error("Api fetching error");
     }
-
+    console.log("consulta api exitosa");
     // Acceder a los headers devueltos
     account.remainingRequests = Number(
       response.headers.get("x-ratelimit-requests-remaining")

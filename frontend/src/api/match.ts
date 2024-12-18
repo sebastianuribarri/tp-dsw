@@ -15,10 +15,13 @@ export const getMatchesByTeams = async (teamsIds: number[]) =>
     },
   });
 
-export const getLiveMatches = async () => await axios.get(url + "live/");
+export const getLiveMatches = async () => {
+  return await axios.get(url + "live/");
+};
 
-export const getMatch = async (matchId: number) =>
+export const getMatch = async (matchId: number) => {
   await axios.get(url + String(matchId));
+};
 
 export const getMatchesBySearch = async (search: string) =>
   await axios.get(url + `search?search=${search}`);

@@ -20,7 +20,6 @@ const LoginPage: React.FC = () => {
     try {
       const response = await loginUser(username, password);
       const data = response.data as { token: string; user: User };
-      console.log("token", data.token);
 
       sessionStorage.setItem("authToken", data.token);
       sessionStorage.setItem("userId", String(data.user.id));

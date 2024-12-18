@@ -35,7 +35,7 @@ export default class MatchApiRepository implements IApiRepository<Match> {
       });
       return matches;
     } catch (err) {
-      console.error("Fetching api error");
+      return null;
     }
   }
 }

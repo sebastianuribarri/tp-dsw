@@ -1,5 +1,6 @@
 import { Router, Express } from "express";
 import PredictionController from "./prediction.controller.js";
+import { authenticateUser } from "../../Shared/infrastructure/authenticate.js";
 
 export default class PredictionRoutes {
   constructor(
@@ -8,16 +9,11 @@ export default class PredictionRoutes {
   ) {
     const predictionRouter = Router();
     server.use("/api/predictions", predictionRouter);
-
+    predictionRouter.use((req, res, next) => {
+      authenticateUser(req, res, next, { premium: true });
+    });
     predictionRouter.get("/:matchId", predictionController.getValuesByMatch);
-    predictionRouter.post(
-      "/",
-      (req, res, next) => {
-        console.log("Router level - req.body:", req.body);
-        next();
-      },
-      predictionController.insertOne
-    );
+    predictionRouter.post("/", predictionController.insertOne);
     predictionRouter.get(
       "/:matchId/:userId",
       predictionController.getPredictionByIds

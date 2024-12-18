@@ -1,4 +1,3 @@
-// MatchesList.tsx
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Section from "../../../ui-components/Section";
@@ -27,17 +26,20 @@ const PaginationButton = styled.button`
 
 const DateMatchesList: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [matches, setMatches] = useState<Match[]>([]);
-  // Placeholder data
+  const [matches, setMatches] = useState<Match[] | null>(null);
+
+  // Fetch matches
   useEffect(() => {
     const fetchMatches = async (date: Date) => {
-      setMatches([]);
       const response = await getMatches({ date: date });
-      setMatches(response.data);
+      const data = response.data;
+      if (data) {
+        setMatches(data);
+      }
     };
 
     fetchMatches(selectedDate);
-  }, [selectedDate]);
+  }, [selectedDate]); // Re-fetch cuando la fecha cambie
 
   const handlePreviousDay = () => {
     const previousDay = new Date(selectedDate);
@@ -60,10 +62,12 @@ const DateMatchesList: React.FC = () => {
         <span>{selectedDate.toDateString()}</span>
         <PaginationButton onClick={handleNextDay}>Next</PaginationButton>
       </Pagination>
-      <MatchesList
-        matches={matches}
-        message="No hay partidos para esta fecha"
-      />
+      {matches !== null && (
+        <MatchesList
+          matches={matches}
+          message="No hay partidos para esta fecha"
+        />
+      )}
     </Section>
   );
 };
