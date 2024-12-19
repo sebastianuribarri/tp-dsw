@@ -174,6 +174,26 @@ export default class MatchUseCases {
       .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
   }
 
+  public async getCalendar(month: number, teamIds: number[]) {
+  const startDate = new Date(new Date().getFullYear(), month - 1, 1); 
+  const endDate = new Date(new Date().getFullYear(), month, 0); 
+
+  const filters = {
+    $and: [
+      { date: { $gte: startDate, $lte: endDate } }, 
+      {
+        $or: [
+          { "home.id": { $in: teamIds } }, 
+          { "away.id": { $in: teamIds } }, 
+        ],
+      },
+    ],
+  };
+
+  return (await this.listMatches(filters))
+}
+
+
   public async listMatches(filters: Record<string, any>) {
     if (filters && filters.date) {
       let start = new Date(filters.date);

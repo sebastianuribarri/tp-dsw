@@ -14,5 +14,6 @@ export default class MatchRoutes {
     matchesRouter.get("/teams", matchesController.getMatchesByTeams);
     matchesRouter.get("/live", matchesController.getLiveMatches);
     matchesRouter.get("/:id", matchesController.getOne);
+    matchesRouter.get("/calendar", matchesController.getCalendar);
   }
 }
