@@ -10,6 +10,7 @@ export default class MatchController {
     this.getLiveMatches = this.getLiveMatches.bind(this);
     this.getBySearch = this.getBySearch.bind(this);
     this.getMatchesByTeams = this.getMatchesByTeams.bind(this);
+    this.getCalendar = this.getCalendar.bind(this);
   }
 
   public async getMatchesByTeams(req: Request, res: Response) {
@@ -22,6 +23,25 @@ export default class MatchController {
       res.status(404).send({ message: "matches not found" });
     }
   }
+
+  public async getCalendar(req: Request, res: Response) {
+  try {
+    const month = parseInt(req.query.month as string, 10); 
+    const teamIds = (req.query.teamIds as string).split(",").map(Number); 
+
+    if (isNaN(month) || !Array.isArray(teamIds) || teamIds.some(isNaN)) {
+      return res.status(400).send({ message: "Invalid parameters" }); 
+    }
+
+    const result = await this.matchUseCases.getCalendar(month, teamIds); 
+    res.json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Error retrieving calendar" }); 
+  }
+}
+
+
   public async getAll(req: Request, res: Response) {
     try {
       console.log(req.query);
