@@ -36,3 +36,9 @@ export const getMatchesBySearch = async (search: string) => {
   const headers = getAuthHeaders();
   return await axios.get(url + `search?search=${search}`, { headers });
 };
+
+export async function getCalendar(month: number, teamIds: number[]) {
+  return await axios.get(
+    url + `calendar?month=${month}&teamIds=${teamIds.join(",")}`
+  );
+}

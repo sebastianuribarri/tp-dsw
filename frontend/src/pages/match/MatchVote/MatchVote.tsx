@@ -4,7 +4,7 @@ import Player from "../../../types/Player";
 import { createVote, getVoteByIds, getVotesByMatch } from "../../../api/vote";
 import { Vote } from "../../../types/Vote";
 import Section from "../../../ui-components/Section";
-import NeedPremiumMessage from "../../NeedPremiumMessage";
+import NeedPremiumMessage from "../../../components/NeedPremiumMessage";
 
 const VoteContainer = styled.div`
   display: flex;

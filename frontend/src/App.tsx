@@ -9,6 +9,7 @@ import TeamPage from "./pages/team/TeamPage";
 import ProfilePage from "./pages/profile/ProfilePage";
 import ExplorerPage from "./pages/explorer/ExplorerPage";
 import ProtectedRoute from "./ProtectedRoute";
+import CalendarView from "./pages/calendar/Calendar";
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -67,6 +68,14 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <MatchPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/calendar/"
+                element={
+                  <ProtectedRoute>
+                    <CalendarView />
                   </ProtectedRoute>
                 }
               />

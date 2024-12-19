@@ -6,7 +6,7 @@ import {
   getValuesByMatch,
 } from "../../../api/prediction";
 import Section from "../../../ui-components/Section";
-import NeedPremiumMessage from "../../NeedPremiumMessage";
+import NeedPremiumMessage from "../../../components/NeedPremiumMessage";
 
 const ButtonContainer = styled.div`
   display: flex;
