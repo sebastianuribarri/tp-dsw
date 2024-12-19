@@ -115,6 +115,12 @@ const AppLogoContainer = styled.div`
   }
 `;
 
+const ChangePlanContainer = styled.div`
+  @media (max-width: 767px) {
+    display: none;
+  }
+`;
+
 const Navbar: React.FC = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState<User | null>(null);
@@ -173,7 +179,11 @@ const Navbar: React.FC = () => {
           Perfil
         </NavLink>
       </LinksContainer>
-      <ChangePlanButton user={user} />
+
+      <ChangePlanContainer>
+        <ChangePlanButton user={user} />
+      </ChangePlanContainer>
+
       <UserInfo>
         <span>{user?.username}</span>
         <LogoutButton onClick={handleLogout}>Salir</LogoutButton>

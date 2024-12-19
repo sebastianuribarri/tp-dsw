@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { changePlan } from "../api/user";
 import { User } from "../types/User";
@@ -21,6 +21,11 @@ const Wrapper = styled.div`
 
 const ChangePlanButton: React.FC<{ user: User | null }> = ({ user }) => {
   const [userPremium, setUserPremium] = useState(user?.premium || false);
+
+  // Sincronizar el estado userPremium cada vez que el user cambie
+  useEffect(() => {
+    setUserPremium(user?.premium || false);
+  }, [user]);
 
   const handleChangePlan = async () => {
     try {

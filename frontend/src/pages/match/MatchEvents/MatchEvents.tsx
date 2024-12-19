@@ -16,6 +16,7 @@ const TeamsContainer = styled.div`
   margin-bottom: 20px;
   padding: 10px;
   width: 100%;
+  gap: 25px;
 `;
 
 const TeamInfo = styled.div`
@@ -46,7 +47,7 @@ const EventItem = styled.div<{ isHomeTeam: boolean }>`
   align-items: center;
   padding: 8px;
   border-bottom: 1px solid #eee;
-  
+
   &:last-child {
     border-bottom: none;
   }
@@ -77,10 +78,17 @@ const MatchEvents: FC<MatchEventsProps> = ({ events, homeTeam, awayTeam }) => {
           <TeamLogo src={awayTeam.logo} alt={awayTeam.name} />
         </TeamInfo>
       </TeamsContainer>
-      
+
       <EventsGrid>
         {sortedEvents.map((event, index) => (
-          <EventItem key={index} isHomeTeam={event.team.id === homeTeam.id} style={{ gridColumn: event.team.id === homeTeam.id ? 1 : 2, gridRow: index + 1 }}>
+          <EventItem
+            key={index}
+            isHomeTeam={event.team.id === homeTeam.id}
+            style={{
+              gridColumn: event.team.id === homeTeam.id ? 1 : 2,
+              gridRow: index + 1,
+            }}
+          >
             <EventTime>{event.time}'</EventTime>
             <EventInfo>
               {event.type} - {event.player.name}
