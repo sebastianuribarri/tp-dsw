@@ -7,13 +7,22 @@ export default class MatchRoutes {
   constructor(matchesController: MatchController, server: Express) {
     const matchesRouter = Router();
     server.use("/api/matches", matchesRouter);
+    matchesRouter.get(
+      "/calendar",
+      (req, res, next) => {
+        authenticateUser(req, res, next, { premium: true });
+      },
+      matchesController.getCalendar
+    );
     matchesRouter.use(authenticateUser);
     matchesRouter.get("/", matchesController.getAll);
     matchesRouter.get("/search", matchesController.getBySearch);
     matchesRouter.get("/team/:id", matchesController.getByTeam);
     matchesRouter.get("/teams", matchesController.getMatchesByTeams);
     matchesRouter.get("/live", matchesController.getLiveMatches);
-    matchesRouter.get("/calendar", matchesController.getCalendar);
+
+    matchesRouter.get("/:id", matchesController.getOne);
+
     matchesRouter.get("/:id", matchesController.getOne);
   }
 }

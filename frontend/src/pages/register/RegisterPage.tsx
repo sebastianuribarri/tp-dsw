@@ -3,6 +3,8 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom"; // Importa useNavigate
 import { registerUser } from "../../api/user"; // Función para registrar usuario
 import { Link } from "react-router-dom";
+import ReCAPTCHA from "react-google-recaptcha"; // Importa ReCAPTCHA
+
 const RegisterPage: React.FC = () => {
   const [username, setUsername] = useState("");
   const [mail, setMail] = useState("");
@@ -10,6 +12,7 @@ const RegisterPage: React.FC = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
   const navigate = useNavigate();
 
   const handleRegister = async (e: React.FormEvent) => {
@@ -23,8 +26,14 @@ const RegisterPage: React.FC = () => {
       return;
     }
 
+    if (!recaptchaToken) {
+      setError("Por favor, completa el reCAPTCHA");
+      setLoading(false);
+      return;
+    }
+
     try {
-      const user = { username, mail, password };
+      const user = { username, mail, password, recaptchaToken };
       await registerUser(user);
 
       navigate("/login");
@@ -39,6 +48,10 @@ const RegisterPage: React.FC = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleRecaptchaChange = (token: string | null) => {
+    setRecaptchaToken(token);
   };
 
   return (
@@ -90,6 +103,12 @@ const RegisterPage: React.FC = () => {
               required
             />
           </InputWrapper>
+          <RecaptchaWrapper>
+            <ReCAPTCHA
+              sitekey="6LdEfqAqAAAAALMWJpXg2_1oyVK0GN8p2aHHgMoc"
+              onChange={handleRecaptchaChange}
+            />
+          </RecaptchaWrapper>
           {error && <ErrorMessage>{error}</ErrorMessage>}
           <Button type="submit" data-testid="register-btn" disabled={loading}>
             {loading ? "Registering..." : "Register"}
@@ -158,6 +177,12 @@ const Input = styled.input`
     outline: none;
     box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
   }
+`;
+
+const RecaptchaWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
 `;
 
 const Button = styled.button`
