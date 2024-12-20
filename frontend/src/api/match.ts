@@ -38,7 +38,8 @@ export const getMatchesBySearch = async (search: string) => {
 };
 
 export async function getCalendar(month: number, teamIds: number[]) {
-  return await axios.get(
-    url + `calendar?month=${month}&teamIds=${teamIds.join(",")}`
-  );
+  const headers = getAuthHeaders();
+  const full_url = `${url}calendar?month=${month}&teamIds=${teamIds.join(",")}`;
+  console.log(full_url);
+  return await axios.get(full_url, { headers });
 }

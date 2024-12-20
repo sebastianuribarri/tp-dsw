@@ -32,7 +32,7 @@ const TeamPage = () => {
     const fetchTeamData = async () => {
       try {
         const response = await getTeamById(Number(id));
-        const data = await response.json();
+        const data = response.data;
         setTeamData({
           id: data.id,
           name: data.name,

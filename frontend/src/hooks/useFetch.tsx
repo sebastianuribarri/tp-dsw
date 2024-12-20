@@ -1,44 +1,66 @@
-import { AxiosResponse } from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import axios, { AxiosError } from "axios";
 
-interface ApiResponse<T> {
+interface FetchState<T> {
   data: T | null;
-  error: string | null;
   loading: boolean;
+  error: string | null;
 }
 
-const useFetch = () => {
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
+export const useFetch = <T,>(
+  fetchFunction: () => Promise<T>
+): FetchState<T> => {
+  const [state, setState] = useState<FetchState<T>>({
+    data: null,
+    loading: true,
+    error: null,
+  });
 
-  const request = async <T,>(
-    fetchFunction: () => Promise<Promise<AxiosResponse<any, any>>>
-  ): Promise<ApiResponse<T>> => {
-    setLoading(true);
-    setError(null);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await fetchFunction();
+        setState({ data, loading: false, error: null });
+      } catch (error: any) {
+        if (axios.isAxiosError(error)) {
+          // Manejo de errores específicos de Axios
+          if (error.response) {
+            // La respuesta del servidor indica un error (4xx, 5xx)
+            setState({
+              data: null,
+              loading: false,
+              error: `Error ${error.response.status}: ${
+                error.response.data?.message || "Error desconocido del servidor"
+              }`,
+            });
+          } else if (error.request) {
+            // No se recibió respuesta del servidor
+            setState({
+              data: null,
+              loading: false,
+              error: "Error de conexión: no se pudo contactar con el servidor.",
+            });
+          } else {
+            // Error al configurar la solicitud
+            setState({
+              data: null,
+              loading: false,
+              error: `Error al realizar la solicitud: ${error.message}`,
+            });
+          }
+        } else {
+          // Otros errores no relacionados con Axios
+          setState({
+            data: null,
+            loading: false,
+            error: error.message || "Error desconocido",
+          });
+        }
+      }
+    };
 
-    try {
-      // Ejecuta la función fetch con los headers de autenticación
-      const response = await fetchFunction();
+    fetchData();
+  }, [fetchFunction]);
 
-      // Si la respuesta tiene un `.data` (axios), úsalo directamente
-      const result = response.data;
-
-      return { data: result, error: null, loading: false };
-    } catch (err: any) {
-      console.error("Error in API call:", err);
-      setError(err.message || "Occurrio un al obtener los datos");
-      return {
-        data: null,
-        error: err.message || "Occurrio un al obtener los datos",
-        loading: false,
-      };
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  return { request, loading, error };
+  return state;
 };
-
-export default useFetch;

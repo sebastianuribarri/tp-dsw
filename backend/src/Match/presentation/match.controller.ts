@@ -25,22 +25,20 @@ export default class MatchController {
   }
 
   public async getCalendar(req: Request, res: Response) {
-  try {
-    const month = parseInt(req.query.month as string, 10); 
-    const teamIds = (req.query.teamIds as string).split(",").map(Number); 
+    try {
+      const month = parseInt(req.query.month as string, 10);
+      const teamIds = (req.query.teamIds as string).split(",").map(Number);
 
-    if (isNaN(month) || !Array.isArray(teamIds) || teamIds.some(isNaN)) {
-      return res.status(400).send({ message: "Invalid parameters" }); 
+      if (isNaN(month) || !Array.isArray(teamIds) || teamIds.some(isNaN)) {
+        return res.status(400).send({ message: "Invalid parameters" });
+      }
+
+      const result = await this.matchUseCases.getCalendar(month, teamIds);
+      res.json(result);
+    } catch (error) {
+      res.status(500).send({ message: "Error retrieving calendar" });
     }
-
-    const result = await this.matchUseCases.getCalendar(month, teamIds); 
-    res.json(result);
-  } catch (error) {
-    console.error(error);
-    res.status(500).send({ message: "Error retrieving calendar" }); 
   }
-}
-
 
   public async getAll(req: Request, res: Response) {
     try {

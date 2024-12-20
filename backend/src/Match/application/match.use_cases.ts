@@ -175,24 +175,23 @@ export default class MatchUseCases {
   }
 
   public async getCalendar(month: number, teamIds: number[]) {
-  const startDate = new Date(new Date().getFullYear(), month - 1, 1); 
-  const endDate = new Date(new Date().getFullYear(), month, 0); 
+    const startDate = new Date(new Date().getFullYear(), month - 1, 1);
+    const endDate = new Date(new Date().getFullYear(), month, 0);
 
-  const filters = {
-    $and: [
-      { date: { $gte: startDate, $lte: endDate } }, 
-      {
-        $or: [
-          { "home.id": { $in: teamIds } }, 
-          { "away.id": { $in: teamIds } }, 
-        ],
-      },
-    ],
-  };
-
-  return (await this.listMatches(filters))
-}
-
+    const filters = {
+      $and: [
+        { date: { $gte: startDate, $lte: endDate } },
+        {
+          $or: [
+            { "home.id": { $in: teamIds } },
+            { "away.id": { $in: teamIds } },
+          ],
+        },
+      ],
+    };
+    console.log(filters);
+    return await this.matchDbRepository.findAll(filters);
+  }
 
   public async listMatches(filters: Record<string, any>) {
     if (filters && filters.date) {

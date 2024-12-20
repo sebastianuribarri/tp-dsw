@@ -21,7 +21,7 @@ const AllTeamsList: React.FC<AllTeamsListProps> = ({ searchValue }) => {
         } else {
           response = await getAllTeams();
         }
-        const data = await response.json();
+        const data = response.data;
         data.sort((a: Team, b: Team) => a.id - b.id);
         setTeamCompetitions(data);
       } catch (err) {
