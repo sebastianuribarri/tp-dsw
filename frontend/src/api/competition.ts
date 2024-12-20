@@ -12,8 +12,7 @@ export const getCompetitionsByTeam = async (teamId: number) => {
 
 export const getCompetitionById = async (id: number) => {
   const headers = getAuthHeaders();
-  return await fetch(url + String(id), {
-    method: "GET",
+  return await axios.get(url + String(id), {
     headers: headers,
   });
 };

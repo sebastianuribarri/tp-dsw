@@ -1,5 +1,4 @@
-// CompetitionsList.tsx
-import React, { useEffect, useState } from "react";
+import React, { useMemo } from "react";
 import Section from "../../../ui-components/Section";
 import CompetitionsList from "../../../components/CompetitionsList/CompetitionsList";
 import Competition from "../../../types/Competition";
@@ -7,6 +6,8 @@ import {
   getAllCompetitions,
   getCompetitionsBySearch,
 } from "../../../api/competition";
+import { useFetch } from "../../../hooks/useFetch";
+import LoaderWrapper from "../../../ui-components/LoaderWrapper";
 
 interface CurrentCompetitionsListProps {
   searchValue?: string;
@@ -15,40 +16,40 @@ interface CurrentCompetitionsListProps {
 const CurrentCompetitionsList: React.FC<CurrentCompetitionsListProps> = ({
   searchValue,
 }) => {
-  const [currentCompetitions, setTeamCompetitions] = useState<Competition[]>(
-    []
-  );
-
-  useEffect(() => {
-    const fetchCompetitions = async () => {
-      try {
-        let response;
-        if (searchValue && searchValue.length >= 5) {
-          response = await getCompetitionsBySearch(searchValue);
-          console.log("Response competition:", response);
-        } else {
-          response = await getAllCompetitions();
-        }
-        const data = await response.data;
-        const sortedCompetitions = data.sort(
-          (a: Competition, b: Competition) => a.id - b.id
-        );
-        setTeamCompetitions(sortedCompetitions);
-      } catch (err) {
-        console.error("Error fetching team data:", err);
+  // Definir la función fetch según la lógica de búsqueda
+  const fetchFunction = useMemo(() => {
+    return async () => {
+      if (searchValue && searchValue.length >= 5) {
+        const response = await getCompetitionsBySearch(searchValue);
+        return response.data;
+      } else {
+        const response = await getAllCompetitions();
+        return response.data;
       }
     };
-
-    fetchCompetitions();
   }, [searchValue]);
+
+  // Usar el hook useFetch
+  const {
+    data: competitions,
+    loading,
+    error,
+  } = useFetch<Competition[]>(fetchFunction);
+
+  // Ordenar las competiciones si están disponibles
+  const sortedCompetitions = competitions
+    ? [...competitions].sort((a, b) => a.id - b.id)
+    : [];
 
   return (
     <Section title="Campeonatos actuales">
-      <CompetitionsList
-        competitions={currentCompetitions}
-        message="No hay campeonatos jugandose actualmente."
-        layoutDirection="row"
-      />
+      <LoaderWrapper loading={loading} error={error}>
+        <CompetitionsList
+          competitions={sortedCompetitions}
+          message="No hay campeonatos jugándose actualmente."
+          layoutDirection="row"
+        />
+      </LoaderWrapper>
     </Section>
   );
 };

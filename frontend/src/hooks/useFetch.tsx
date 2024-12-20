@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 
 interface FetchState<T> {
   data: T | null;

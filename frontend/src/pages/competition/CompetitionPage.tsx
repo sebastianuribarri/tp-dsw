@@ -24,7 +24,7 @@ const CompetitionPage = () => {
 
   const fetchCompetitionData = async (): Promise<CompetitionDetail> => {
     const response = await getCompetitionById(Number(id));
-    const data = await response.json();
+    const data = response.data;
     return {
       id: data.id,
       name: data.name,
@@ -47,11 +47,11 @@ const CompetitionPage = () => {
   }
 
   if (error) {
-    return <p>Error: {error}</p>;
+    return <p>{error}</p>;
   }
 
   if (!competitionDetail) {
-    return <p>Competencia No existe</p>;
+    return <p>Competencia no existe</p>;
   }
 
   return (
