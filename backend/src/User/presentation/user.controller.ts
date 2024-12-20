@@ -78,11 +78,11 @@ export default class UserController {
     }
   }
 
-  updateSubscription(req: Request, res: Response) {
+  async updateSubscription(req: Request, res: Response) {
     try {
       const { id } = req.params;
-      this.userUseCases.updateSubscription(id);
-      res.status(200).json({ message: "Subscription updated successfully" });
+      const result = await this.userUseCases.updateSubscription(id);
+      res.status(200).json(result);
     } catch (error) {
       res.status(500).json({ message: error.message });
     }

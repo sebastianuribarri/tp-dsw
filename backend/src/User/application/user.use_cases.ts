@@ -39,9 +39,17 @@ export default class UserUseCases {
     const user = await this.getUser(id);
     console.log("suscription actual", user.premium);
     const newSubscriptionStatus = !user.premium;
-    return await this.userDbRepository.updateOne(id, {
-      premium: newSubscriptionStatus,
+     await this.userDbRepository.updateOne(id, {
+      premium: newSubscriptionStatus, 
     });
+     const token = jwt.sign(
+      { id: user.id, premium: newSubscriptionStatus },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "24h",
+      }
+    );
+    return {token}
   }
 
   public async register(user: User) {
