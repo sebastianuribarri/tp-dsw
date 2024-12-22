@@ -11,6 +11,7 @@ import styled from "styled-components";
 import PageContent from "../../ui-components/PageContent";
 import { useFetch } from "../../hooks/useFetch";
 import { getCompetitionById } from "../../api/competition";
+import LoaderWrapper from "../../ui-components/LoaderWrapper";
 
 const CompetitionContentContainer = styled.div`
   display: flex;
@@ -42,35 +43,33 @@ const CompetitionPage = () => {
     error,
   } = useFetch(fetchCompetitionData);
 
-  if (loading) {
-    return <p>Cargando...</p>;
-  }
-
-  if (error) {
-    return <p>{error}</p>;
-  }
-
-  if (!competitionDetail) {
-    return <p>Competencia no existe</p>;
-  }
-
   return (
     <Page>
       <PageMenu>
-        <CompetitionHeader competition={competitionDetail} />
+        {competitionDetail && (
+          <CompetitionHeader competition={competitionDetail} />
+        )}
       </PageMenu>
       <PageContent>
-        <CompetitionContentContainer>
-          <CompetitionStandings standings={competitionDetail.standings} />
-          <CompetitionMatches
-            competitionId={competitionDetail.id}
-            rounds={competitionDetail.rounds}
-          />
-        </CompetitionContentContainer>
-        <CompetitionAbout
-          start={competitionDetail.start}
-          end={competitionDetail.end}
-        />
+        <LoaderWrapper loading={loading} error={error}>
+          {competitionDetail ? (
+            <>
+              <CompetitionContentContainer>
+                <CompetitionStandings standings={competitionDetail.standings} />
+                <CompetitionMatches
+                  competitionId={competitionDetail.id}
+                  rounds={competitionDetail.rounds}
+                />
+              </CompetitionContentContainer>
+              <CompetitionAbout
+                start={competitionDetail.start}
+                end={competitionDetail.end}
+              />
+            </>
+          ) : (
+            <p>Competencia no existe</p>
+          )}
+        </LoaderWrapper>
       </PageContent>
     </Page>
   );
