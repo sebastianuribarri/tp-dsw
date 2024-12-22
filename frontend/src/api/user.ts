@@ -53,5 +53,10 @@ export const updatePassword = async (id: string, password: string) => {
 export const changePlan = async (id: string) => {
   const headers = getAuthHeaders();
   console.log("headers", headers);
-  return await axios.put(`${url}/${id}/change-plan`, {}, { headers });
+  const result =  await axios.put(`${url}/${id}/change-plan`, {}, { headers });
+  if (result.data.token) {
+      sessionStorage.setItem("authToken", result.data.token)
+
+  }
+  return result
 };

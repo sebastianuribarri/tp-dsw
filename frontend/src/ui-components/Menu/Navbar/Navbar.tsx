@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { FaHome, FaSearch, FaUser } from "react-icons/fa";
+import { FaHome, FaSearch, FaUser, FaCalendarAlt } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import AppLogo from "../../AppLogo/AppLogo";
 import { getUserById } from "../../../api/user";
@@ -143,7 +143,7 @@ const Navbar: React.FC = () => {
       setUserId(sessionStorage.getItem("userId"));
     }
     fetchUser();
-  }, []);
+  }, [userId]);
 
   const handleLogout = () => {
     sessionStorage.removeItem("authToken");
@@ -178,6 +178,14 @@ const Navbar: React.FC = () => {
           </Icon>
           Perfil
         </NavLink>
+        {user?.premium && (
+          <NavLink to="/calendar">
+            <Icon>
+              <FaCalendarAlt />
+            </Icon>
+            Calendario
+          </NavLink>
+        )}
       </LinksContainer>
 
       <ChangePlanContainer>
@@ -193,3 +201,5 @@ const Navbar: React.FC = () => {
 };
 
 export default Navbar;
+
+
