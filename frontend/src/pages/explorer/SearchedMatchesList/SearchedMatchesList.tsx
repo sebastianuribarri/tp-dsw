@@ -1,40 +1,40 @@
-// src/components/Explorer/SearchedMatchesList/SearchedMatchesList.tsx
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Section from "../../../ui-components/Section";
 import MatchesList from "../../../components/MatchesList/MatchesList";
 import Match from "../../../types/Match";
 import { getMatchesBySearch } from "../../../api/match";
+import { useFetch } from "../../../hooks/useFetch";
+import LoaderWrapper from "../../../ui-components/LoaderWrapper";
 
 interface SearchedMatchesListProps {
   searchValue: string;
 }
 
-const SearchedMatchesList: React.FC<SearchedMatchesListProps> = ({ searchValue }) => {
-  const [matches, setMatches] = useState<Match[]>([]);
+const SearchedMatchesList: React.FC<SearchedMatchesListProps> = ({
+  searchValue,
+}) => {
+  const fetchMatches = async (): Promise<Match[]> => {
+    if (searchValue) {
+      const response = await getMatchesBySearch(searchValue);
+      return response.data;
+    }
+    return [];
+  };
 
-  useEffect(() => {
-    const fetchMatches = async () => {
-      try {
-        if (searchValue && searchValue.length >= 5) {
-          const response = await getMatchesBySearch(searchValue);
-          const data = response.data;
-          console.log("Matches:", response);
-          setMatches(data);
-        }
-      } catch (err) {
-        console.error("Error fetching matches:", err);
-      }
-    };
-
-    fetchMatches();
-  }, [searchValue]);
+  const {
+    data: matches,
+    loading,
+    error,
+  } = useFetch(fetchMatches, [searchValue]);
 
   return (
     <Section title="Resultados de búsqueda">
-      <MatchesList
-        matches={matches}
-        message="No se encontraron partidos."
-      />
+      <LoaderWrapper loading={loading} error={error}>
+        <MatchesList
+          matches={matches || []}
+          message="No se encontraron partidos."
+        />
+      </LoaderWrapper>
     </Section>
   );
 };

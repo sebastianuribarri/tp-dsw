@@ -1,27 +1,29 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import MatchesList from "../../../components/MatchesList/MatchesList";
 import Section from "../../../ui-components/Section";
 import IMatch from "../../../types/Match";
 import { getLiveMatches } from "../../../api/match";
+import { useFetch } from "../../../hooks/useFetch";
+import LoaderWrapper from "../../../ui-components/LoaderWrapper";
 
 const LiveMatches: React.FC = () => {
-  const [matches, setMatches] = useState<IMatch[]>([]);
+  const fetchLiveMatches = async (): Promise<IMatch[]> => {
+    const response = await getLiveMatches();
+    return response.data;
+  };
 
-  useEffect(() => {
-    // Replace with your API endpoint
-    const fetchMatches = async () => {
-      const response = await getLiveMatches();
-      setMatches(response.data);
-    };
-    fetchMatches();
-  }, []);
+  const { data: matches, loading, error } = useFetch(fetchLiveMatches, []);
 
   return (
     <Section title="En vivo">
-      <MatchesList
-        matches={matches}
-        message="No hay partidos en vivo en este momento."
-      />
+      <LoaderWrapper loading={loading} error={error}>
+        {matches && (
+          <MatchesList
+            matches={matches}
+            message="No hay partidos en vivo en este momento."
+          />
+        )}
+      </LoaderWrapper>
     </Section>
   );
 };

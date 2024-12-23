@@ -1,33 +1,42 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import MatchesList from "../../../components/MatchesList/MatchesList";
 import Match from "../../../types/Match";
 import Section from "../../../ui-components/Section";
 import { getUserById } from "../../../api/user";
 import { getMatchesByTeams } from "../../../api/match";
+import { useFetch } from "../../../hooks/useFetch";
+import LoaderWrapper from "../../../ui-components/LoaderWrapper";
 
 const UpcomingMatches: React.FC = () => {
-  const [matches, setMatches] = useState<Match[]>([]);
   const userId = sessionStorage.getItem("userId");
-  useEffect(() => {
-    const fetchMatchesData = async () => {
-      if (userId) {
-        const getUserResponse = await getUserById(userId);
-        const user = getUserResponse.data;
-        const teamIds = user.teams.map((team: { id: number }) => team.id);
-        const getMatchesResponse = await getMatchesByTeams(teamIds);
-        const upcomingMatches = getMatchesResponse.data as Match[];
-        setMatches(upcomingMatches);
-      }
-    };
-    fetchMatchesData();
-  }, []);
+
+  const fetchMatchesData = async (): Promise<Match[]> => {
+    if (userId) {
+      const getUserResponse = await getUserById(userId);
+      const user = getUserResponse.data;
+      const teamIds = user.teams.map((team: { id: number }) => team.id);
+      const getMatchesResponse = await getMatchesByTeams(teamIds);
+      return getMatchesResponse.data as Match[];
+    }
+    return [];
+  };
+
+  const {
+    data: matches,
+    loading,
+    error,
+  } = useFetch(fetchMatchesData, [userId]);
 
   return (
     <Section title="Próximos Partidos">
-      <MatchesList
-        matches={matches}
-        message="No hay partidos próximos en este momento."
-      />
+      <LoaderWrapper loading={loading} error={error}>
+        {matches && (
+          <MatchesList
+            matches={matches}
+            message="No hay partidos próximos para tus equipos."
+          />
+        )}
+      </LoaderWrapper>
     </Section>
   );
 };

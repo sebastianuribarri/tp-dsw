@@ -34,7 +34,7 @@ const CurrentCompetitionsList: React.FC<CurrentCompetitionsListProps> = ({
     data: competitions,
     loading,
     error,
-  } = useFetch<Competition[]>(fetchFunction);
+  } = useFetch<Competition[]>(fetchFunction, [searchValue]);
 
   // Ordenar las competiciones si están disponibles
   const sortedCompetitions = competitions

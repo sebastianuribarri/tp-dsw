@@ -1,16 +1,17 @@
-import { useEffect, useState } from "react";
-
-import { getTeamById } from "../../api/team";
+import React from "react";
 import { useParams } from "react-router-dom";
-import PageMenu from "../../ui-components/PageMenu/PageMenu";
-
-import TeamHeader from "./TeamHeader/TeamHeader";
-import { TeamDetail } from "../../types/Team";
-import TeamMatches from "./TeamMatches/TeamMatches";
-import TeamSeason from "./TeamSeason/TeamSeason";
-import TeamPlayersList from "./PlayersList/PlayersList";
 import styled from "styled-components";
+import Page from "../../ui-components/Page";
+import PageMenu from "../../ui-components/PageMenu/PageMenu";
+import TeamHeader from "./TeamHeader/TeamHeader";
+import TeamSeason from "./TeamSeason/TeamSeason";
+import TeamMatches from "./TeamMatches/TeamMatches";
 import PageContent from "../../ui-components/PageContent";
+import { TeamDetail } from "../../types/Team";
+import { useFetch } from "../../hooks/useFetch";
+import LoaderWrapper from "../../ui-components/LoaderWrapper";
+import { getTeamById } from "../../api/team";
+import TeamPlayersList from "./PlayersList/PlayersList";
 
 const TeamContentContainer = styled.div`
   display: flex;
@@ -22,50 +23,34 @@ const TeamContentContainer = styled.div`
     justify-content: space-between;
   }
 `;
-const TeamPage = () => {
+
+const TeamPage: React.FC = () => {
   const { id } = useParams();
-  const [teamDetail, setTeamData] = useState<TeamDetail | null>(null);
 
-  useEffect(() => {
-    // Fetch data from the API
+  const fetchTeamData = async (): Promise<TeamDetail> => {
+    const response = await getTeamById(Number(id));
+    return response.data;
+  };
 
-    const fetchTeamData = async () => {
-      try {
-        const response = await getTeamById(Number(id));
-        const data = response.data;
-        setTeamData({
-          id: data.id,
-          name: data.name,
-          logo: data.logo,
-          players: data.players,
-        });
-      } catch (error) {
-        console.error("Error fetching team data:", error);
-      }
-    };
-
-    fetchTeamData();
-  }, []);
+  const { data: teamDetail, loading, error } = useFetch(fetchTeamData, [id]);
 
   return (
-    <>
-      {teamDetail ? (
-        <>
-          <PageMenu>
-            <TeamHeader team={teamDetail} />
-          </PageMenu>
-          <PageContent>
+    <Page>
+      <PageMenu>{teamDetail && <TeamHeader team={teamDetail} />}</PageMenu>
+      <PageContent>
+        <LoaderWrapper loading={loading} error={error}>
+          {teamDetail ? (
             <TeamContentContainer>
               <TeamSeason />
               <TeamMatches teamId={teamDetail.id} />
               <TeamPlayersList players={teamDetail.players} />
             </TeamContentContainer>
-          </PageContent>
-        </>
-      ) : (
-        <p> Team No existe</p>
-      )}
-    </>
+          ) : (
+            <p>Team no existe</p>
+          )}
+        </LoaderWrapper>
+      </PageContent>
+    </Page>
   );
 };
 

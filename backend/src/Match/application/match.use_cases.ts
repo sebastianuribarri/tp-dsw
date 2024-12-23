@@ -228,7 +228,7 @@ export default class MatchUseCases {
   }
 
   public async getBySearch(value: string) {
-    if (!value || value.length < 4) {
+    if (!value) {
       throw new Error(
         "El termino de busqueda debe tener al menos 4 caracteres"
       );

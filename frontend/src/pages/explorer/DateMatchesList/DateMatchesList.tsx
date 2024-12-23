@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import Section from "../../../ui-components/Section";
 import { getMatches } from "../../../api/match";
-import Match from "../../../types/Match";
 import MatchesList from "../../../components/MatchesList/MatchesList";
+import { useFetch } from "../../../hooks/useFetch";
+import LoaderWrapper from "../../../ui-components/LoaderWrapper";
 
 const Pagination = styled.div`
   display: flex;
@@ -26,31 +27,28 @@ const PaginationButton = styled.button`
 
 const DateMatchesList: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [matches, setMatches] = useState<Match[] | null>(null);
 
-  // Fetch matches
-  useEffect(() => {
-    const fetchMatches = async (date: Date) => {
-      const response = await getMatches({ date: date });
-      const data = response.data;
-      if (data) {
-        setMatches(data);
-      }
-    };
+  const fetchMatches = async () => {
+    const response = await getMatches(selectedDate);
+    return response.data;
+  };
 
-    fetchMatches(selectedDate);
-  }, [selectedDate]); // Re-fetch cuando la fecha cambie
+  let {
+    data: matches,
+    loading,
+    error,
+  } = useFetch(fetchMatches, [selectedDate]);
 
   const handlePreviousDay = () => {
-    const previousDay = new Date(selectedDate);
-    previousDay.setDate(selectedDate.getDate() - 1);
-    setSelectedDate(previousDay);
+    setSelectedDate(
+      (prevDate) => new Date(prevDate.setDate(prevDate.getDate() - 1))
+    );
   };
 
   const handleNextDay = () => {
-    const nextDay = new Date(selectedDate);
-    nextDay.setDate(selectedDate.getDate() + 1);
-    setSelectedDate(nextDay);
+    setSelectedDate(
+      (prevDate) => new Date(prevDate.setDate(prevDate.getDate() + 1))
+    );
   };
 
   return (
@@ -62,12 +60,14 @@ const DateMatchesList: React.FC = () => {
         <span>{selectedDate.toDateString()}</span>
         <PaginationButton onClick={handleNextDay}>Next</PaginationButton>
       </Pagination>
-      {matches !== null && (
-        <MatchesList
-          matches={matches}
-          message="No hay partidos para esta fecha"
-        />
-      )}
+      <LoaderWrapper loading={loading} error={error}>
+        {matches !== null && (
+          <MatchesList
+            matches={matches}
+            message="No hay partidos para esta fecha"
+          />
+        )}
+      </LoaderWrapper>
     </Section>
   );
 };

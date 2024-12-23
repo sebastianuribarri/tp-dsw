@@ -150,17 +150,6 @@ const Button = styled.button`
   }
 `;
 
-const Message = styled.p<{ type: "error" | "success" }>`
-  color: ${({ type }) => (type === "error" ? "#dc3545" : "#28a745")};
-  background-color: ${({ type }) =>
-    type === "error" ? "rgba(220, 53, 69, 0.2)" : "rgba(40, 167, 69, 0.2)"};
-  font-size: 0.9rem;
-  text-align: center;
-  padding: 0.75rem;
-  border-radius: 4px;
-  margin-top: -0.5rem;
-`;
-
 const Footer = styled.div`
   margin-top: 1.5rem;
   text-align: center;

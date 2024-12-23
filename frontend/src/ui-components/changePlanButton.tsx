@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { changePlan } from "../api/user";
 import { User } from "../types/User";
+import RequestHandler from "./RequestHandler";
 
 const Button = styled.button<{ isPremium: boolean }>`
   padding: 10px 20px;
@@ -21,6 +22,7 @@ const Wrapper = styled.div`
 
 const ChangePlanButton: React.FC<{ user: User | null }> = ({ user }) => {
   const [userPremium, setUserPremium] = useState(user?.premium || false);
+  const [trigger, setTrigger] = useState(false);
 
   // Sincronizar el estado userPremium cada vez que el user cambie
   useEffect(() => {
@@ -28,21 +30,25 @@ const ChangePlanButton: React.FC<{ user: User | null }> = ({ user }) => {
   }, [user]);
 
   const handleChangePlan = async () => {
-    try {
-      if (user?.id) {
-        await changePlan(user.id);
-        setUserPremium(!userPremium);
-      }
-    } catch (error) {
-      console.error("Error actualizando el plan:", error);
+    if (user?.id) {
+      await changePlan(user.id);
+      setUserPremium(!userPremium);
+    } else {
+      throw new Error("Error en el servidor");
     }
+  };
+
+  const handleButtonClick = () => {
+    setTrigger((prev) => !prev); // Toggle trigger to activate RequestHandler
   };
 
   return (
     <Wrapper>
-      <Button isPremium={userPremium} onClick={handleChangePlan}>
-        {userPremium ? "Cambiar a Basic" : "Cambiar a Premium"}
-      </Button>
+      <RequestHandler onSubmit={handleChangePlan} trigger={trigger}>
+        <Button isPremium={userPremium} onClick={handleButtonClick}>
+          {userPremium ? "Cambiar a Basic" : "Cambiar a Premium"}
+        </Button>
+      </RequestHandler>
     </Wrapper>
   );
 };

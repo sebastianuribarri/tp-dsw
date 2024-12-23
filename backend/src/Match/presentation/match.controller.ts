@@ -78,11 +78,7 @@ export default class MatchController {
       }
       res.json(result);
     } catch (error) {
-      if (error instanceof Error && error.message.includes("4 characters")) {
-        return res.status(400).json({ message: error.message });
-      }
-      console.error("Error in getBySearch:", error);
-      res.status(500).json({ message: "Internal server error" });
+      res.status(500).json({ message: error.message });
     }
   }
 

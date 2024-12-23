@@ -8,7 +8,8 @@ interface FetchState<T> {
 }
 
 export const useFetch = <T,>(
-  fetchFunction: () => Promise<T>
+  fetchFunction: () => Promise<T>,
+  dependencies: any[] = []
 ): FetchState<T> => {
   const [state, setState] = useState<FetchState<T>>({
     data: null,
@@ -38,7 +39,7 @@ export const useFetch = <T,>(
             setState({
               data: null,
               loading: false,
-              error: "Error de conexión: no se pudo contactar con el servidor.",
+              error: "Error de conexión al servidor",
             });
           } else {
             // Error al configurar la solicitud
@@ -49,7 +50,6 @@ export const useFetch = <T,>(
             });
           }
         } else {
-          // Otros errores no relacionados con Axios
           setState({
             data: null,
             loading: false,
@@ -58,9 +58,9 @@ export const useFetch = <T,>(
         }
       }
     };
-
+    setState({ data: null, loading: true, error: null });
     fetchData();
-  }, [fetchFunction]);
+  }, dependencies);
 
   return state;
 };

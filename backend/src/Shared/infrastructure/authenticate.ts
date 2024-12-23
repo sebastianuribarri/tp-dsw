@@ -20,7 +20,7 @@ export const authenticateUser = (
   if (!token) {
     return res
       .status(401)
-      .json({ error: "Acceso denegado. Token no proporcionado." });
+      .json({ message: "Acceso denegado. Token no proporcionado." });
   }
 
   try {
@@ -29,13 +29,13 @@ export const authenticateUser = (
 
     // Verificar si se requiere que el usuario sea premium
     if (options.premium && !req.user.premium) {
-      return res.status(403).json({ error: "Requiere usuario premium." });
+      return res.status(403).json({ message: "Requiere usuario premium." });
     }
 
     console.log("user authenticated", decoded);
     next();
   } catch (error) {
     console.log("user unauthenticated", error);
-    return res.status(403).json({ error: "Token inválido o expirado." });
+    return res.status(403).json({ message: "Token inválido o expirado." });
   }
 };
