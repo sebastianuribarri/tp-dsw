@@ -42,7 +42,7 @@ export default class MatchController {
 
   public async getAll(req: Request, res: Response) {
     try {
-      console.log(req.query);
+      console.log("matches params", req.query);
 
       const result = await this.matchUseCases.listMatches(req.query);
       res.json(result);

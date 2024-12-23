@@ -29,7 +29,8 @@ const DateMatchesList: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
 
   const fetchMatches = async () => {
-    const response = await getMatches(selectedDate);
+    console.log("fetching matches", selectedDate);
+    const response = await getMatches({ date: selectedDate });
     return response.data;
   };
 

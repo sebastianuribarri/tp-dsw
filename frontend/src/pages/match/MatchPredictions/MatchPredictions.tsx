@@ -150,9 +150,9 @@ const MatchPrediction = ({
       const response = await getValuesByMatch(matchId);
       const matchResults = await response.json();
       setResults(matchResults);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error submitting prediction:", error);
-      setMessage("Error realizando la prediccion.");
+      setMessage(error.message || "Error al realizar la prediccion");
       setMessageColor("red");
     }
   };

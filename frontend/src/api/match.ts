@@ -4,6 +4,7 @@ const url = API_URL + "matches/";
 
 export const getMatches = async (filters: object) => {
   const headers = getAuthHeaders();
+  console.log("params", filters);
   return await axios.get(url, { params: filters, headers });
 };
 

@@ -132,9 +132,9 @@ const MatchVote = ({ matchId, lineups, userId }: MatchVoteProps) => {
       const votesResponse = await getVotesByMatch(matchId);
       const votesData = votesResponse.data;
       setVotes(votesData);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error al registrar voto:", error);
-      setMessage("Error al registrar voto.");
+      setMessage("Error al registrar voto");
     } finally {
       setIsVoting(false);
     }

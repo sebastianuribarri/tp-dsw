@@ -38,7 +38,7 @@ const MatchLineups: FC<MatchLineupsProps> = ({ lineups }) => {
           )}
         </>
       ) : (
-        <Message>Lineups are not available</Message>
+        <Message>Las alineaciones no estan disponibles</Message>
       )}
     </Section>
   );
